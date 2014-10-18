@@ -52,9 +52,9 @@ static UserInfo* currentUser;
     
     CoreDataHandler *cdHandler = [[CoreDataHandler alloc] init];
     [cdHandler deleteAllDataForEntity:kCoreDataUserInfo];
-    [cdHandler deleteAllDataForEntity:kCoreDataClass];
-    [cdHandler deleteAllDataForEntity:kCoreDataReservation];
-    [cdHandler deleteAllDataForEntity:kCoreDataAttendance];
+//    [cdHandler deleteAllDataForEntity:kCoreDataClass];
+//    [cdHandler deleteAllDataForEntity:kCoreDataReservation];
+//    [cdHandler deleteAllDataForEntity:kCoreDataAttendance];
     currentUser = nil;
 }
 

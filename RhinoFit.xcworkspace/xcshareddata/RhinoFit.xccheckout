@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>32887BFB-3201-42C6-9BC0-8CB0AC326DAE</string>
+	<key>IDESourceControlProjectName</key>
+	<string>RhinoFit</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>9A824A10E8BC3FECDDB308BAD0FD149E926962CF</key>
+		<string>https://github.com/SutanKasturi/RhinoFit.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>RhinoFit.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>9A824A10E8BC3FECDDB308BAD0FD149E926962CF</key>
+		<string>..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/SutanKasturi/RhinoFit.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>9A824A10E8BC3FECDDB308BAD0FD149E926962CF</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>9A824A10E8BC3FECDDB308BAD0FD149E926962CF</string>
+			<key>IDESourceControlWCCName</key>
+			<string>RhinoFit</string>
+		</dict>
+	</array>
+</dict>
+</plist>
