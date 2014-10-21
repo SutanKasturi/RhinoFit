@@ -47,12 +47,16 @@ static UserInfo* currentUser;
 
 - (void) deleteUser
 {
+    if ( currentUser == nil )
+        return;
+    
+    currentUser = nil;
+    NSLog(@"DELETE USER");
     NSUserDefaults *sharedInstance = [NSUserDefaults standardUserDefaults];
     [sharedInstance removeObjectForKey:kParamToken];
     
     CoreDataHandler *cdHandler = [[CoreDataHandler alloc] init];
     [cdHandler deleteAllDataForEntity:kCoreDataUserInfo];
-    currentUser = nil;
 }
 
 - (NSString*) getToken

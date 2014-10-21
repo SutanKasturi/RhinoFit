@@ -104,7 +104,7 @@ static AKObjectManager *sharedManager = nil;
 
 - (void) setupResponseDescriptors {
     [self setupRequestResponseDescriptors];
-    [self setupUserResponseDescriptors];
+//    [self setupUserResponseDescriptors];
 //    [self setupClassResponseDescriptors];
 //    [self setupReservationResponseDescriptors];
 //    [self setupAttendanceResponseDescriptors];
@@ -218,30 +218,30 @@ static AKObjectManager *sharedManager = nil;
 #pragma mark - CoreData Mapping
 
 // UserInfo
-- (void) setupUserResponseDescriptors {
-    RKEntityMapping *userMapping = [RKEntityMapping mappingForEntityForName:kCoreDataUserInfo inManagedObjectStore:self.managedObjectStore];
-    NSDictionary *userMappingDictionary = @{
-                                            @"u_first":@"userFirstName",
-                                            @"u_last":@"userLastName",
-                                            @"u_address1":@"userAddress1",
-                                            @"u_address2":@"userAddress2",
-                                            @"u_city":@"userCity",
-                                            @"u_state":@"userState",
-                                            @"u_zip":@"userZip",
-                                            @"u_country":@"userCountry",
-                                            @"u_phone1":@"userPhone1",
-                                            @"u_phone2":@"userPhone2"};
-    
-    [userMapping addAttributeMappingsFromDictionary:userMappingDictionary];
-    
-    RKResponseDescriptor *userResponseDescriptors = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
-                                                                                                 method:RKRequestMethodAny
-                                                                                            pathPattern:nil
-                                                                                                keyPath:nil
-                                                                                            statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
-    
-    [self addResponseDescriptor:userResponseDescriptors];
-}
+//- (void) setupUserResponseDescriptors {
+//    RKEntityMapping *userMapping = [RKEntityMapping mappingForEntityForName:kCoreDataUserInfo inManagedObjectStore:self.managedObjectStore];
+//    NSDictionary *userMappingDictionary = @{
+//                                            @"u_first":@"userFirstName",
+//                                            @"u_last":@"userLastName",
+//                                            @"u_address1":@"userAddress1",
+//                                            @"u_address2":@"userAddress2",
+//                                            @"u_city":@"userCity",
+//                                            @"u_state":@"userState",
+//                                            @"u_zip":@"userZip",
+//                                            @"u_country":@"userCountry",
+//                                            @"u_phone1":@"userPhone1",
+//                                            @"u_phone2":@"userPhone2"};
+//    
+//    [userMapping addAttributeMappingsFromDictionary:userMappingDictionary];
+//    
+//    RKResponseDescriptor *userResponseDescriptors = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
+//                                                                                                 method:RKRequestMethodAny
+//                                                                                            pathPattern:nil
+//                                                                                                keyPath:nil
+//                                                                                            statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+//    
+//    [self addResponseDescriptor:userResponseDescriptors];
+//}
 
 // Class
 //- (void) setupClassResponseDescriptors {
