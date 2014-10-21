@@ -33,8 +33,13 @@
 
 - (void) sendEmailLogin:(NSString*) email
                password:(NSString*) password;
-- (void) getUserInfo;
-- (void) getClassess:(NSString*)startDate endDate:(NSString *)endDate;
+- (void) getUserInfo:(void (^)(id result))success
+             failure:(void (^)(NSString *error))failure;
+- (void) getClassess:(NSString*)startDate
+             endDate:(NSString *)endDate
+             success:(void (^)(NSArray*result))success
+             failure:(void (^)(NSString *error))failure;
+
 - (void) makeReservation:(NSString*)classId reservationDate:(NSString*)reservationDate;
 - (void) listReservation;
 - (void) deleteReservation:(NSString*)resId;

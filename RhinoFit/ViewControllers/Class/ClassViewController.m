@@ -15,7 +15,7 @@
 #import "Constants.h"
 #import "ClassTableViewCell.h"
 
-@interface ClassViewController ()<NetworkManagerDelegate, DemoTextFieldDelegate>
+@interface ClassViewController ()<DemoTextFieldDelegate>
 
 @property (nonatomic, strong) METransitions *transitions;
 @property (nonatomic, strong) UIPanGestureRecognizer *dynamicTransitionPanGesture;
@@ -78,34 +78,6 @@
     [dateTextField setDate:[NSDate new]];
 }
 
-#pragma mark - NetworkManagerDelegate
-
-- (void) successRequest:(NSString *)action result:(id)obj
-{
-    if ( ![action isEqualToString:kRequestGetClassess] )
-        return;
-    
-    if ( obj != nil && [obj isKindOfClass:[NSMutableArray class]]) {
-        classes = obj;
-        [self.tableView reloadData];
-        [waitingViewController.view setHidden:YES];
-        [waitingView setHidden:YES];
-    }
-    else {
-        [waitingView setHidden:YES];
-        [waitingViewController showResult:kMessageNoClasses];
-    }
-}
-
-- (void) failureRequest:(NSString *)action errorMessage:(NSString *)errorMessage
-{
-    if ( ![action isEqualToString:kRequestGetClassess] )
-        return;
-    
-    [waitingView setHidden:YES];
-    [waitingViewController showResult:errorMessage];
-}
-
 #pragma mark - Button Actions
 - (IBAction)onChangeDate:(id)sender {
     [dateTextField becomeFirstResponder];
@@ -130,12 +102,45 @@
     [waitingView setHidden:NO];
     [waitingViewController showWaitingIndicator];
     
-    NetworkManager *networkManager = [NetworkManager sharedManager];
-    networkManager.delegate = self;
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"yyyy-MM-dd"];
     NSString *dateString = [df stringFromDate:date];
-    [networkManager getClassess:dateString endDate:dateString];
+    [[NetworkManager sharedManager] getClassess:dateString
+                        endDate:dateString
+                        success:^(NSArray *result) {
+                            [self successRequest:kRequestGetClassess result:result];
+                        }
+                        failure:^(NSString *error) {
+                            [self failureRequest:kRequestGetClassess errorMessage:error];
+                        }];
+}
+
+#pragma mark - NetworkManagerDelegate
+
+- (void) successRequest:(NSString *)action result:(id)obj
+{
+    if ( ![action isEqualToString:kRequestGetClassess] )
+        return;
+    
+    if ( obj != nil && [obj isKindOfClass:[NSArray class]]) {
+        classes = [[NSMutableArray alloc] initWithArray:obj];
+        [self.tableView reloadData];
+        [waitingViewController.view setHidden:YES];
+        [waitingView setHidden:YES];
+    }
+    else {
+        [waitingView setHidden:YES];
+        [waitingViewController showResult:kMessageNoClasses];
+    }
+}
+
+- (void) failureRequest:(NSString *)action errorMessage:(NSString *)errorMessage
+{
+    if ( ![action isEqualToString:kRequestGetClassess] )
+        return;
+    
+    [waitingView setHidden:YES];
+    [waitingViewController showResult:errorMessage];
 }
 
 #pragma mark - Properties

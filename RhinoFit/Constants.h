@@ -53,6 +53,7 @@ extern NSString *const kButtonCancelAttendance;
 
 // Globals
 extern NSString *const kRhinoFitUserToken;
+extern NSString *const kRhinoFitUserEmail;
 
 // Request Params
 extern NSString *const kParamAction;

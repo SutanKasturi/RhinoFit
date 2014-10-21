@@ -14,7 +14,7 @@
 #import "AppDelegate.h"
 #import "MenuTableViewCell.h"
 
-@interface MenuViewController () <NetworkManagerDelegate>
+@interface MenuViewController ()
 
 @property (nonatomic, strong) UserInfo *currentUser;
 @property (nonatomic, strong) NSArray *menuItems;
@@ -30,12 +30,16 @@
     [super viewDidLoad];
 
     NetworkManager *networkManager = [NetworkManager sharedManager];
-    networkManager.delegate = self;
     currentUser = [networkManager getUser];
     if ( currentUser != nil )
         [self displayUserInfo];
     else
-        [networkManager getUserInfo];
+        [networkManager getUserInfo:^(id result) {
+                                [self successRequest:kRequestGetUserInfo result:result];
+                            }
+                            failure:^(NSString *error) {
+                                [self failureRequest:kRequestGetUserInfo errorMessage:error];
+                            }];
     
 //    self.transitionsNavigationController = (UINavigationController *)self.slidingViewController.topViewController;
 }
@@ -47,7 +51,12 @@
 
 - (void) displayUserInfo
 {
-    self.mUserNameLabel.text = [NSString stringWithFormat:@"%@ %@", currentUser.userFirstName, currentUser.userLastName];
+//    if ( (currentUser.userFirstName == nil || [currentUser.userFirstName isEqualToString:@""]) && (currentUser.userLastName == nil || [currentUser.userLastName isEqualToString:@""]))
+//    {
+        self.mUserNameLabel.text = [[NSUserDefaults standardUserDefaults] objectForKey:kRhinoFitUserEmail];
+//    } else {
+//        self.mUserNameLabel.text = [NSString stringWithFormat:@"%@ %@", currentUser.userFirstName, currentUser.userLastName];
+//    }
 }
 
 #pragma mark - NetworkManagerDelegate

@@ -52,7 +52,6 @@
 		8481227D19F0C04800CE53D5 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8481227C19F0C04800CE53D5 /* logo.png */; };
 		849B767B19F099B400680B2D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 849B767A19F099B400680B2D /* main.m */; };
 		849B767E19F099B400680B2D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 849B767D19F099B400680B2D /* AppDelegate.m */; };
-		849B768119F099B400680B2D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 849B768019F099B400680B2D /* ViewController.m */; };
 		849B768419F099B400680B2D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 849B768219F099B400680B2D /* Main.storyboard */; };
 		849B768619F099B400680B2D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 849B768519F099B400680B2D /* Images.xcassets */; };
 		849B768919F099B400680B2D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 849B768719F099B400680B2D /* LaunchScreen.xib */; };
@@ -188,8 +187,6 @@
 		849B767A19F099B400680B2D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		849B767C19F099B400680B2D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		849B767D19F099B400680B2D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		849B767F19F099B400680B2D /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		849B768019F099B400680B2D /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		849B768319F099B400680B2D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		849B768519F099B400680B2D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		849B768819F099B400680B2D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -441,8 +438,6 @@
 				847BB50819F16A1900528DE4 /* Reservation */,
 				847BB50419F169EF00528DE4 /* Class */,
 				847BB4DF19F1253200528DE4 /* Menu */,
-				849B767F19F099B400680B2D /* ViewController.h */,
-				849B768019F099B400680B2D /* ViewController.m */,
 				848122AA19F0C59000CE53D5 /* Login */,
 				847BB53C19F2114300528DE4 /* WaitingViewController.h */,
 				847BB53D19F2114300528DE4 /* WaitingViewController.m */,
@@ -771,7 +766,6 @@
 				847BB4E219F1254F00528DE4 /* MenuViewController.m in Sources */,
 				847BB52A19F184B600528DE4 /* LoginViewController.m in Sources */,
 				847BB4FE19F160E900528DE4 /* RhinoFitClass.m in Sources */,
-				849B768119F099B400680B2D /* ViewController.m in Sources */,
 				847BB4D819F1197A00528DE4 /* RequestFail.m in Sources */,
 				847BB56D19F2D91700528DE4 /* MenuTableViewCell.m in Sources */,
 				847BB55D19F2AE0200528DE4 /* GetAttendanceRequest.m in Sources */,

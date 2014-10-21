@@ -61,6 +61,7 @@
 
 - (void) successfullyLoggedIn
 {
+    [[NSUserDefaults standardUserDefaults] setValue:mEmailTextField.text forKey:kRhinoFitUserEmail];
     UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
     AppDelegate *app = [[UIApplication sharedApplication] delegate];
     app.window.rootViewController = viewController;

@@ -52,9 +52,6 @@ static UserInfo* currentUser;
     
     CoreDataHandler *cdHandler = [[CoreDataHandler alloc] init];
     [cdHandler deleteAllDataForEntity:kCoreDataUserInfo];
-//    [cdHandler deleteAllDataForEntity:kCoreDataClass];
-//    [cdHandler deleteAllDataForEntity:kCoreDataReservation];
-//    [cdHandler deleteAllDataForEntity:kCoreDataAttendance];
     currentUser = nil;
 }
 
@@ -74,7 +71,6 @@ static UserInfo* currentUser;
 {
     CoreDataHandler *cdHandler = [[CoreDataHandler alloc] init];
     return [cdHandler getAllDataForEntity:kCoreDataClass];
-//    return [cdHandler getEntityDataByDate:kCoreDataClass dateField:@" dateValue:<#(NSDate *)#>:kCoreDataClass idField: idValue:<#(NSNumber *)#>]
 }
 
 - (void)sendEmailLogin:(NSString *)email
@@ -114,7 +110,8 @@ static UserInfo* currentUser;
              }];
 }
 
-- (void) getUserInfo
+- (void) getUserInfo:(void (^)(id result))success
+             failure:(void (^)(NSString *error))failure
 {
     UserInfoRequest *dataObject = [UserInfoRequest new];
     [dataObject setAction:kRequestGetUserInfo];
@@ -151,16 +148,45 @@ static UserInfo* currentUser;
                                                     @"userZip":[response objectForKey:kResponseKeyUserZip]
                                                     };
                          [cdHandler insertNewRecord:kCoreDataUserInfo fields:userInfo];
-                         [self.delegate successRequest:kRequestGetUserInfo result:userInfo];
+                         if ( success )
+                             success(userInfo);
                      }
                  }             }
              failure:^(RKObjectRequestOperation *operation, NSError *error) {
                  NSLog(@"Error : %@", error.description);
-                 [self.delegate failureRequest:kRequestGetUserInfo errorMessage:[error localizedDescription]];
+                 if ( failure )
+                     failure(error.localizedDescription);
              }];
 }
 
-- (void) getClassess:(NSString*)startDate endDate:(NSString *)endDate
+static NSDateFormatter *sUserVisibleDateFormatter = nil;
+
+- (NSDate *)getDateFromRFC3339DateTimeString:(NSString *)rfc3339DateTimeString {
+    /*
+     Returns a user-visible date time string that corresponds to the specified
+     RFC 3339 date time string. Note that this does not handle all possible
+     RFC 3339 date time strings, just one of the most common styles.
+     */
+    
+    // If the date formatters aren't already set up, create them and cache them for reuse.
+    static NSDateFormatter *sRFC3339DateFormatter = nil;
+    if (sRFC3339DateFormatter == nil) {
+        sRFC3339DateFormatter = [[NSDateFormatter alloc] init];
+        NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+        
+        [sRFC3339DateFormatter setLocale:enUSPOSIXLocale];
+        [sRFC3339DateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ssZ"];
+        [sRFC3339DateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    }
+    
+    // Convert the RFC 3339 date time string to an NSDate.
+    return [sRFC3339DateFormatter dateFromString:rfc3339DateTimeString];
+}
+
+- (void) getClassess:(NSString*)startDate
+             endDate:(NSString *)endDate
+             success:(void (^)(NSArray*result))success
+             failure:(void (^)(NSString *error))failure
 {
     ClassesRequest *dataObject = [ClassesRequest new];
     [dataObject setAction:kRequestGetClassess];
@@ -169,37 +195,37 @@ static UserInfo* currentUser;
     [dataObject setEnddate:endDate];
     
     // what to print
-    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
-    RKLogConfigureByName("Restkit/Network", RKLogLevelDebug);
+//    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
+//    RKLogConfigureByName("Restkit/Network", RKLogLevelDebug);
 
     [self postObject:dataObject
                 path:@"api.php"
           parameters:nil
              success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                  if ( operation.HTTPRequestOperation.response.statusCode != 200 ) {
-                     [self.delegate failureRequest:kRequestGetClassess errorMessage:operation.HTTPRequestOperation.responseString];
+                     if ( failure ) {
+                         failure(operation.HTTPRequestOperation.responseString);
+                     }
                      return;
                  }
                  NSError *error;
                  NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
                  if ( error || response == nil ) {
-                     [self.delegate failureRequest:kRequestGetClassess errorMessage:error.localizedDescription];
+                     if ( failure )
+                         failure(error.localizedDescription);
                  }
                  else {
                      if ( ![response isKindOfClass:[NSArray class]] && [response objectForKey:@"error"] ){
                          NSString *error = [response objectForKey:@"error"];
-                         [self.delegate failureRequest:kRequestGetClassess errorMessage:error];
+                         if ( failure )
+                             failure(error);
                      }
                      else {
                          NSMutableArray *result = [[NSMutableArray alloc] init];
                          for ( NSDictionary *theClass in response ) {
-                             NSDateFormatter *df = [[NSDateFormatter alloc] init];
-                             [df setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
                              RhinoFitClass *class = [[RhinoFitClass alloc] init];
-                             NSString *startDateString = [[[theClass objectForKey:kResponseKeyStartDate] substringToIndex:19] stringByReplacingOccurrencesOfString:@"T" withString:@" "];
-                             NSString *endDateString = [[[theClass objectForKey:kResponseKeyEndDate] substringToIndex:19] stringByReplacingOccurrencesOfString:@"T" withString:@" "];
-                             class.startDate = [df dateFromString:startDateString];
-                             class.endDate = [df dateFromString:endDateString];
+                             class.startDate = [self getDateFromRFC3339DateTimeString:[theClass objectForKey:kResponseKeyStartDate]];
+                             class.endDate = [self getDateFromRFC3339DateTimeString:[theClass objectForKey:kResponseKeyEndDate]];
                              class.allDay = [NSNumber numberWithBool:[theClass objectForKey:kResponseKeyAllDay]];
                              class.title = [theClass objectForKey:kResponseKeyTitle];
                              class.color = [theClass objectForKey:kResponseKeyColor];
@@ -214,16 +240,22 @@ static UserInfo* currentUser;
                              class.isActionReservation = NO;
                              [result addObject:class];
                          }
-                         [self.delegate successRequest:kRequestGetClassess result:result];
+                         if ( success ) {
+                             success(result);
+                         }
                      }
                  }
              }
              failure:^(RKObjectRequestOperation *operation, NSError *error) {
                  NSLog(@"Error : %@", error.description);
-                 if ( operation.HTTPRequestOperation.response.statusCode == RKStatusCodeClassSuccessful )
-                     [self.delegate successRequest:kRequestGetClassess result:nil];
-                 else
-                     [self.delegate failureRequest:kRequestGetClassess errorMessage:error.localizedDescription];
+                 if ( operation.HTTPRequestOperation.response.statusCode == RKStatusCodeClassSuccessful ) {
+                     if ( success )
+                         success(nil);
+                 }
+                 else {
+                     if ( failure )
+                         failure(error.localizedDescription);
+                 }
              }];
 }
 
@@ -234,10 +266,6 @@ static UserInfo* currentUser;
     [dataObject setToken:[self getToken]];
     [dataObject setClasstimeid:classId];
     [dataObject setDate:reservationDate];
-    
-    // what to print
-    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
-    RKLogConfigureByName("Restkit/Network", RKLogLevelDebug);
     
     [self postObject:dataObject
                 path:@"api.php"
@@ -281,10 +309,6 @@ static UserInfo* currentUser;
     ListReservationRequest *dataObject = [[ListReservationRequest alloc] init];
     [dataObject setAction:kRequestListReservations];
     [dataObject setToken:[self getToken]];
-    
-    // what to print
-    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
-    RKLogConfigureByName("Restkit/Network", RKLogLevelDebug);
     
     [self postObject:dataObject
                 path:@"api.php"
@@ -337,10 +361,6 @@ static UserInfo* currentUser;
     [dataObject setToken:[self getToken]];
     [dataObject setResid:resId];
     
-    // what to print
-    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
-    RKLogConfigureByName("Restkit/Network", RKLogLevelDebug);
-    
     [self postObject:dataObject
                 path:@"api.php"
           parameters:nil
@@ -388,10 +408,6 @@ static UserInfo* currentUser;
     [dataObject setToken:[self getToken]];
     [dataObject setStartdate:startDate];
     [dataObject setEnddate:endDate];
-    
-    // what to print
-    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
-    RKLogConfigureByName("Restkit/Network", RKLogLevelDebug);
     
     [self postObject:dataObject
                 path:@"api.php"
@@ -443,10 +459,6 @@ static UserInfo* currentUser;
     [dataObject setClasstimeid:classId];
     [dataObject setDate:attendanceDate];
     
-    // what to print
-    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
-    RKLogConfigureByName("Restkit/Network", RKLogLevelDebug);
-    
     [self postObject:dataObject
                 path:@"api.php"
           parameters:nil
@@ -489,10 +501,6 @@ static UserInfo* currentUser;
     [dataObject setAction:kRequestDeleteAttendance];
     [dataObject setToken:[self getToken]];
     [dataObject setAid:aId];
-    
-    // what to print
-    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
-    RKLogConfigureByName("Restkit/Network", RKLogLevelDebug);
     
     [self postObject:dataObject
                 path:@"api.php"

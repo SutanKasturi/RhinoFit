@@ -177,6 +177,10 @@
         [reservationButton setTitle:kButtonMakeReservation forState:UIControlStateNormal];
         [attendanceButton setTitle:kButtonMarkAttended forState:UIControlStateNormal];
     }
+    
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"hh:mm a"];
+    timeLabel.text = [df stringFromDate:theClass.startDate];
 }
 
 #pragma mark - NetworkManagerDelegate

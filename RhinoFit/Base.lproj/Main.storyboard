@@ -210,7 +210,7 @@
                                     <outlet property="delegate" destination="Vg0-U8-ArT" id="P8N-WP-ToN"/>
                                 </connections>
                             </tableView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J4b-ZH-xWN">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J4b-ZH-xWN">
                                 <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="Z4i-g0-Syf"/>
@@ -229,13 +229,13 @@
                                     </mask>
                                 </variation>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6g8-mr-diq">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6g8-mr-diq">
                                 <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="gtt-i1-cW5"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                                 <variation key="default">
                                     <mask key="constraints">
@@ -290,18 +290,18 @@
                                 <exclude reference="qSG-lz-XZU"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="ZPc-q0-WtK"/>
-                                <exclude reference="ddr-i1-7Ox"/>
                                 <exclude reference="8n5-EZ-eXD"/>
                                 <exclude reference="H9M-H7-bNS"/>
                                 <exclude reference="LyL-BU-pzr"/>
-                                <exclude reference="TN1-BA-n4c"/>
-                                <exclude reference="Td0-MF-Ozd"/>
-                                <exclude reference="mDs-f8-q5q"/>
+                                <exclude reference="poa-Rz-DyI"/>
                                 <exclude reference="I0G-QD-V02"/>
                                 <exclude reference="Jg9-3p-Y6S"/>
                                 <exclude reference="Ogq-e7-hyB"/>
-                                <exclude reference="poa-Rz-DyI"/>
+                                <exclude reference="TN1-BA-n4c"/>
+                                <exclude reference="Td0-MF-Ozd"/>
+                                <exclude reference="mDs-f8-q5q"/>
+                                <exclude reference="ZPc-q0-WtK"/>
+                                <exclude reference="ddr-i1-7Ox"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -311,18 +311,18 @@
                                 <include reference="qSG-lz-XZU"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="ZPc-q0-WtK"/>
-                                <include reference="ddr-i1-7Ox"/>
                                 <include reference="8n5-EZ-eXD"/>
                                 <include reference="H9M-H7-bNS"/>
                                 <include reference="LyL-BU-pzr"/>
-                                <include reference="TN1-BA-n4c"/>
-                                <include reference="Td0-MF-Ozd"/>
-                                <include reference="mDs-f8-q5q"/>
+                                <include reference="poa-Rz-DyI"/>
                                 <include reference="I0G-QD-V02"/>
                                 <include reference="Jg9-3p-Y6S"/>
                                 <include reference="Ogq-e7-hyB"/>
-                                <include reference="poa-Rz-DyI"/>
+                                <include reference="TN1-BA-n4c"/>
+                                <include reference="Td0-MF-Ozd"/>
+                                <include reference="mDs-f8-q5q"/>
+                                <include reference="ZPc-q0-WtK"/>
+                                <include reference="ddr-i1-7Ox"/>
                             </mask>
                         </variation>
                     </view>
