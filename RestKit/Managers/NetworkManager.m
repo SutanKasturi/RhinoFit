@@ -24,6 +24,14 @@
 #import "Reservation.h"
 #import "Attendance.h"
 
+#import "MyBenchmarksRequest.h"
+#import "AddNewBenchmarkRequest.h"
+#import "MyMembershipsRequest.h"
+#import "AvailableBenchmarksRequest.h"
+#import "MyBenchmark.h"
+#import "MyMembership.h"
+#import "AvailableBenchmark.h"
+
 @implementation NetworkManager
 
 #pragma mark - User Manager
@@ -544,6 +552,243 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
              failure:^(RKObjectRequestOperation *operation, NSError *error) {
                  NSLog(@"Error : %@", error.description);
                  [self.delegate failureRequest:kRequestDeleteAttendance errorMessage:error.localizedDescription];
+             }];
+}
+
+- (void) getMyBenchmarks:(void (^)(NSMutableArray*result))success
+                 failure:(void (^)(NSString *error))failure
+{
+    MyBenchmarksRequest *dataObject = [[MyBenchmarksRequest alloc] init];
+    [dataObject setAction:kRequestMyBenchmarks];
+    [dataObject setToken:[self getToken]];
+    
+    [self postObject:dataObject
+                path:@"api.php"
+          parameters:nil
+             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                 if ( operation.HTTPRequestOperation.response.statusCode != 200 ) {
+                     if ( failure )
+                         failure(operation.HTTPRequestOperation.responseString);
+                     return;
+                 }
+                 NSError *error;
+                 NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
+                 if ( error || response == nil ) {
+                     if ( failure )
+                         failure(error.localizedDescription);
+                 }
+                 else {
+                     if ( [response isKindOfClass:[NSDictionary class]] && [response objectForKey:@"error"] ) {
+                         NSString *error = [response objectForKey:@"error"];
+                         if ( failure ) {
+                             failure(error);
+                         }
+                     }
+                     else if ( [response isKindOfClass:[NSArray class]] ){
+                         NSMutableArray *result = [[NSMutableArray alloc] init];
+                         for ( NSDictionary *dict in response ) {
+                             NSLog(@"%@", dict);
+                             MyBenchmark *benchmark = [[MyBenchmark alloc] init];
+                             benchmark.benchmarkId = [NSNumber numberWithInt:[[dict objectForKey:kParamBId] intValue]];
+                             benchmark.title = [dict objectForKey:kParamBDesc];
+                             benchmark.type = [dict objectForKey:kParamBType];
+                             NSDateFormatter *df = [[NSDateFormatter alloc] init];
+                             [df setDateFormat:@"yyyy-MM-dd"];
+                             benchmark.currentDate = [df dateFromString:[dict objectForKey:kParamBBestDate]];
+                             benchmark.currentScore = [dict objectForKey:kParamBBestResults];
+                             benchmark.lastDate = [df dateFromString:[dict objectForKey:kParamBLastDate]];
+                             benchmark.lastScore = [dict objectForKey:kParamBLastResults];
+                             [result addObject:benchmark];
+                         }
+                         if ( success )
+                             success(result);
+                     }
+                     else {
+                         if ( failure ) {
+                             failure(kMessageUnkownError);
+                         }
+                     }
+                 }
+             }
+             failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                 NSLog(@"Error : %@", error.description);
+                 if ( failure )
+                     failure(error.localizedDescription);
+             }];
+}
+- (void) addNewBenchmark:(NSString*)benchmarkId
+                    date:(NSString*)date
+                   value:(NSString*)value
+                 success:(void (^)(NSMutableDictionary*result))success
+                 failure:(void (^)(NSString *error))failure
+{
+    AddNewBenchmarkRequest *dataObject = [[AddNewBenchmarkRequest alloc] init];
+    [dataObject setAction:kRequestNewBenchmark];
+    [dataObject setToken:[self getToken]];
+    [dataObject setId:benchmarkId];
+    [dataObject setDate:date];
+    [dataObject setValue:value];
+    
+    [self postObject:dataObject
+                path:@"api.php"
+          parameters:nil
+             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                 if ( operation.HTTPRequestOperation.response.statusCode != 200 ) {
+                     [self.delegate failureRequest:kRequestMakeAttendance errorMessage:operation.HTTPRequestOperation.responseString];
+                     if ( failure )
+                         failure (operation.HTTPRequestOperation.responseString);
+                     return;
+                 }
+                 NSError *error;
+                 NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
+                 if ( error || response == nil ) {
+                     if ( failure )
+                         failure(error.localizedDescription);
+                 }
+                 else {
+                     if ( [response isKindOfClass:[NSDictionary class]] ){
+                         if ( [response objectForKey:@"error"] ) {
+                             NSString *error = [response objectForKey:@"error"];
+                             if ( failure )
+                                 failure(error);
+                         }
+                         else {
+                             NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithDictionary:response];
+                             NSLog(@"%@", result);
+                             if (success) {
+                                 success(result);
+                             }
+                         }
+                     }
+                     else {
+                         if ( failure )
+                             failure(kMessageUnkownError);
+                     }
+                 }
+             }
+             failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                 NSLog(@"Error : %@", error.description);
+                 if (failure)
+                     failure(error.localizedDescription);
+             }];
+}
+
+- (void) getAvailableBenchmarks:(void (^)(NSMutableArray*result))success
+                        failure:(void (^)(NSString *error))failure
+{
+    AvailableBenchmarksRequest *dataObject = [[AvailableBenchmarksRequest alloc] init];
+    [dataObject setAction:kRequestAvailableBenchmarks];
+    [dataObject setToken:[self getToken]];
+    
+    [self postObject:dataObject
+                path:@"api.php"
+          parameters:nil
+             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                 if ( operation.HTTPRequestOperation.response.statusCode != 200 ) {
+                     if ( failure )
+                         failure(operation.HTTPRequestOperation.responseString);
+                     return;
+                 }
+                 NSError *error;
+                 NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
+                 if ( error || response == nil ) {
+                     if ( failure )
+                         failure(error.localizedDescription);
+                 }
+                 else {
+                     if ( [response isKindOfClass:[NSDictionary class]] && [response objectForKey:@"error"] ) {
+                         NSString *error = [response objectForKey:@"error"];
+                         if ( failure ) {
+                             failure(error);
+                         }
+                     }
+                     else if ( [response isKindOfClass:[NSArray class]] ){
+                         NSMutableArray *result = [[NSMutableArray alloc] init];
+                         for ( NSDictionary *dict in response ) {
+                             NSLog(@"%@", dict);
+                             AvailableBenchmark *availableBenchmark = [[AvailableBenchmark alloc] init];
+                             availableBenchmark.benchmarkId = [NSNumber numberWithInt:[[dict objectForKey:kParamBId] intValue]];
+                             availableBenchmark.bdescription = [dict objectForKey:kParamBDesc];
+                             availableBenchmark.btype = [dict objectForKey:kParamBType];
+                             availableBenchmark.bformat = [dict objectForKey:kParamBFormat];
+                             [result addObject:availableBenchmark];
+                         }
+                         if ( success )
+                             success(result);
+                     }
+                     else {
+                         if ( failure ) {
+                             failure(kMessageUnkownError);
+                         }
+                     }
+                 }
+             }
+             failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                 NSLog(@"Error : %@", error.description);
+                 if ( failure )
+                     failure(error.localizedDescription);
+             }];
+}
+
+- (void) getMyMemberships:(void (^)(NSMutableArray*result))success
+                  failure:(void (^)(NSString *error))failure
+{
+    MyMembershipsRequest *dataObject = [[MyMembershipsRequest alloc] init];
+    [dataObject setAction:kRequestMyMemberships];
+    [dataObject setToken:[self getToken]];
+    
+    [self postObject:dataObject
+                path:@"api.php"
+          parameters:nil
+             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                 if ( operation.HTTPRequestOperation.response.statusCode != 200 ) {
+                     if ( failure )
+                         failure(operation.HTTPRequestOperation.responseString);
+                     return;
+                 }
+                 NSError *error;
+                 NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
+                 if ( error || response == nil ) {
+                     if ( failure )
+                         failure(error.localizedDescription);
+                 }
+                 else {
+                     if ( [response isKindOfClass:[NSDictionary class]] && [response objectForKey:@"error"] ) {
+                         NSString *error = [response objectForKey:@"error"];
+                         if ( failure ) {
+                             failure(error);
+                         }
+                     }
+                     else if ( [response isKindOfClass:[NSArray class]] ){
+                         NSMutableArray *result = [[NSMutableArray alloc] init];
+                         for ( NSDictionary *dict in response ) {
+                             NSLog(@"%@", dict);
+                             MyMembership *membership = [[MyMembership alloc] init];
+                             membership.memebershipId = [NSNumber numberWithInt:[[dict objectForKey:kParamMId] intValue]];
+                             membership.membershipName = [dict objectForKey:kParamMName];
+                             NSDateFormatter *df = [[NSDateFormatter alloc] init];
+                             [df setDateFormat:@"yyyy-MM-dd"];
+                             membership.startDate = [df dateFromString:[dict objectForKey:kParamMStartDate]];
+                             membership.endDate = [df dateFromString:[dict objectForKey:kParamMEndDate]];
+                             membership.renewal = [dict objectForKey:kParamMRenewal];
+                             membership.attended = [NSNumber numberWithInt:[[dict objectForKey:kParamMAttended] intValue]];
+                             membership.attendedLimit = [NSNumber numberWithInt:[[dict objectForKey:kParamMAttendedLimit] intValue]];
+                             membership.limit = [dict objectForKey:kParamMLimit];
+                             [result addObject:membership];
+                         }
+                         if ( success )
+                             success(result);
+                     }
+                     else {
+                         if ( failure )
+                             failure(kMessageUnkownError);
+                     }
+                 }
+             }
+             failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                 NSLog(@"Error : %@", error.description);
+                 if ( failure )
+                     failure(error.localizedDescription);
              }];
 }
 

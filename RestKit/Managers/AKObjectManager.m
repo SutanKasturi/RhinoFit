@@ -20,6 +20,10 @@
 #import "GetAttendanceRequest.h"
 #import "MakeAttendanceRequest.h"
 #import "DeleteAttendanceRequest.h"
+#import "MyBenchmarksRequest.h"
+#import "AddNewBenchmarkRequest.h"
+#import "MyMembershipsRequest.h"
+#import "AvailableBenchmarksRequest.h"
 
 static AKObjectManager *sharedManager = nil;
 
@@ -213,6 +217,42 @@ static AKObjectManager *sharedManager = nil;
     
     
     [self addRequestDescriptor:deleteAttendanceRequestResponseDescriptors];
+    
+    // MyBenchmarksResquest
+    RKRequestDescriptor *myBenchmarksRequestResponseDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[MyBenchmarksRequest getMyBenchmarksRequestMapping]
+                                                                                                            objectClass:[MyBenchmarksRequest class]
+                                                                                                            rootKeyPath:nil
+                                                                                                                 method:RKRequestMethodPOST];
+    
+    
+    [self addRequestDescriptor:myBenchmarksRequestResponseDescriptors];
+    
+    // AddNewBenchmarksResquest
+    RKRequestDescriptor *addNewBenchmarksRequestResponseDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[AddNewBenchmarkRequest getAddNewBenchmarkRequestMapping]
+                                                                                                        objectClass:[AddNewBenchmarkRequest class]
+                                                                                                        rootKeyPath:nil
+                                                                                                             method:RKRequestMethodPOST];
+    
+    
+    [self addRequestDescriptor:addNewBenchmarksRequestResponseDescriptors];
+    
+    // MyMembershipsResquest
+    RKRequestDescriptor *myMembershipsRequestResponseDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[MyMembershipsRequest getMyMembershipsRequestMapping]
+                                                                                                            objectClass:[MyMembershipsRequest class]
+                                                                                                            rootKeyPath:nil
+                                                                                                                 method:RKRequestMethodPOST];
+    
+    
+    [self addRequestDescriptor:myMembershipsRequestResponseDescriptors];
+    
+    // AvailableBenchmarksRequest
+    RKRequestDescriptor *availableBenchmarksRequestResponseDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[AvailableBenchmarksRequest getAvailableBenchmarksRequestMapping]
+                                                                                                         objectClass:[AvailableBenchmarksRequest class]
+                                                                                                         rootKeyPath:nil
+                                                                                                              method:RKRequestMethodPOST];
+    
+    
+    [self addRequestDescriptor:availableBenchmarksRequestResponseDescriptors];
 }
 
 #pragma mark - CoreData Mapping

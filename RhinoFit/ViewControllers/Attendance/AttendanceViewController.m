@@ -66,11 +66,13 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    waitingViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"WaitingViewController"];
-    waitingViewController.view.frame = self.tableView.frame;
-    [self addChildViewController:waitingViewController];
-    [self.view addSubview:waitingViewController.view];
-    [waitingViewController showWaitingIndicator];
+    if ( waitingViewController == nil ) {
+        waitingViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"WaitingViewController"];
+        waitingViewController.view.frame = self.tableView.frame;
+        [self addChildViewController:waitingViewController];
+        [self.view addSubview:waitingViewController.view];
+        [waitingViewController showWaitingIndicator];
+    }
 }
 
 - (void) setTitleString

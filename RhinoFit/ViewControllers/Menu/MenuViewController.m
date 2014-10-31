@@ -88,7 +88,7 @@
 - (NSArray *)menuItems {
     if (_menuItems) return _menuItems;
     
-    _menuItems = @[kMenuClasses, kMenuMyReservations, kMenuMyAttendance, kMenuLogout];
+    _menuItems = @[kMenuClasses, kMenuMyReservations, kMenuMyAttendance, kMenuMyBenchmarks, kMenuMyMemberships, kMenuLogout];
     
     return _menuItems;
 }
@@ -126,6 +126,10 @@
         self.slidingViewController.topViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"ReservationNavigationController"];
     } else if ([menuItem isEqualToString:kMenuMyAttendance]) {
         self.slidingViewController.topViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"AttendanceNavigationController"];
+    } else if ([menuItem isEqualToString:kMenuMyBenchmarks]) {
+        self.slidingViewController.topViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MyBenchmarksNavigationController"];
+    } else if ([menuItem isEqualToString:kMenuMyMemberships]) {
+        self.slidingViewController.topViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MyMembershipsNavigationController"];
     } else if ([menuItem isEqualToString:kMenuLogout]) {
         [[NetworkManager sharedManager] deleteUser];
         UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];

@@ -63,19 +63,21 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    waitingView = [[UIView alloc] initWithFrame:self.view.bounds];
-    waitingView.backgroundColor = UIColorFromRGB(0x000000);
-    waitingView.alpha = 0.1f;
-    waitingViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"WaitingViewController"];
-    waitingViewController.view.frame = self.tableView.frame;
-    [self addChildViewController:waitingViewController];
-    [self.view addSubview:waitingView];
-    [self.view addSubview:waitingViewController.view];
-    [waitingViewController showWaitingIndicator];
-
-    dateTextField.datedelegate = self;
-    [dateTextField setType:TEXT_FIELD_DATE];
-    [dateTextField setDate:[NSDate new]];
+    if ( waitingViewController == nil ) {
+        waitingView = [[UIView alloc] initWithFrame:self.view.bounds];
+        waitingView.backgroundColor = UIColorFromRGB(0x000000);
+        waitingView.alpha = 0.1f;
+        waitingViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"WaitingViewController"];
+        waitingViewController.view.frame = self.tableView.frame;
+        [self addChildViewController:waitingViewController];
+        [self.view addSubview:waitingView];
+        [self.view addSubview:waitingViewController.view];
+        [waitingViewController showWaitingIndicator];
+        
+        dateTextField.pickerdelegate = self;
+        [dateTextField setType:TEXT_FIELD_DATE];
+        [dateTextField setDate:[NSDate new]];
+    }
 }
 
 #pragma mark - Button Actions

@@ -10,9 +10,6 @@
 
 @interface DemoTextField() <UIPickerViewDataSource, UIPickerViewDelegate>
 
-@property (nonatomic, strong) UIDatePicker *datePicker;
-@property (nonatomic, strong) UIPickerView *pickerView;
-
 @end
 
 @implementation DemoTextField
@@ -22,6 +19,9 @@
 @synthesize type;
 
 @synthesize pickerArray;
+@synthesize pickerArray2;
+@synthesize picker1;
+@synthesize picker2;
 
 @synthesize datePicker;
 @synthesize pickerView;
@@ -181,13 +181,49 @@
             self.inputView = pickerView;
         }
     }
-    else if ( type == TEXT_FIELD_PICKER ) {
+    else if ( type == TEXT_FIELD_PICKER || type == TEXT_FIELD_MINUTEANDSECOND ) {
         if ( pickerView == nil ) {
+            if ( type == TEXT_FIELD_MINUTEANDSECOND ) {
+                pickerArray = [[NSMutableArray alloc] init];
+                pickerArray2 = [[NSMutableArray alloc] init];
+                for ( int i = 0; i < 60; i++ ) {
+                    NSString *value = [NSString stringWithFormat:@"%d", i];
+                    if ( i < 10 ) {
+                        value = [NSString stringWithFormat:@"0%d", i];
+                    }
+                    [pickerArray addObject:value];
+                    [pickerArray2 addObject:value];
+                }
+                picker1 = @"00";
+                picker2 = @"00";
+            }
             pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 50, 100, 150)];
             [pickerView setDataSource:self];
             [pickerView setDelegate:self];
             pickerView.showsSelectionIndicator = YES;
             self.inputView = pickerView;
+            if ( type == TEXT_FIELD_PICKER ) {
+                for ( int i = 0; i < [pickerArray count]; i++ ) {
+                    NSString *value = pickerArray[i];
+                    if ( [value isEqualToString:self.text] ) {
+                        [pickerView selectRow:i inComponent:0 animated:YES];
+                    }
+                }
+            }
+            else {
+                NSString *string = self.text;
+                if ( [string isEqualToString:@""] ) {
+                    string = @"00:00";
+                }
+                NSRange range = [string rangeOfString:@":" options:NSBackwardsSearch];
+                int minute = [[string substringToIndex:range.location - 1] intValue];
+                int second = [[string substringFromIndex:range.location + 1] intValue];
+                for ( int i = (int)[pickerArray count]; i < minute + 300; i++ ) {
+                    [pickerArray addObject:[NSString stringWithFormat:@"%d", i]];
+                }
+                [pickerView selectRow:minute inComponent:0 animated:YES];
+                [pickerView selectRow:second inComponent:1 animated:YES];
+            }
         }
     }
 }
@@ -209,11 +245,30 @@
 #pragma mark - UIDatePicker Delegate
 
 - (void) datePickerValueChanged:(id)sender {
-    [self setDate:datePicker.date];
+    if ( self.dateFormat == nil || [self.dateFormat isEqualToString:@""] )
+        [self setDate:datePicker.date];
+    else {
+        [self setDate:datePicker.date format:self.dateFormat];
+    }
 }
 
 
 // Date Action
+- (void) setDate:(NSDate *)date format:(NSString*)format{
+    if ( datePicker == nil ) {
+        datePicker = [[UIDatePicker alloc] init];
+        datePicker.datePickerMode = UIDatePickerModeDate;
+        [datePicker addTarget:self action:@selector(datePickerValueChanged:) forControlEvents:UIControlEventValueChanged];
+        self.inputView = datePicker;
+    }
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    self.dateFormat = format;
+    [df setDateFormat:format];
+    NSString *dateString = [df stringFromDate:date];
+    self.text = dateString;
+    datePicker.date = date;
+    [self.pickerdelegate didChangedDate:datePicker.date];
+}
 - (void) setDate:(NSDate *)date
 {
     if ( datePicker == nil ) {
@@ -231,7 +286,7 @@
     }
     self.text = dateString;
     datePicker.date = date;
-    [self.datedelegate didChangedDate:datePicker.date];
+    [self.pickerdelegate didChangedDate:datePicker.date];
 }
 
 - (void) nextDate
@@ -269,21 +324,49 @@
 #pragma mark - UIPickerView DataSource
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
-    return 1;
+    if ( type == TEXT_FIELD_MINUTEANDSECOND )
+        return 2;
+    else
+        return 1;
 }
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{
-    return [pickerArray count];
+    if ( component == 0 )
+        return [pickerArray count];
+    else
+        return [pickerArray2 count];
 }
 
 #pragma mark - UIPickerView Delegate
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-    return [pickerArray objectAtIndex:row];
+    if ( component == 0 ) {
+        int count = (int)[pickerArray count];
+        if ( type == TEXT_FIELD_MINUTEANDSECOND && row + 300 >= count) {
+            for ( int i = count; i < count + 60; i++ ) {
+                [pickerArray addObject:[NSString stringWithFormat:@"%d", i]];
+            }
+            [self.pickerView reloadComponent:0];
+        }
+        return [pickerArray objectAtIndex:row];
+    }
+    else
+        return [pickerArray2 objectAtIndex:row];
 }
 
 - (void) pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
-    self.text = [pickerArray objectAtIndex:row];
+    if ( type != TEXT_FIELD_MINUTEANDSECOND ) {
+        self.text = [pickerArray objectAtIndex:row];
+        [self.pickerdelegate didSelectedPicker:(int)row];
+    }
+    else {
+        if ( component == 0 ) {
+            picker1 = [pickerArray objectAtIndex:row];
+        }
+        else {
+            picker2 = [pickerArray2 objectAtIndex:row];
+        }
+        self.text = [NSString stringWithFormat:@"%@:%@", picker1, picker2];
+    }
 }
-
 
 @end

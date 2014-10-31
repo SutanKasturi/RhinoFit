@@ -47,4 +47,17 @@
 - (void) makeAttendance:(NSString*)classId attendanceDate:(NSString*)attendanceDate;
 - (void) deleteAttendance:(NSString*)aId;
 
+- (void) getMyBenchmarks:(void (^)(NSMutableArray*result))success
+                 failure:(void (^)(NSString *error))failure;
+- (void) addNewBenchmark:(NSString*)benchmarkId
+                    date:(NSString*)date
+                   value:(NSString*)value
+                 success:(void (^)(NSMutableDictionary*result))success
+                 failure:(void (^)(NSString *error))failure;
+- (void) getAvailableBenchmarks:(void (^)(NSMutableArray*result))success
+                        failure:(void (^)(NSString *error))failure;
+
+- (void) getMyMemberships:(void (^)(NSMutableArray*result))success
+                        failure:(void (^)(NSString *error))failure;
+
 @end

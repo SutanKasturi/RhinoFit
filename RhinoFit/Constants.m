@@ -15,6 +15,8 @@ NSString *const kAppBaseUrl = @"https://rhinofit.ca/";
 NSString *const kMenuClasses = @"Classes";
 NSString *const kMenuMyReservations = @"My Reservations";
 NSString *const kMenuMyAttendance = @"My Attendance";
+NSString *const kMenuMyBenchmarks = @"My Benchmarks";
+NSString *const kMenuMyMemberships = @"My Memberships";
 NSString *const kMenuLogout = @"Log out";
 
 // Request
@@ -27,6 +29,10 @@ NSString *const kRequestDeleteReservation = @"deletereservation";
 NSString *const kRequestGetAttendance = @"getattendance";
 NSString *const kRequestMakeAttendance = @"makeattendance";
 NSString *const kRequestDeleteAttendance = @"deleteattendance";
+NSString *const kRequestMyBenchmarks = @"listmybenchmarks";
+NSString *const kRequestAvailableBenchmarks = @"listavailablebenchmarks";
+NSString *const kRequestNewBenchmark = @"addbenchmark";
+NSString *const kRequestMyMemberships = @"listmemberships";
 
 // Messages
 NSString* const kMessageInvalidLogin = @"Invalid Login";
@@ -41,6 +47,7 @@ NSString *const kMessageIsReservationAndAttended = @"You have reserved and atten
 NSString *const kMessageUnkownError = @"Unkown Error";
 NSString *const kMessageNoReservations = @"There is no reservations";
 NSString *const kMessageNoAttendance = @"There is no attendance";
+NSString *const kMessageNoMyBenchmarks = @"You currently have no benchmarks";
 
 // Button Names
 
@@ -64,6 +71,24 @@ NSString *const kParamClassTimeId = @"classtimeid";
 NSString *const kParamDate = @"date";
 NSString *const kParamResId = @"resid";
 NSString *const kParamAId = @"aid";
+
+NSString *const kParamBId = @"bid";
+NSString *const kParamBDesc = @"bdesc";
+NSString *const kParamBType = @"btype";
+NSString *const kParamBBestDate = @"bbestdate";
+NSString *const kParamBBestResults = @"bbestresults";
+NSString *const kParamBLastDate = @"blastdate";
+NSString *const kParamBLastResults = @"blastresults";
+NSString *const kParamBFormat = @"bformat";
+
+NSString *const kParamMId = @"mid";
+NSString *const kParamMName = @"mname";
+NSString *const kParamMStartDate = @"mstart";
+NSString *const kParamMEndDate = @"mend";
+NSString *const kParamMRenewal = @"mrenewal";
+NSString *const kParamMAttended = @"mattended";
+NSString *const kParamMAttendedLimit = @"mattendedlimit";
+NSString *const kParamMLimit = @"mlimit";
 
 // CoreData Tables
 NSString *const kCoreDataUserInfo = @"UserInfo";
