@@ -216,7 +216,7 @@
                     string = @"00:00";
                 }
                 NSRange range = [string rangeOfString:@":" options:NSBackwardsSearch];
-                int minute = [[string substringToIndex:range.location - 1] intValue];
+                int minute = [[string substringToIndex:range.location] intValue];
                 int second = [[string substringFromIndex:range.location + 1] intValue];
                 for ( int i = (int)[pickerArray count]; i < minute + 300; i++ ) {
                     [pickerArray addObject:[NSString stringWithFormat:@"%d", i]];
