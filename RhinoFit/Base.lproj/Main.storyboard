@@ -144,6 +144,7 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="50" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Lgh-g5-nqC">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="separatorColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MenuCell" id="hyZ-3g-hxl" customClass="MenuTableViewCell">
@@ -171,31 +172,62 @@
                                                         </mask>
                                                     </variation>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UHY-fP-88f">
+                                                    <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                                                    <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="1" id="TZv-Jh-aNv"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="TZv-Jh-aNv"/>
+                                                        </mask>
+                                                    </variation>
+                                                    <variation key="heightClass=regular-widthClass=compact">
+                                                        <mask key="constraints">
+                                                            <include reference="TZv-Jh-aNv"/>
+                                                        </mask>
+                                                    </variation>
+                                                </label>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <constraints>
+                                                <constraint firstItem="UHY-fP-88f" firstAttribute="leading" secondItem="kNI-g7-623" secondAttribute="leading" id="HaG-6s-bOn"/>
+                                                <constraint firstAttribute="trailing" secondItem="UHY-fP-88f" secondAttribute="trailing" id="PTL-nU-m7T"/>
                                                 <constraint firstAttribute="centerY" secondItem="T1v-wu-up0" secondAttribute="centerY" id="cI1-qR-GTQ"/>
                                                 <constraint firstAttribute="trailing" secondItem="T1v-wu-up0" secondAttribute="trailing" constant="8" id="gp2-Sj-iak"/>
                                                 <constraint firstItem="T1v-wu-up0" firstAttribute="leading" secondItem="kNI-g7-623" secondAttribute="leading" constant="8" id="oZw-se-dlJ"/>
+                                                <constraint firstAttribute="bottom" secondItem="UHY-fP-88f" secondAttribute="bottom" id="x8d-4H-dbG"/>
                                             </constraints>
                                             <variation key="default">
                                                 <mask key="subviews">
                                                     <exclude reference="T1v-wu-up0"/>
+                                                    <exclude reference="UHY-fP-88f"/>
                                                 </mask>
                                                 <mask key="constraints">
                                                     <exclude reference="cI1-qR-GTQ"/>
                                                     <exclude reference="gp2-Sj-iak"/>
                                                     <exclude reference="oZw-se-dlJ"/>
+                                                    <exclude reference="HaG-6s-bOn"/>
+                                                    <exclude reference="PTL-nU-m7T"/>
+                                                    <exclude reference="x8d-4H-dbG"/>
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact">
                                                 <mask key="subviews">
                                                     <include reference="T1v-wu-up0"/>
+                                                    <include reference="UHY-fP-88f"/>
                                                 </mask>
                                                 <mask key="constraints">
                                                     <include reference="cI1-qR-GTQ"/>
                                                     <include reference="gp2-Sj-iak"/>
                                                     <include reference="oZw-se-dlJ"/>
+                                                    <include reference="HaG-6s-bOn"/>
+                                                    <include reference="PTL-nU-m7T"/>
+                                                    <include reference="x8d-4H-dbG"/>
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>

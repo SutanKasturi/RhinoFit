@@ -14,7 +14,7 @@
     
 }
 
-- (void)deleteAllDataForEntity:(NSString*)entityName;
+- (void)deleteAllDataForEntity:(NSString*)entityName sortField:(NSString*)sortField;
 - (void)deleteDataByValue:(NSString*)entityName fieldName:(NSString*)fieldName fieldValue:(NSNumber*)fieldValue;
 
 - (void)insertNewRecord:(NSString*)entityName fields:(NSDictionary*)fields;

@@ -44,6 +44,11 @@
 //    self.transitionsNavigationController = (UINavigationController *)self.slidingViewController.topViewController;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self displayUserInfo];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -51,12 +56,9 @@
 
 - (void) displayUserInfo
 {
-//    if ( (currentUser.userFirstName == nil || [currentUser.userFirstName isEqualToString:@""]) && (currentUser.userLastName == nil || [currentUser.userLastName isEqualToString:@""]))
-//    {
-        self.mUserNameLabel.text = [[NSUserDefaults standardUserDefaults] objectForKey:kRhinoFitUserEmail];
-//    } else {
-//        self.mUserNameLabel.text = [NSString stringWithFormat:@"%@ %@", currentUser.userFirstName, currentUser.userLastName];
-//    }
+    NSUserDefaults *sharedInstance = [NSUserDefaults standardUserDefaults];
+    NSString *email = [sharedInstance objectForKey:kRhinoFitUserEmail];
+    self.mUserNameLabel.text = email;
 }
 
 #pragma mark - NetworkManagerDelegate

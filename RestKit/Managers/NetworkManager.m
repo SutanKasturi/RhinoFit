@@ -64,7 +64,7 @@ static UserInfo* currentUser;
     [sharedInstance removeObjectForKey:kParamToken];
     
     CoreDataHandler *cdHandler = [[CoreDataHandler alloc] init];
-    [cdHandler deleteAllDataForEntity:kCoreDataUserInfo];
+    [cdHandler deleteAllDataForEntity:kCoreDataUserInfo sortField:@"userFirstName"];
 }
 
 - (NSString*) getToken
@@ -108,6 +108,7 @@ static UserInfo* currentUser;
                          NSString *token = [response objectForKey:@"token"];
                          NSUserDefaults *sharedInstance = [NSUserDefaults standardUserDefaults];
                          [sharedInstance setObject:token forKey:kParamToken];
+                         [sharedInstance setObject:email forKey:kRhinoFitUserEmail];
                          [self.delegate successRequest:kRequestLogin result:token];
                      }
                      else {

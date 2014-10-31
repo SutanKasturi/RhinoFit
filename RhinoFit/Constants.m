@@ -57,8 +57,8 @@ NSString *const kButtonMarkAttended = @"Mark Attended";
 NSString *const kButtonCancelAttendance = @"Cancel Attendance";
 
 // Globals
-NSString *const kRhinoFitUserToken = @"com.travis.rhinofit.User_Token";
-NSString *const kRhinoFitUserEmail = @"com.travis.rhinofit.User_Email";
+NSString *const kRhinoFitUserToken = @"com.travis.rhinofit.token";
+NSString *const kRhinoFitUserEmail = @"com.travis.rhinofit.email";
 
 // Request Params
 NSString *const kParamAction = @"action";

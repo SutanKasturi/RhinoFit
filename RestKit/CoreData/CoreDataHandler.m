@@ -106,25 +106,54 @@
     
 }
 
-
-
-- (void)deleteAllDataForEntity:(NSString*)entityName{
-    NSManagedObjectContext *mOC =[RKManagedObjectStore defaultStore].mainQueueManagedObjectContext;
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    
-    NSEntityDescription *entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:mOC];
-    [fetchRequest setEntity:entity];
+- (void)deleteAllDataForEntity:(NSString*)entityName sortField:(NSString*)sortField{
+    //    NSManagedObjectContext *mOC =[RKManagedObjectStore defaultStore].mainQueueManagedObjectContext;
+    //    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    //
+    //    NSEntityDescription *entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:mOC];
+    //    [fetchRequest setEntity:entity];
+    //
+    //    NSError *error;
+    //    NSArray *items = [mOC executeFetchRequest:fetchRequest error:&error];
+    //    for ( NSManagedObject *managedObject in items ) {
+    //        [mOC deleteObject:managedObject];
+    //        NSLog(@"%@ object deleted", entityName);
+    //    }
+    //    items = nil;
+    //
+    //    if ( ![mOC save:&error] ) {
+    //        NSLog(@"Error deleting %@ - error: %@", entityName, error);
+    //    }
+    //    [mOC processPendingChanges];
     
     NSError *error;
-    NSArray *items = [mOC executeFetchRequest:fetchRequest error:&error];
-    for ( NSManagedObject *managedObject in items ) {
-        [mOC deleteObject:managedObject];
-        NSLog(@"%@ object deleted", entityName);
+    [[RKManagedObjectStore defaultStore].mainQueueManagedObjectContext save:&error];
+    [[RKManagedObjectStore defaultStore].mainQueueManagedObjectContext saveToPersistentStore:&error];
+    // NSManagedObjectContext *mOCPersistent =[RKManagedObjectStore defaultStore].persistentStoreManagedObjectContext;
+    NSManagedObjectContext *mOC =[RKManagedObjectStore defaultStore].mainQueueManagedObjectContext;
+    
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:entityName];
+    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:sortField ascending:NO];
+    fetchRequest.sortDescriptors = @[descriptor];
+    
+    // Setup fetched results
+    NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                                               managedObjectContext:mOC
+                                                                                                 sectionNameKeyPath:nil
+                                                                                                          cacheName:nil];
+    
+    [fetchedResultsController performFetch:&error];
+    
+    for (id object in [ fetchedResultsController fetchedObjects]) {
+        NSLog(@"DELETING ******* %@", object);
+        [mOC deleteObject:object];
     }
     
-    if ( ![mOC save:&error] ) {
-        NSLog(@"Error deleting %@ - error: %@", entityName, error);
+    if (![mOC saveToPersistentStore:&error]) {
+        NSLog(@"CORE DATA FAILED TO SAVE");
     }
+    
+    [mOC processPendingChanges];
 }
 
 -(NSArray*) getEntityDataByID:(NSString*)entityName idField:(NSString*)idField idValue:(NSNumber*)idValue{
