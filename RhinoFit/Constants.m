@@ -9,7 +9,7 @@
 #import "Constants.h"
 
 // App Url
-NSString *const kAppBaseUrl = @"https://rhinofit.ca/";
+NSString *const kAppBaseUrl = @"https://my.rhinofit.ca/";
 
 // Menu Items
 NSString *const kMenuClasses = @"Classes";

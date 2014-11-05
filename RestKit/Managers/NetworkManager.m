@@ -120,6 +120,7 @@ static UserInfo* currentUser;
              failure:^(RKObjectRequestOperation *operation, NSError *error) {
                  NSLog(@"Error : %@", error.description);
                  [self.delegate failureRequest:kRequestLogin errorMessage:[error localizedDescription]];
+                 [self errorMessage:error.localizedDescription];
              }];
 }
 
