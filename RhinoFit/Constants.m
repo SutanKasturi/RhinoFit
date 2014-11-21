@@ -33,6 +33,8 @@ NSString *const kRequestMyBenchmarks = @"listmybenchmarks";
 NSString *const kRequestAvailableBenchmarks = @"listavailablebenchmarks";
 NSString *const kRequestNewBenchmark = @"addbenchmark";
 NSString *const kRequestMyMemberships = @"listmemberships";
+NSString *const kRequestMyBenchmarkData = @"listmybenchmarkdata";
+NSString *const kRequestDeleteBenchmarkData = @"deletebenchmarkdata";
 
 // Messages
 NSString* const kMessageInvalidLogin = @"Invalid Login";
@@ -45,9 +47,11 @@ NSString *const kMessageIsReservation = @"You are reserved in this class";
 NSString *const kMessageIsAttended = @"You have attended this class";
 NSString *const kMessageIsReservationAndAttended = @"You have reserved and attended this class";
 NSString *const kMessageUnkownError = @"Unkown Error";
-NSString *const kMessageNoReservations = @"There is no reservations";
-NSString *const kMessageNoAttendance = @"There is no attendance";
+NSString *const kMessageNoReservations = @"You have no upcoming reservations.";
+NSString *const kMessageNoAttendance = @"You have not attended any classes in this month.";
 NSString *const kMessageNoMyBenchmarks = @"You currently have no benchmarks";
+NSString *const kMessageDeleteBenchmark = @"Are you sure you want to delete this entry?";
+NSString *const kMessageNoMyMemberships = @"You currently have no memberships";
 
 // Button Names
 
@@ -80,6 +84,8 @@ NSString *const kParamBBestResults = @"bbestresults";
 NSString *const kParamBLastDate = @"blastdate";
 NSString *const kParamBLastResults = @"blastresults";
 NSString *const kParamBFormat = @"bformat";
+NSString *const kParamId = @"id";
+NSString *const kParamValue = @"value";
 
 NSString *const kParamMId = @"mid";
 NSString *const kParamMName = @"mname";

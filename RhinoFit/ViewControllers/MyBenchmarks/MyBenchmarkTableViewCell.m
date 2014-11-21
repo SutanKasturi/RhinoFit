@@ -20,7 +20,10 @@
     // Configure the view for the selected state
 }
 - (IBAction)onUpdate:(id)sender {
-    [self.delegate didUpdateBenchmark:self.mBenchmark];
+    [self.delegate onUpdateBenchmark:self.mBenchmark];
+}
+- (IBAction)onHistory:(id)sender {
+    [self.delegate onHistoryBenchmark:self];
 }
 
 - (void) setBenchmark:(MyBenchmark*)benchmark

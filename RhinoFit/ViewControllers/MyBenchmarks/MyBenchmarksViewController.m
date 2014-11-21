@@ -14,11 +14,13 @@
 #import "WaitingViewController.h"
 #import "AddBenchmarkViewController.h"
 #import "AvailableBenchmark.h"
+#import "MyBenchmarkHistoryViewController.h"
 
-@interface MyBenchmarksViewController ()<MyBenchmarkTableViewCellDelegate, AddBenchmarkViewControllerDelegate>
+@interface MyBenchmarksViewController ()<MyBenchmarkTableViewCellDelegate, AddBenchmarkViewControllerDelegate, MyBenchmarkHistoryViewControllerDelegate>
 
 @property (nonatomic, strong) NSMutableArray *mMyBenchmarks;
 @property (nonatomic, strong) WaitingViewController *waitingViewController;
+@property (nonatomic, strong) NSIndexPath *selectedIndexPath;
 
 @end
 
@@ -26,6 +28,7 @@
 
 @synthesize mMyBenchmarks = _mMyBenchmarks;
 @synthesize waitingViewController;
+@synthesize selectedIndexPath;
 
 - (void)getMyBenchmarks
 {
@@ -61,7 +64,7 @@
 {
     if ( waitingViewController == nil ) {
         waitingViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"WaitingViewController"];
-        waitingViewController.view.frame = self.tableView.frame;
+        waitingViewController.view.frame = self.view.frame;
         [self addChildViewController:waitingViewController];
         [self.view addSubview:waitingViewController.view];
         [waitingViewController showWaitingIndicator];
@@ -104,16 +107,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
-#pragma mark- MyBenchmarksTableViewCellDelegate
-
-- (void)didUpdateBenchmark:(MyBenchmark *)benchmark
-{
-    AddBenchmarkViewController *addBenchmarkViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"AddBenchmarkViewController"];
-    addBenchmarkViewController.mBenchmark = benchmark;
-    addBenchmarkViewController.delegate = self;
-    [self.navigationController pushViewController:addBenchmarkViewController animated:YES];
-}
-
 #pragma mark - AddBenchmarkViewControllerDelegate
 
 - (void)didAddedBenchmark:(NSArray *)newBenchmark
@@ -142,10 +135,6 @@
         }
     }
     if ( selectedBenchmark == nil ) {
-        if ( isNew ==  NO ) {
-            isNew = YES;
-            path = [NSIndexPath indexPathForRow:[[self mMyBenchmarks] count] inSection:0];
-        }
         selectedBenchmark = [[MyBenchmark alloc] init];
         selectedBenchmark.benchmarkId = available.benchmarkId;
         selectedBenchmark.title = available.bdescription;
@@ -207,4 +196,38 @@
     [self.navigationController pushViewController:addBenchmarkViewController animated:YES];
 }
 
+#pragma mark- MyBenchmarksTableViewCellDelegate
+
+- (void)onUpdateBenchmark:(MyBenchmark *)benchmark
+{
+    AddBenchmarkViewController *addBenchmarkViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"AddBenchmarkViewController"];
+    addBenchmarkViewController.mBenchmark = benchmark;
+    addBenchmarkViewController.delegate = self;
+    [self.navigationController pushViewController:addBenchmarkViewController animated:YES];
+}
+
+- (void)onHistoryBenchmark:(MyBenchmarkTableViewCell *)cell {
+    MyBenchmarkHistoryViewController *benchmarkHistoryViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MyBenchmarkHistoryViewController"];
+    benchmarkHistoryViewController.mBenchmark = cell.mBenchmark;
+    benchmarkHistoryViewController.delegate = self;
+    selectedIndexPath = [self.tableView indexPathForCell:cell];
+    [self.navigationController pushViewController:benchmarkHistoryViewController animated:YES];
+}
+
+#pragma mark - MyBenchmarkHistoryViewControllerDelegate
+- (void)didUpdatedMyBenchmarkHistory {
+    if ( selectedIndexPath && selectedIndexPath.row < [[self mMyBenchmarks] count]) {
+        [self.tableView beginUpdates];
+        [self.tableView reloadRowsAtIndexPaths:@[selectedIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView endUpdates];
+    }
+}
+
+- (void)removeMyBenchmark {
+    if ( selectedIndexPath && selectedIndexPath.row < [[self mMyBenchmarks] count]) {
+        [self.tableView beginUpdates];
+        [self.tableView deleteRowsAtIndexPaths:@[selectedIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView endUpdates];
+    }
+}
 @end

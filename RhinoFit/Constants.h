@@ -35,7 +35,8 @@ extern NSString *const kRequestMyBenchmarks;
 extern NSString *const kRequestAvailableBenchmarks;
 extern NSString *const kRequestNewBenchmark;
 extern NSString *const kRequestMyMemberships;
-
+extern NSString *const kRequestMyBenchmarkData;
+extern NSString *const kRequestDeleteBenchmarkData;
 
 // Messages
 extern NSString *const kMessageInvalidLogin;
@@ -51,6 +52,8 @@ extern NSString *const kMessageUnkownError;
 extern NSString *const kMessageNoReservations;
 extern NSString *const kMessageNoAttendance;
 extern NSString *const kMessageNoMyBenchmarks;
+extern NSString *const kMessageDeleteBenchmark;
+extern NSString *const kMessageNoMyMemberships;
 
 // Button Names
 
@@ -83,6 +86,8 @@ extern NSString *const kParamBBestResults;
 extern NSString *const kParamBLastDate;
 extern NSString *const kParamBLastResults;
 extern NSString *const kParamBFormat;
+extern NSString *const kParamId;
+extern NSString *const kParamValue;
 
 extern NSString *const kParamMId;
 extern NSString *const kParamMName;

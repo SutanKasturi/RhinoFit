@@ -9,10 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "MyBenchmark.h"
 
+@class MyBenchmarkTableViewCell;
+
 @protocol MyBenchmarkTableViewCellDelegate <NSObject>
 
 @required
-- (void) didUpdateBenchmark:(MyBenchmark*)benchmark;
+- (void) onUpdateBenchmark:(MyBenchmark*)benchmark;
+- (void) onHistoryBenchmark:(MyBenchmarkTableViewCell*)cell;
 
 @end
 

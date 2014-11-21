@@ -32,7 +32,7 @@
     
     [[NetworkManager sharedManager] getMyMemberships:^(NSMutableArray *result) {
         if ( result == nil || [result count] == 0 ) {
-            [waitingViewController showResult:kMessageNoMyBenchmarks];
+            [waitingViewController showResult:kMessageNoMyMemberships];
         }
         else {
             [waitingViewController.view setHidden:YES];

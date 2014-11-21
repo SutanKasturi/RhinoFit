@@ -13,17 +13,17 @@
 #import "UIViewController+ECSlidingViewController.h"
 #import "NetworkManager.h"
 
-@interface AttendanceViewController ()<AttendanceTableViewCellDelegate, NetworkManagerDelegate, SRMonthPickerDelegate, UIScrollViewDelegate>
+@interface AttendanceViewController ()<AttendanceTableViewCellDelegate, SRMonthPickerDelegate, UIScrollViewDelegate>
 
 @property (nonatomic, strong) WaitingViewController *waitingViewController;
-@property (nonatomic, strong) NSMutableArray *mAttendance;
+@property (nonatomic, strong) NSMutableArray *mAttendanceArray;
 
 @end
 
 @implementation AttendanceViewController
 
 @synthesize waitingViewController;
-@synthesize mAttendance;
+@synthesize mAttendanceArray;
 @synthesize monthLabel;
 @synthesize monthPicker;
 
@@ -77,7 +77,7 @@
 
 - (void) setTitleString
 {
-    self.title = [NSString stringWithFormat:@"My Attendace(%d)", (int)[mAttendance count]];
+    self.title = [NSString stringWithFormat:@"My Attendace (%d)", (int)[mAttendanceArray count]];
 }
 
 #pragma mark - TapGesture
@@ -112,8 +112,6 @@
 {
     monthLabel.text = [NSString stringWithFormat:@"%@", [self formatDate:self.monthPicker.date]];
     [waitingViewController showWaitingIndicator];
-    NetworkManager *networkManager = [NetworkManager sharedManager];
-    networkManager.delegate = self;
     NSCalendar *cal = [NSCalendar currentCalendar];
     NSDateComponents *components = [[NSDateComponents alloc] init];
     
@@ -126,50 +124,40 @@
     [components setMonth:[month intValue]];
     NSRange range = [cal rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:[cal dateFromComponents:components]];
     
-    [networkManager getAttendance:[NSString stringWithFormat:@"%@-%@-01", year, month] endDate:[NSString stringWithFormat:@"%@-%@-%d", year, month, (int)range.length]];
-}
+    [[NetworkManager sharedManager] getAttendance:[NSString stringWithFormat:@"%@-%@-01", year, month]
+                                          endDate:[NSString stringWithFormat:@"%@-%@-%d", year, month, (int)range.length]
+                                          success:^(NSMutableArray *result) {
+                                              if ( result != nil ) {
+                                                  mAttendanceArray = [[NSMutableArray alloc] initWithArray:result];
+                                                  [self setTitleString];
+                                                  [self.tableView reloadData];
+                                                  if ( [[self mAttendanceArray] count] == 0 ) {
+                                                      [waitingViewController showResult:kMessageNoAttendance];
+                                                  }
+                                                  else
+                                                      [waitingViewController.view setHidden:YES];
+                                              }
+                                              else {
+                                                  [waitingViewController showResult:kMessageNoClasses];
+                                              }
 
-#pragma mark - NetworkManagerDelegate
-
-- (void) successRequest:(NSString *)action result:(id)obj
-{
-    if ( ![action isEqualToString:kRequestGetAttendance] )
-        return;
-    
-    if ( obj != nil && [obj isKindOfClass:[NSMutableArray class]]) {
-        mAttendance = obj;
-        [self setTitleString];
-        [self.tableView reloadData];
-        if ( [[self mAttendance] count] == 0 ) {
-            [waitingViewController showResult:kMessageNoAttendance];
-        }
-        else
-            [waitingViewController.view setHidden:YES];
-    }
-    else {
-        [waitingViewController showResult:kMessageNoClasses];
-    }
-}
-
-- (void) failureRequest:(NSString *)action errorMessage:(NSString *)errorMessage
-{
-    if ( ![action isEqualToString:kRequestListReservations] )
-        return;
-    
-    [waitingViewController showResult:errorMessage];
+                                          }
+                                          failure:^(NSString *error) {
+                                              [waitingViewController showResult:error];
+                                          }];
 }
 
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [mAttendance count];
+    return [mAttendanceArray count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"AttendanceTableViewCell";
     AttendanceTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
-    [cell setAttendance:mAttendance[indexPath.row]];
+    [cell setAttendance:mAttendanceArray[indexPath.row]];
     cell.delegate = self;
     
     return cell;
@@ -189,7 +177,7 @@
 - (void)didCanceledAttendance:(AttendanceTableViewCell *)cell
 {
     [self.tableView beginUpdates];
-    [mAttendance removeObject:cell.mAttendance];
+    [mAttendanceArray removeObject:cell.mAttendance];
     [self.tableView deleteRowsAtIndexPaths:@[[self.tableView indexPathForCell:cell]] withRowAnimation:UITableViewRowAnimationAutomatic];
     [self.tableView endUpdates];
 }

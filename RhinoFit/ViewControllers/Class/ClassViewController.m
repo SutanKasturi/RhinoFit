@@ -110,49 +110,27 @@
     [[NetworkManager sharedManager] getClassess:dateString
                         endDate:dateString
                         success:^(NSArray *result) {
-                            [self successRequest:kRequestGetClassess result:result];
+                            if ( classes )
+                                [classes removeAllObjects];
+                            else
+                                classes = [[NSMutableArray alloc] init];
+                            if ( result != nil && [result isKindOfClass:[NSArray class]] && [result count] > 0 ) {
+                                [classes addObjectsFromArray:result];
+                                [self.tableView reloadData];
+                                [waitingViewController.view setHidden:YES];
+                                [waitingView setHidden:YES];
+                            }
+                            else {
+                                [waitingView setHidden:YES];
+                                [waitingViewController showResult:kMessageNoClasses];
+                            }
                         }
                         failure:^(NSString *error) {
-                            [self failureRequest:kRequestGetClassess errorMessage:error];
+                            if ( classes )
+                                [classes removeAllObjects];
+                            [waitingView setHidden:YES];
+                            [waitingViewController showResult:error];
                         }];
-}
-
-#pragma mark - NetworkManagerDelegate
-
-- (void) successRequest:(NSString *)action result:(id)obj
-{
-    if ( ![action isEqualToString:kRequestGetClassess] )
-        return;
-    
-    if ( obj != nil && [obj isKindOfClass:[NSArray class]]) {
-        classes = [[NSMutableArray alloc] initWithArray:obj];
-        [self.tableView reloadData];
-        [waitingViewController.view setHidden:YES];
-        [waitingView setHidden:YES];
-    }
-    else {
-        [waitingView setHidden:YES];
-        [waitingViewController showResult:kMessageNoClasses];
-    }
-}
-
-- (void) failureRequest:(NSString *)action errorMessage:(NSString *)errorMessage
-{
-    if ( ![action isEqualToString:kRequestGetClassess] )
-        return;
-    
-    [waitingView setHidden:YES];
-    [waitingViewController showResult:errorMessage];
-}
-
-#pragma mark - Properties
-
-- (METransitions *)transitions {
-    if (_transitions) return _transitions;
-    
-    _transitions = [[METransitions alloc] init];
-    
-    return _transitions;
 }
 
 - (UIPanGestureRecognizer *)dynamicTransitionPanGesture {

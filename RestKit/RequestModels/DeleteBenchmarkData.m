@@ -1,16 +1,16 @@
 //
-//  AddNewBenchmarkRequest.m
+//  DeleteBenchmarkData.m
 //  RhinoFit
 //
-//  Created by Admin on 10/30/14.
+//  Created by Admin on 11/21/14.
 //  Copyright (c) 2014 Sutan. All rights reserved.
 //
 
-#import "AddNewBenchmarkRequest.h"
+#import "DeleteBenchmarkData.h"
 
-@implementation AddNewBenchmarkRequest
+@implementation DeleteBenchmarkData
 
-+(RKObjectMapping *)getAddNewBenchmarkRequestMapping
++(RKObjectMapping *)getDeleteBenchmarkDataRequestMapping
 {
     RKObjectMapping *mapping = [RKObjectMapping requestMapping];
     [mapping addAttributeMappingsFromArray:@[@"action", @"token", @"id", @"date", @"value", @"dataid"]];

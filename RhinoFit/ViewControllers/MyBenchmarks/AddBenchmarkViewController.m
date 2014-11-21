@@ -12,13 +12,15 @@
 #import "Constants.h"
 #import "AvailableBenchmark.h"
 #import "WaitingViewController.h"
+#import "BenchmarkSpinnerViewController.h"
 #import <MBProgressHUD/MBProgressHUD.h>
 
-@interface AddBenchmarkViewController ()<DemoTextFieldDelegate>
+@interface AddBenchmarkViewController ()<BenchmarkSpinnerViewControllerDelegate>
 
-@property (nonatomic, strong) NSMutableArray *availableBenchmarkLabels;
 @property (nonatomic, strong) AvailableBenchmark *selectedBenchmark;
 @property (nonatomic, strong) WaitingViewController *waitingViewController;
+@property (nonatomic, strong) UIView *overlayView;
+@property (nonatomic, strong) BenchmarkSpinnerViewController *benchmarkSpinnerViewController;
 
 @end
 
@@ -30,17 +32,22 @@
 @synthesize measurementTextfield;
 @synthesize measurementLabel;
 @synthesize benchmarkButton;
+@synthesize benchmarkSpinnerButton;
 @synthesize saveButton;
-@synthesize availableBenchmarkLabels;
 @synthesize selectedBenchmark;
+@synthesize deleteBenchmarkButton;
 @synthesize waitingViewController;
+@synthesize overlayView;
+@synthesize benchmarkSpinnerViewController;
 
 static NSMutableArray * availableBenchmark;
 
-- (NSMutableArray*)getAvailableBenchmark
+- (void)getAvailableBenchmark
 {
-    if ( availableBenchmark && [availableBenchmark count] > 0 )
-        return availableBenchmark;
+    if ( availableBenchmark && [availableBenchmark count] > 0 ) {
+        [self setAvailableBenchmarkLabels];
+        return;
+    }
     
     if ( availableBenchmark == nil )
         availableBenchmark = [[NSMutableArray alloc] init];
@@ -48,14 +55,11 @@ static NSMutableArray * availableBenchmark;
         [availableBenchmark removeAllObjects];
     
     [[NetworkManager sharedManager] getAvailableBenchmarks:^(NSMutableArray *result) {
-        availableBenchmark = result;
-        [self setAvailableBenchmarkLabels];
-    } failure:^(NSString *error) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:error delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [alertView show];
-    }];
-    
-    return availableBenchmark;
+                availableBenchmark = result;
+                [self setAvailableBenchmarkLabels];
+            } failure:^(NSString *error) {
+                [waitingViewController showResult:error];
+            }];
 }
 
 - (void) setAvailableBenchmarkLabels
@@ -66,34 +70,30 @@ static NSMutableArray * availableBenchmark;
         return;
     }
     
-    if ( availableBenchmark == nil || [availableBenchmark count] == 0 ) {
+    if ( [availableBenchmark count] == 0 ) {
         [waitingViewController showResult:@"There is no available benchmark"];
         return;
     }
-    
-    if ( availableBenchmarkLabels == nil )
-        availableBenchmarkLabels = [[NSMutableArray alloc] init];
-    else
-        [availableBenchmarkLabels removeAllObjects];
-    for ( AvailableBenchmark *available in availableBenchmark) {
-        [availableBenchmarkLabels addObject:available.bdescription];
-    }
-    
-    benchmarkTextField.pickerArray = availableBenchmarkLabels;
-    [benchmarkTextField setType:TEXT_FIELD_PICKER];
-    benchmarkTextField.pickerdelegate = self;
-    
+    benchmarkSpinnerViewController.mBenchmarkArray = availableBenchmark;
+    [benchmarkSpinnerViewController.tableView reloadData];
     if ( self.mBenchmark ) {
         for ( int i = 0; i < [availableBenchmark count]; i++ ) {
             AvailableBenchmark *available = availableBenchmark[i];
             if ( [available.benchmarkId intValue] == [self.mBenchmark.benchmarkId intValue] ) {
                 selectedBenchmark = available;
-                [self didSelectedPicker:i];
+                [self didSelectedBenchmark:selectedBenchmark];
                 break;
             }
         }
         benchmarkTextField.text = self.mBenchmark.title;
-        measurementTextfield.text = self.mBenchmark.lastScore;
+        if ( self.mBenchmarkHistory ) {
+            [dateTextField setDate:self.mBenchmarkHistory.date format:@"MM/dd/yyyy"];
+            measurementTextfield.text = self.mBenchmarkHistory.value;
+        }
+        else {
+            [dateTextField setDate:self.mBenchmark.currentDate format:@"MM/dd/yyyy"];
+            measurementTextfield.text = self.mBenchmark.currentScore;
+        }
         measurementLabel.text = self.mBenchmark.type;
         [self setEditableBenchmark:YES];
     }
@@ -101,8 +101,13 @@ static NSMutableArray * availableBenchmark;
         [self setEditableBenchmark:NO];
         [benchmarkTextField setEnabled:YES];
         [benchmarkButton setEnabled:YES];
+        [overlayView setHidden:NO];
     }
     [waitingViewController.view setHidden:YES];
+}
+
+- (void) tapHandler {
+    [overlayView setHidden:YES];
 }
 
 - (void)viewDidLoad {
@@ -115,17 +120,39 @@ static NSMutableArray * availableBenchmark;
     
     [saveButton setButtonType:CustomButtonBlue];
     
-    [self setAvailableBenchmarkLabels];
+    if ( self.mBenchmarkHistory ) {
+        [deleteBenchmarkButton setHidden:NO];
+        [benchmarkTextField setEnabled:NO];
+        [benchmarkButton setEnabled:NO];
+    }
+    else {
+        [deleteBenchmarkButton setHidden:YES];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     if ( waitingViewController == nil ) {
+        overlayView = [[UIView alloc] initWithFrame:self.view.bounds];
+        benchmarkSpinnerViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"BenchmarkSpinnerViewController"];
+        CGRect rect = benchmarkSpinnerButton.frame;
+        benchmarkSpinnerViewController.view.frame = CGRectMake(rect.origin.x + 10, rect.origin.y + rect.size.height, rect.size.width - 10, 300);
+        benchmarkSpinnerViewController.delegate = self;
+        [overlayView setHidden:YES];
+        
+        [overlayView addSubview:benchmarkSpinnerViewController.view];
+        [self addChildViewController:benchmarkSpinnerViewController];
+        [self.view addSubview:overlayView];
+        
+//        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapHandler)];
+//        [overlayView addGestureRecognizer:tapGestureRecognizer];
+        
         waitingViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"WaitingViewController"];
         waitingViewController.view.frame = self.view.bounds;
         [self addChildViewController:waitingViewController];
         [self.view addSubview:waitingViewController.view];
-        if ( [[self getAvailableBenchmark] count] == 0 )
+        [self getAvailableBenchmark];
+        if ( [availableBenchmark count] == 0 )
             [waitingViewController showWaitingIndicator];
         else
             [waitingViewController.view setHidden:YES];
@@ -145,37 +172,53 @@ static NSMutableArray * availableBenchmark;
     [benchmarkButton setEnabled:isEditable];
     [dateButton setEnabled:isEditable];
     [saveButton setEnabled:isEditable];
+    [benchmarkSpinnerButton setEnabled:isEditable];
     if ( isEditable == NO )
         measurementLabel.text = @"";
+    
+    if ( self.mBenchmarkHistory ) {
+        [benchmarkButton setEnabled:NO];
+        [benchmarkTextField setEnabled:NO];
+    }
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 - (IBAction)onDate:(id)sender {
     [dateTextField becomeFirstResponder];
 }
-- (IBAction)onBenchmark:(id)sender {
-    [benchmarkTextField becomeFirstResponder];
+- (IBAction)onBenchmarkSpinner:(id)sender {
+    if ( [overlayView isHidden] ) {
+        overlayView.alpha = 1.0f;
+        [overlayView setHidden:NO];
+    }
+    else
+        [overlayView setHidden:YES];
+}
+- (IBAction)onDeleteBenchmark:(id)sender {
+    [self confirmPopup:kMessageDeleteBenchmark];
 }
 
 - (IBAction)onSave:(id)sender {
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view.superview animated:YES];
     hud.labelText = NSLocalizedString(@"Adding...", nil);
     hud.dimBackground = YES;
+    
+    NSString *dataId = nil;
+    if ( self.mBenchmarkHistory )
+        dataId = [self.mBenchmarkHistory.benchmarkDataId stringValue];
+    
     [[NetworkManager sharedManager] addNewBenchmark:[NSString stringWithFormat:@"%@", selectedBenchmark.benchmarkId]
                                                date:dateTextField.text
-                                              value:measurementTextfield.text
-                                            success:^(NSMutableDictionary *result) {
+                                              value:[NSString stringWithFormat:@"%d",[measurementTextfield.text intValue]]
+                                             dataId:dataId
+                                            success:^(NSNumber *benchmarkDataId) {
                                                 [MBProgressHUD hideAllHUDsForView:self.view.superview animated:YES];
-                                                if ( result ) {
+                                                if ( benchmarkDataId ) {
                                                     NSArray *newBenchmark = [[NSArray alloc] initWithObjects:selectedBenchmark, dateTextField.datePicker.date, measurementTextfield.text, nil];
+                                                    if ( self.mBenchmarkHistory ) {
+                                                        self.mBenchmarkHistory.benchmarkDataId = benchmarkDataId;
+                                                        self.mBenchmarkHistory.date = dateTextField.datePicker.date;
+                                                        self.mBenchmarkHistory.value = measurementTextfield.text;
+                                                    }
                                                     [self.delegate didAddedBenchmark:newBenchmark];
                                                     [self.navigationController popViewControllerAnimated:YES];
                                                 }
@@ -187,11 +230,61 @@ static NSMutableArray * availableBenchmark;
                                             }];
 }
 
-#pragma mark - DemoTextFieldDelegate
+#pragma mark - Delete confirm
 
-- (void)didSelectedPicker:(int)row
+- (void) confirmPopup:(NSString*)message
 {
-    selectedBenchmark = [self getAvailableBenchmark][row];
+    UIAlertView *alert = [[UIAlertView alloc]
+                          initWithTitle:@""
+                          message:message
+                          delegate:self
+                          cancelButtonTitle:@"No"
+                          otherButtonTitles:@"Yes", nil];
+    [alert show];
+}
+
+- (void) alertView:(UIAlertView*)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if ( buttonIndex == 1 ) {
+        [self deleteBenchmarkData];
+    }
+}
+
+- (void) deleteBenchmarkData {
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view.superview animated:YES];
+    hud.labelText = NSLocalizedString(@"Deleting...", nil);
+    hud.dimBackground = YES;
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"MM/dd/yyyy"];
+    [[NetworkManager sharedManager] deleteBenchmarkData:[self.mBenchmark.benchmarkId stringValue]
+                                                   date:[df stringFromDate:self.mBenchmarkHistory.date]
+                                                  value:self.mBenchmarkHistory.value
+                                                 dataId:[self.mBenchmarkHistory.benchmarkDataId stringValue]
+                                                success:^(BOOL isSuccess) {
+                                                    [MBProgressHUD hideAllHUDsForView:self.view.superview animated:YES];
+                                                    if ( isSuccess )
+                                                        [self.delegate didDeletedBenchmarkData];
+                                                    [self.navigationController popViewControllerAnimated:YES];
+                                                }
+                                                failure:^(NSString *error) {
+                                                    [MBProgressHUD hideAllHUDsForView:self.view.superview animated:YES];
+                                                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:error delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                                                    [alertView show];
+                                                }];
+}
+
+#pragma mark - BenchmarkSpinnerViewControllerDelegate
+
+- (void)didSelectedBenchmark:(AvailableBenchmark *)benchmark {
+    [UIView animateWithDuration:0.2f
+                     animations:^{
+                         overlayView.alpha = 0.0f;
+                     }
+                     completion:^(BOOL finished) {
+                         [overlayView setHidden:YES];
+                     }];
+    selectedBenchmark = benchmark;
+    benchmarkTextField.text = selectedBenchmark.bdescription;
     if ( [selectedBenchmark.btype isEqualToString:@"minutes:seconds"] ) {
         [measurementTextfield setType:TEXT_FIELD_MINUTEANDSECOND];
         measurementTextfield.pickerView = nil;
@@ -204,4 +297,5 @@ static NSMutableArray * availableBenchmark;
     measurementLabel.text = selectedBenchmark.btype;
     [self setEditableBenchmark:YES];
 }
+
 @end

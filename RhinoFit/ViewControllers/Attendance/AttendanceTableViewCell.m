@@ -10,7 +10,7 @@
 #import "Constants.h"
 #import "NetworkManager.h"
 
-@interface AttendanceTableViewCell() <NetworkManagerDelegate>
+@interface AttendanceTableViewCell()
 
 @end
 @implementation AttendanceTableViewCell
@@ -59,9 +59,19 @@
 }
 - (void) cancelAttendance
 {
-    NetworkManager *networkManage = [NetworkManager sharedManager];
-    networkManage.delegate = self;
-    [networkManage deleteAttendance:[NSString stringWithFormat:@"%@",mAttendance.attendanceId]];
+    [[NetworkManager sharedManager] deleteAttendance:[NSString stringWithFormat:@"%@",mAttendance.attendanceId]
+                                             success:^(BOOL isSuccess) {
+                                                 if ( isSuccess ) {
+                                                     mAttendance.attendanceId = [NSNumber numberWithInt:0];
+                                                     mAttendance.isActionAttendance = NO;
+                                                     [self.delegate didCanceledAttendance:self];
+                                                     return;
+                                                 }
+                                                 [self setAttendance:mAttendance];
+                                             }
+                                             failure:^(NSString *error) {
+                                                 
+                                             }];
 }
 
 - (void) setAttendance:(Attendance *)aAttendance
@@ -81,31 +91,6 @@
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"EEEE, MMMM dd, yyyy"];
     whenLabel.text = [df stringFromDate:mAttendance.when];
-}
-
-#pragma mark - NetworkManagerDelegate
-
-- (void) successRequest:(NSString *)action result:(id)obj
-{
-    NSLog(@"Success");
-    if ( mAttendance == nil )
-        return;
-    
-    if ( [obj isKindOfClass:[NSDictionary class]] ) {
-        if ( [[obj objectForKey:kParamAction] isEqualToString:kRequestDeleteAttendance]
-            && [[obj objectForKey:kResponseKeyAttendanceId] isEqualToString:[NSString stringWithFormat:@"%@", mAttendance.attendanceId]] ) {
-            mAttendance.attendanceId = [NSNumber numberWithInt:0];
-            mAttendance.isActionAttendance = NO;
-            [self.delegate didCanceledAttendance:self];
-            return;
-        }
-    }
-    [self setAttendance:mAttendance];
-}
-
-- (void) failureRequest:(NSString *)action errorMessage:(NSString *)errorMessage
-{
-    NSLog(@"Failure");
 }
 
 @end

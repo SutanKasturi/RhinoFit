@@ -21,14 +21,17 @@
 #import "GetAttendanceRequest.h"
 #import "MakeAttendanceRequest.h"
 #import "DeleteAttendanceRequest.h"
+#import "DeleteBenchmarkData.h"
 #import "Reservation.h"
 #import "Attendance.h"
+#import "BenchmarkHistory.h"
 
 #import "MyBenchmarksRequest.h"
 #import "AddNewBenchmarkRequest.h"
 #import "MyMembershipsRequest.h"
 #import "AvailableBenchmarksRequest.h"
 #import "MyBenchmark.h"
+#import "MyBenchmarkDataRequest.h"
 #import "MyMembership.h"
 #import "AvailableBenchmark.h"
 
@@ -87,6 +90,8 @@ static UserInfo* currentUser;
 
 - (void)sendEmailLogin:(NSString *)email
               password:(NSString *)password
+               success:(void (^)(BOOL isLoggedIn))success
+               failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure
 {
     LoginRequest *dataObject = [LoginRequest new];
     [dataObject setAction:kRequestLogin];
@@ -100,8 +105,9 @@ static UserInfo* currentUser;
                  NSError *error;
                  NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
                  if ( error ) {
-                     [self.delegate failureRequest:kRequestLogin errorMessage:error.localizedDescription];
                      [self errorMessage:error.localizedDescription];
+                     if ( success )
+                         success(NO);
                  }
                  else {
                      if ( [response objectForKey:@"token"] ){
@@ -109,18 +115,21 @@ static UserInfo* currentUser;
                          NSUserDefaults *sharedInstance = [NSUserDefaults standardUserDefaults];
                          [sharedInstance setObject:token forKey:kParamToken];
                          [sharedInstance setObject:email forKey:kRhinoFitUserEmail];
-                         [self.delegate successRequest:kRequestLogin result:token];
+                         if ( success )
+                             success(YES);
                      }
                      else {
                          NSString *error = [response objectForKey:@"error"];
-                         [self.delegate failureRequest:kRequestLogin errorMessage:error];
                          [self errorMessage:error];
+                         if ( success )
+                             success(NO);
                      }
                  }             }
              failure:^(RKObjectRequestOperation *operation, NSError *error) {
                  NSLog(@"Error : %@", error.description);
-                 [self.delegate failureRequest:kRequestLogin errorMessage:[error localizedDescription]];
                  [self errorMessage:error.localizedDescription];
+                 if ( failure )
+                     failure(operation, error);
              }];
 }
 
@@ -138,13 +147,15 @@ static UserInfo* currentUser;
                  NSError *error;
                  NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
                  if ( error ) {
-                     [self.delegate failureRequest:kRequestGetUserInfo errorMessage:error.localizedDescription];
+                     if ( failure )
+                         failure(error.localizedDescription);
                      [self errorMessage:error.localizedDescription];
                  }
                  else {
                      if ( [response objectForKey:@"error"] ){
                          NSString *error = [response objectForKey:@"error"];
-                         [self.delegate failureRequest:kRequestGetUserInfo errorMessage:error];
+                         if ( failure )
+                             failure(error);
                          [self errorMessage:error];
                      }
                      else {
@@ -273,7 +284,10 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
              }];
 }
 
-- (void) makeReservation:(NSString*)classId reservationDate:(NSString*)reservationDate
+- (void) makeReservation:(NSString*)classId
+         reservationDate:(NSString*)reservationDate
+                 success:(void (^)(NSDictionary *result))success
+                 failure:(void (^)(NSString *error))failure
 {
     MakeReservationRequest *dataObject = [[MakeReservationRequest alloc] init];
     [dataObject setAction:kRequestMakeReservation];
@@ -286,39 +300,43 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
           parameters:nil
              success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                  if ( operation.HTTPRequestOperation.response.statusCode != 200 ) {
-                     [self.delegate failureRequest:kRequestMakeReservation errorMessage:operation.HTTPRequestOperation.responseString];
+                     if ( failure )
+                         failure(operation.HTTPRequestOperation.responseString);
                      return;
                  }
                  NSError *error;
                  NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
                  if ( error || response == nil ) {
-                     [self.delegate failureRequest:kRequestMakeReservation errorMessage:error.localizedDescription];
+                     if ( failure )
+                         failure(error.localizedDescription);
                  }
                  else {
                      if ( [response isKindOfClass:[NSDictionary class]] ){
                          if ( [response objectForKey:@"error"] ) {
                              NSString *error = [response objectForKey:@"error"];
-                             [self.delegate failureRequest:kRequestMakeReservation errorMessage:error];
+                             if ( failure )
+                                 failure(error);
                          }
                          else {
-                             NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithDictionary:response];
-                             [result setValue:kRequestMakeReservation forKey:kParamAction];
-                             [result setValue:classId forKey:kResponseKeyClassId];
-                             [self.delegate successRequest:kRequestMakeReservation result:result];
+                             if ( success )
+                                 success(response);
                          }
                      }
                      else {
-                         [self.delegate failureRequest:kRequestMakeReservation errorMessage:kMessageUnkownError];
+                         if ( failure )
+                             failure(kMessageUnkownError);
                      }
                  }
              }
              failure:^(RKObjectRequestOperation *operation, NSError *error) {
                  NSLog(@"Error : %@", error.description);
-                 [self.delegate failureRequest:kRequestMakeReservation errorMessage:error.localizedDescription];
+                 if ( failure )
+                     failure(error.localizedDescription);
              }];
 }
 
-- (void) listReservation
+- (void) listReservation:(void (^)(NSMutableArray *result))success
+                 failure:(void (^)(NSString *error))failure
 {
     ListReservationRequest *dataObject = [[ListReservationRequest alloc] init];
     [dataObject setAction:kRequestListReservations];
@@ -329,46 +347,55 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
           parameters:nil
              success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                  if ( operation.HTTPRequestOperation.response.statusCode != 200 ) {
-                     [self.delegate failureRequest:kRequestListReservations errorMessage:operation.HTTPRequestOperation.responseString];
+                     if ( failure )
+                         failure(operation.HTTPRequestOperation.responseString);
                      return;
                  }
                  NSError *error;
                  NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
                  if ( error || response == nil ) {
-                     [self.delegate failureRequest:kRequestListReservations errorMessage:error.localizedDescription];
+                     if ( failure )
+                         failure (error.localizedDescription);
                  }
                  else {
                      if ( [response isKindOfClass:[NSDictionary class]] && [response objectForKey:@"error"] ) {
                          NSString *error = [response objectForKey:@"error"];
-                         [self.delegate failureRequest:kRequestListReservations errorMessage:error];
+                         if ( failure )
+                             failure(error);
                      }
                      else if ( [response isKindOfClass:[NSArray class]] ){
-                         NSMutableArray *result = [[NSMutableArray alloc] init];
-                         for ( NSDictionary *dict in response ) {
-                             Reservation *reservation = [[Reservation alloc] init];
-                             reservation.reservationId = [NSNumber numberWithInt:[[dict objectForKey:kResponseKeyReservationId] intValue]];
-                             reservation.title = [dict objectForKey:kResponseKeyTitle];
-                             
-                             NSDateFormatter *df = [[NSDateFormatter alloc] init];
-                             [df setDateFormat:@"EEE, d MMM yyyy HH:mm:ss Z"];
+                         if ( success ) {
+                             NSMutableArray *result = [[NSMutableArray alloc] init];
+                             for ( NSDictionary *dict in response ) {
+                                 Reservation *reservation = [[Reservation alloc] init];
+                                 reservation.reservationId = [NSNumber numberWithInt:[[dict objectForKey:kResponseKeyReservationId] intValue]];
+                                 reservation.title = [dict objectForKey:kResponseKeyTitle];
+                                 
+                                 NSDateFormatter *df = [[NSDateFormatter alloc] init];
+                                 [df setDateFormat:@"EEE, d MMM yyyy HH:mm:ss Z"];
 
-                             reservation.when = [df dateFromString:[dict objectForKey:kResponseKeyReservationWhen]];
-                             reservation.isActionReservation = NO;
-                             [result addObject:reservation];
+                                 reservation.when = [df dateFromString:[dict objectForKey:kResponseKeyReservationWhen]];
+                                 reservation.isActionReservation = NO;
+                                 [result addObject:reservation];
+                             }
+                             success (result);
                          }
-                         [self.delegate successRequest:kRequestListReservations result:result];
                      }
                      else {
-                         [self.delegate failureRequest:kRequestListReservations errorMessage:kMessageUnkownError];
+                         if ( failure )
+                             failure(kMessageUnkownError);
                      }
                  }
              }
              failure:^(RKObjectRequestOperation *operation, NSError *error) {
                  NSLog(@"Error : %@", error.description);
-                 [self.delegate failureRequest:kRequestListReservations errorMessage:error.localizedDescription];
+                 if ( failure )
+                     failure(error.localizedDescription);
              }];
 }
 - (void) deleteReservation:(NSString*)resId
+                   success:(void (^)(BOOL isSuccess))success
+                   failure:(void (^)(NSString *error))failure
 {
     DeleteReservationRequest *dataObject = [[DeleteReservationRequest alloc] init];
     [dataObject setAction:kRequestDeleteReservation];
@@ -380,42 +407,49 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
           parameters:nil
              success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                  if ( operation.HTTPRequestOperation.response.statusCode != 200 ) {
-                     [self.delegate failureRequest:kRequestDeleteReservation errorMessage:operation.HTTPRequestOperation.responseString];
+                     if ( failure )
+                         failure(operation.HTTPRequestOperation.responseString);
                      return;
                  }
                  NSError *error;
                  NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
                  if ( error || response == nil ) {
-                     [self.delegate failureRequest:kRequestDeleteReservation errorMessage:error.localizedDescription];
+                     if ( failure )
+                         failure(error.localizedDescription);
                  }
                  else {
                      if ( [response isKindOfClass:[NSDictionary class]] ){
                          if ( [response objectForKey:@"error"] ) {
                              NSString *error = [response objectForKey:@"error"];
-                             [self.delegate failureRequest:kRequestDeleteReservation errorMessage:error];
+                             if ( failure )
+                                 failure(error);
                          }
                          else if ( [[response objectForKey:kResponseKeyResult] intValue] == 1 ){
-                             NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
-                             [result setValue:kRequestDeleteReservation forKey:kParamAction];
-                             [result setValue:resId forKey:kResponseKeyReservationId];
-                             [self.delegate successRequest:kRequestDeleteReservation result:result];
+                             if ( success )
+                                 success(YES);
                          }
                          else
                          {
-                             [self.delegate failureRequest:kRequestDeleteReservation errorMessage:kMessageUnkownError];
+                             if ( failure )
+                                 failure(kMessageUnkownError);
                          }
                      }
                      else {
-                         [self.delegate failureRequest:kRequestDeleteReservation errorMessage:kMessageUnkownError];
+                         if ( failure )
+                             failure(kMessageUnkownError);
                      }
                  }
              }
              failure:^(RKObjectRequestOperation *operation, NSError *error) {
                  NSLog(@"Error : %@", error.description);
-                 [self.delegate failureRequest:kRequestDeleteReservation errorMessage:error.localizedDescription];
+                 if ( failure )
+                     failure(error.localizedDescription);
              }];
 }
-- (void) getAttendance:(NSString*)startDate endDate:(NSString *)endDate
+- (void) getAttendance:(NSString*)startDate
+               endDate:(NSString *)endDate
+               success:(void (^)(NSMutableArray *result))success
+               failure:(void (^)(NSString *error))failure
 {
     GetAttendanceRequest *dataObject = [[GetAttendanceRequest alloc] init];
     [dataObject setAction:kRequestGetAttendance];
@@ -428,44 +462,55 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
           parameters:nil
              success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                  if ( operation.HTTPRequestOperation.response.statusCode != 200 ) {
-                     [self.delegate failureRequest:kRequestGetAttendance errorMessage:operation.HTTPRequestOperation.responseString];
+                     if ( failure )
+                         failure(operation.HTTPRequestOperation.responseString);
                      return;
                  }
                  NSError *error;
                  NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
                  if ( error || response == nil ) {
-                     [self.delegate failureRequest:kRequestGetAttendance errorMessage:error.localizedDescription];
+                     if ( failure )
+                         failure (error.localizedDescription);
                  }
                  else {
                      if ( [response isKindOfClass:[NSDictionary class]] && [response objectForKey:@"error"] ) {
                          NSString *error = [response objectForKey:@"error"];
-                         [self.delegate failureRequest:kRequestGetAttendance errorMessage:error];
+                         if ( failure )
+                             failure(error);
                      }
                      else if ( [response isKindOfClass:[NSArray class]] ){
-                         NSMutableArray *result = [[NSMutableArray alloc] init];
-                         for ( NSDictionary *dict in response ) {
-                             Attendance *attendance = [[Attendance alloc] init];
-                             attendance.attendanceId = [NSNumber numberWithInt:[[dict objectForKey:kResponseKeyAttendanceId] intValue]];
-                             attendance.title = [dict objectForKey:kResponseKeyTitle];
-                             NSDateFormatter *df = [[NSDateFormatter alloc] init];
-                             [df setDateFormat:@"EEE, d MMM yyyy HH:mm:ss Z"];
-                             attendance.when = [df dateFromString:[dict objectForKey:kResponseKeyAttendanceWhen]];
-                             attendance.isActionAttendance = NO;
-                             [result addObject:attendance];
+                         if ( success ) {
+                             NSMutableArray *result = [[NSMutableArray alloc] init];
+                             for ( NSDictionary *dict in response ) {
+                                 Attendance *attendance = [[Attendance alloc] init];
+                                 attendance.attendanceId = [NSNumber numberWithInt:[[dict objectForKey:kResponseKeyAttendanceId] intValue]];
+                                 attendance.title = [dict objectForKey:kResponseKeyTitle];
+                                 NSDateFormatter *df = [[NSDateFormatter alloc] init];
+                                 [df setDateFormat:@"EEE, d MMM yyyy HH:mm:ss Z"];
+                                 attendance.when = [df dateFromString:[dict objectForKey:kResponseKeyAttendanceWhen]];
+                                 attendance.isActionAttendance = NO;
+                                 [result addObject:attendance];
+                             }
+                             if ( success )
+                                 success(result);
                          }
-                         [self.delegate successRequest:kRequestGetAttendance result:result];
                      }
                      else {
-                         [self.delegate failureRequest:kRequestGetAttendance errorMessage:kMessageUnkownError];
+                         if ( failure )
+                             failure(kMessageUnkownError);
                      }
                  }
              }
              failure:^(RKObjectRequestOperation *operation, NSError *error) {
                  NSLog(@"Error : %@", error.description);
-                 [self.delegate failureRequest:kRequestGetAttendance errorMessage:error.localizedDescription];
+                 if ( failure )
+                     failure(error.localizedDescription);
              }];
 }
-- (void) makeAttendance:(NSString*)classId attendanceDate:(NSString*)attendanceDate
+- (void) makeAttendance:(NSString*)classId
+         attendanceDate:(NSString*)attendanceDate
+                success:(void (^)(NSNumber *attendanceId))success
+                failure:(void (^)(NSString *error))failure
 {
     MakeAttendanceRequest *dataObject = [[MakeAttendanceRequest alloc] init];
     [dataObject setAction:kRequestMakeAttendance];
@@ -478,38 +523,46 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
           parameters:nil
              success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                  if ( operation.HTTPRequestOperation.response.statusCode != 200 ) {
-                     [self.delegate failureRequest:kRequestMakeAttendance errorMessage:operation.HTTPRequestOperation.responseString];
+                     if ( failure )
+                         failure(operation.HTTPRequestOperation.responseString);
                      return;
                  }
                  NSError *error;
                  NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
                  if ( error || response == nil ) {
-                     [self.delegate failureRequest:kRequestMakeAttendance errorMessage:error.localizedDescription];
+                     if ( failure )
+                         failure(error.localizedDescription);
                  }
-                 else {
-                     if ( [response isKindOfClass:[NSDictionary class]] ){
-                         if ( [response objectForKey:@"error"] ) {
-                             NSString *error = [response objectForKey:@"error"];
-                             [self.delegate failureRequest:kRequestMakeAttendance errorMessage:error];
-                         }
-                         else {
-                             NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithDictionary:response];
-                             [result setValue:kRequestMakeAttendance forKey:kParamAction];
-                             [result setValue:classId forKey:kResponseKeyClassId];
-                             [self.delegate successRequest:kRequestMakeAttendance result:result];
-                         }
+                 else if ( [response isKindOfClass:[NSDictionary class]] ){
+                     if ( [response objectForKey:@"error"] ) {
+                         NSString *error = [response objectForKey:@"error"];
+                         if ( failure )
+                             failure(error);
+                     }
+                     if ( [response objectForKey:kResponseKeyAttendanceId] ) {
+                         NSNumber *attendanceId = [NSNumber numberWithInt:[[response objectForKey:kResponseKeyAttendanceId] intValue]];
+                         if ( success )
+                             success(attendanceId);
                      }
                      else {
-                         [self.delegate failureRequest:kRequestMakeAttendance errorMessage:kMessageUnkownError];
+                         if ( failure )
+                             failure(kMessageUnkownError);
                      }
+                 }
+                 else {
+                     if ( failure )
+                         failure(kMessageUnkownError);
                  }
              }
              failure:^(RKObjectRequestOperation *operation, NSError *error) {
                  NSLog(@"Error : %@", error.description);
-                 [self.delegate failureRequest:kRequestMakeAttendance errorMessage:error.localizedDescription];
+                 if ( failure )
+                     failure(error.localizedDescription);
              }];
 }
 - (void) deleteAttendance:(NSString*)aId
+                  success:(void (^)(BOOL isSuccess))success
+                  failure:(void (^)(NSString *error))failure
 {
     DeleteAttendanceRequest *dataObject = [[DeleteAttendanceRequest alloc] init];
     [dataObject setAction:kRequestDeleteAttendance];
@@ -521,39 +574,41 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
           parameters:nil
              success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                  if ( operation.HTTPRequestOperation.response.statusCode != 200 ) {
-                     [self.delegate failureRequest:kRequestDeleteAttendance errorMessage:operation.HTTPRequestOperation.responseString];
+                     if ( failure )
+                         failure(operation.HTTPRequestOperation.responseString);
                      return;
                  }
                  NSError *error;
                  NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
                  if ( error || response == nil ) {
-                     [self.delegate failureRequest:kRequestDeleteAttendance errorMessage:error.localizedDescription];
+                     if ( failure )
+                         failure(error.localizedDescription);
+                 }
+                 else if ( [response isKindOfClass:[NSDictionary class]] ){
+                     if ( [response objectForKey:@"error"] ) {
+                         NSString *error = [response objectForKey:@"error"];
+                         if ( failure )
+                             failure(error);
+                     }
+                     else if ( [[response objectForKey:kResponseKeyResult] intValue] == 1 ){
+                         if ( success )
+                             success(YES);
+                     }
+                     else
+                     {
+                         if ( failure )
+                             failure(kMessageUnkownError);
+                     }
                  }
                  else {
-                     if ( [response isKindOfClass:[NSDictionary class]] ){
-                         if ( [response objectForKey:@"error"] ) {
-                             NSString *error = [response objectForKey:@"error"];
-                             [self.delegate failureRequest:kRequestDeleteAttendance errorMessage:error];
-                         }
-                         else if ( [[response objectForKey:kResponseKeyResult] intValue] == 1 ){
-                             NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
-                             [result setValue:kRequestDeleteAttendance forKey:kParamAction];
-                             [result setValue:aId forKey:kResponseKeyAttendanceId];
-                             [self.delegate successRequest:kRequestDeleteAttendance result:result];
-                         }
-                         else
-                         {
-                             [self.delegate failureRequest:kRequestDeleteAttendance errorMessage:kMessageUnkownError];
-                         }
-                     }
-                     else {
-                         [self.delegate failureRequest:kRequestDeleteAttendance errorMessage:kMessageUnkownError];
-                     }
+                     if ( failure )
+                         failure(kMessageUnkownError);
                  }
              }
              failure:^(RKObjectRequestOperation *operation, NSError *error) {
                  NSLog(@"Error : %@", error.description);
-                 [self.delegate failureRequest:kRequestDeleteAttendance errorMessage:error.localizedDescription];
+                 if ( failure )
+                     failure(error.localizedDescription);
              }];
 }
 
@@ -621,7 +676,8 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
 - (void) addNewBenchmark:(NSString*)benchmarkId
                     date:(NSString*)date
                    value:(NSString*)value
-                 success:(void (^)(NSMutableDictionary*result))success
+                  dataId:(NSString*)dataId
+                 success:(void (^)(NSNumber *benchmarkDataId))success
                  failure:(void (^)(NSString *error))failure
 {
     AddNewBenchmarkRequest *dataObject = [[AddNewBenchmarkRequest alloc] init];
@@ -630,13 +686,13 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     [dataObject setId:benchmarkId];
     [dataObject setDate:date];
     [dataObject setValue:value];
+    [dataObject setDataid:dataId];
     
     [self postObject:dataObject
                 path:@"api.php"
           parameters:nil
              success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                  if ( operation.HTTPRequestOperation.response.statusCode != 200 ) {
-                     [self.delegate failureRequest:kRequestMakeAttendance errorMessage:operation.HTTPRequestOperation.responseString];
                      if ( failure )
                          failure (operation.HTTPRequestOperation.responseString);
                      return;
@@ -655,10 +711,9 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                                  failure(error);
                          }
                          else {
-                             NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithDictionary:response];
-                             NSLog(@"%@", result);
+                             NSNumber *benchmarkDataId = [NSNumber numberWithInt:[[response objectForKey:kParamId] intValue]];
                              if (success) {
-                                 success(result);
+                                 success(benchmarkDataId);
                              }
                          }
                      }
@@ -732,6 +787,117 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
              }];
 }
 
+- (void) getMyBenchmarkData:(NSString*)benchmarkId
+                    success:(void (^)(NSMutableArray*result))success
+                    failure:(void (^)(NSString *error))failure
+{
+    MyBenchmarkDataRequest *dataObject = [[MyBenchmarkDataRequest alloc] init];
+    [dataObject setAction:kRequestMyBenchmarkData];
+    [dataObject setToken:[self getToken]];
+    [dataObject setId:benchmarkId];
+    
+    [self postObject:dataObject
+                path:@"api.php"
+          parameters:nil
+             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                 if ( operation.HTTPRequestOperation.response.statusCode != 200 ) {
+                     if ( failure )
+                         failure (operation.HTTPRequestOperation.responseString);
+                     return;
+                 }
+                 NSError *error;
+                 NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
+                 if ( error || response == nil ) {
+                     if ( failure )
+                         failure(error.localizedDescription);
+                 }
+                 else {
+                     if ( [response isKindOfClass:[NSDictionary class]] && [response objectForKey:@"error"] ) {
+                         NSString *error = [response objectForKey:@"error"];
+                         if ( failure )
+                             failure(error);
+                     }
+                     else if ( [response isKindOfClass:[NSArray class]] ) {
+                         if ( success ) {
+                             NSMutableArray *result = [[NSMutableArray alloc] init];
+                             NSDateFormatter *df = [[NSDateFormatter alloc] init];
+                             [df setDateFormat:@"yyyy-MM-dd"];
+                             for ( NSDictionary *dict in response ) {
+                                 BenchmarkHistory *history = [[BenchmarkHistory alloc] init];
+                                 [history setBenchmarkDataId:[NSNumber numberWithInt:[[dict objectForKey:kParamId] intValue]]];
+                                 [history setDate:[df dateFromString:[dict objectForKey:kParamDate]]];
+                                 [history setValue:[dict objectForKey:kParamValue]];
+                                 [result addObject:history];
+                             }
+                             result = [[NSMutableArray alloc] initWithArray:[result sortedArrayUsingSelector:@selector(compare:)]];
+                             success(result);
+                         }
+                     }
+                     else {
+                         if ( failure )
+                             failure(kMessageUnkownError);
+                     }
+                 }
+             }
+             failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                 NSLog(@"Error : %@", error.description);
+                 if (failure)
+                     failure(error.localizedDescription);
+             }];
+}
+
+- (void) deleteBenchmarkData:(NSString *)benchmarkId
+                        date:(NSString*)date
+                       value:(NSString*)value
+                      dataId:(NSString*)dataId
+                     success:(void (^)(BOOL isSuccess))success
+                     failure:(void (^)(NSString *error))failure
+{
+    DeleteBenchmarkData *dataObject = [[DeleteBenchmarkData alloc] init];
+    [dataObject setAction:kRequestDeleteBenchmarkData];
+    [dataObject setToken:[self getToken]];
+    [dataObject setId:benchmarkId];
+    [dataObject setDate:date];
+    [dataObject setValue:value];
+    [dataObject setDataid:dataId];
+    
+    [self postObject:dataObject
+                path:@"api.php"
+          parameters:nil
+             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                 if ( operation.HTTPRequestOperation.response.statusCode != 200 ) {
+                     if ( failure )
+                         failure(operation.HTTPRequestOperation.responseString);
+                     return;
+                 }
+                 NSError *error;
+                 NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
+                 if ( error || response == nil ) {
+                     if ( failure )
+                         failure(error.localizedDescription);
+                 }
+                 else if ( [response isKindOfClass:[NSDictionary class]] && [response objectForKey:@"error"]){
+                     NSString *error = [response objectForKey:@"error"];
+                     if ( failure )
+                         failure(error);
+                 }
+                 else if ( [response isKindOfClass:[NSArray class]] ){
+                     if ( success )
+                         success(YES);
+                 }
+                 else
+                 {
+                     if ( failure )
+                         failure(kMessageUnkownError);
+                 }
+             }
+             failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                 NSLog(@"Error : %@", error.description);
+                 if ( failure )
+                     failure(error.localizedDescription);
+             }];
+}
+
 - (void) getMyMemberships:(void (^)(NSMutableArray*result))success
                   failure:(void (^)(NSString *error))failure
 {
@@ -762,24 +928,25 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                          }
                      }
                      else if ( [response isKindOfClass:[NSArray class]] ){
-                         NSMutableArray *result = [[NSMutableArray alloc] init];
-                         for ( NSDictionary *dict in response ) {
-                             NSLog(@"%@", dict);
-                             MyMembership *membership = [[MyMembership alloc] init];
-                             membership.memebershipId = [NSNumber numberWithInt:[[dict objectForKey:kParamMId] intValue]];
-                             membership.membershipName = [dict objectForKey:kParamMName];
-                             NSDateFormatter *df = [[NSDateFormatter alloc] init];
-                             [df setDateFormat:@"yyyy-MM-dd"];
-                             membership.startDate = [df dateFromString:[dict objectForKey:kParamMStartDate]];
-                             membership.endDate = [df dateFromString:[dict objectForKey:kParamMEndDate]];
-                             membership.renewal = [dict objectForKey:kParamMRenewal];
-                             membership.attended = [NSNumber numberWithInt:[[dict objectForKey:kParamMAttended] intValue]];
-                             membership.attendedLimit = [NSNumber numberWithInt:[[dict objectForKey:kParamMAttendedLimit] intValue]];
-                             membership.limit = [dict objectForKey:kParamMLimit];
-                             [result addObject:membership];
-                         }
-                         if ( success )
+                         if ( success ) {
+                             NSMutableArray *result = [[NSMutableArray alloc] init];
+                             for ( NSDictionary *dict in response ) {
+                                 NSLog(@"%@", dict);
+                                 MyMembership *membership = [[MyMembership alloc] init];
+                                 membership.memebershipId = [NSNumber numberWithInt:[[dict objectForKey:kParamMId] intValue]];
+                                 membership.membershipName = [dict objectForKey:kParamMName];
+                                 NSDateFormatter *df = [[NSDateFormatter alloc] init];
+                                 [df setDateFormat:@"yyyy-MM-dd"];
+                                 membership.startDate = [df dateFromString:[dict objectForKey:kParamMStartDate]];
+                                 membership.endDate = [df dateFromString:[dict objectForKey:kParamMEndDate]];
+                                 membership.renewal = [dict objectForKey:kParamMRenewal];
+                                 membership.attended = [NSNumber numberWithInt:[[dict objectForKey:kParamMAttended] intValue]];
+                                 membership.attendedLimit = [NSNumber numberWithInt:[[dict objectForKey:kParamMAttendedLimit] intValue]];
+                                 membership.limit = [dict objectForKey:kParamMLimit];
+                                 [result addObject:membership];
+                             }
                              success(result);
+                         }
                      }
                      else {
                          if ( failure )

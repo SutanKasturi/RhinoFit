@@ -10,7 +10,7 @@
 #import "Constants.h"
 #import "NetworkManager.h"
 
-@interface ClassTableViewCell()<NetworkManagerDelegate> {
+@interface ClassTableViewCell() {
     BOOL isConfirmReservation;
 }
 
@@ -104,33 +104,68 @@
 - (void) makeReservation
 {
     NetworkManager *networkManage = [NetworkManager sharedManager];
-    networkManage.delegate = self;
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"yyyy-MM-dd"];
-    [networkManage makeReservation:theClass.classId reservationDate:[df stringFromDate:[NSDate new]]];
+    [networkManage makeReservation:theClass.classId
+                   reservationDate:[df stringFromDate:[NSDate new]]
+                           success:^(NSDictionary *result) {
+                               if ( result != nil ) {
+                                   theClass.reservationId = [NSNumber numberWithInt:[[result objectForKey:kResponseKeyReservationId] intValue]];
+                                   theClass.isActionReservation = NO;
+                               }
+                               [self setClass:theClass];
+                           }
+                           failure:^(NSString *error) {
+                               [self setClass:theClass];
+                           }];
 }
 
 - (void) cancelReservation
 {
-    NetworkManager *networkManage = [NetworkManager sharedManager];
-    networkManage.delegate = self;
-    [networkManage deleteReservation:[NSString stringWithFormat:@"%@",theClass.reservationId]];
+    [[NetworkManager sharedManager] deleteReservation:[NSString stringWithFormat:@"%@",theClass.reservationId]
+                             success:^(BOOL isSuccess) {
+                                 if ( isSuccess ) {
+                                     theClass.reservationId = [NSNumber numberWithInt:0];
+                                     theClass.isActionReservation = NO;
+                                 }
+                                 [self setClass:theClass];
+                             }
+                             failure:^(NSString *error) {
+                                 [self setClass:theClass];
+                             }];
 }
 
 - (void) markAttended
 {
-    NetworkManager *networkManage = [NetworkManager sharedManager];
-    networkManage.delegate = self;
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"yyyy-MM-dd"];
-    [networkManage makeAttendance:theClass.classId attendanceDate:[df stringFromDate:[NSDate new]]];
+    [[NetworkManager sharedManager] makeAttendance:theClass.classId
+                   attendanceDate:[df stringFromDate:[NSDate new]]
+                          success:^(NSNumber *attendanceId) {
+                              if ( attendanceId ) {
+                                  theClass.aId = attendanceId;
+                                  theClass.isActionAttendance = NO;
+                              }
+                              [self setClass:theClass];
+                          }
+                          failure:^(NSString *error) {
+                              [self setClass:theClass];
+                          }];
 }
 
 - (void) cancelAttendance
 {
-    NetworkManager *networkManage = [NetworkManager sharedManager];
-    networkManage.delegate = self;
-    [networkManage deleteAttendance:[NSString stringWithFormat:@"%@",theClass.aId]];
+    [[NetworkManager sharedManager] deleteAttendance:[NSString stringWithFormat:@"%@",theClass.aId]
+                                             success:^(BOOL isSuccess) {
+                                                 if (isSuccess) {
+                                                     theClass.aId = [NSNumber numberWithInt:0];
+                                                     theClass.isActionAttendance = NO;
+                                                 }
+                                                 [self setClass:theClass];
+                                             }
+                                             failure:^(NSString *error) {
+                                                 [self setClass:theClass];
+                                             }];
 }
 
 - (void) setClass:(RhinoFitClass*) aClass
@@ -181,43 +216,6 @@
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"hh:mm a"];
     timeLabel.text = [df stringFromDate:theClass.startDate];
-}
-
-#pragma mark - NetworkManagerDelegate
-
-- (void) successRequest:(NSString *)action result:(id)obj
-{
-    NSLog(@"Success");
-    if ( theClass == nil )
-        return;
-    
-    if ( [obj isKindOfClass:[NSDictionary class]] ) {
-        if ( [[obj objectForKey:kParamAction] isEqualToString:kRequestMakeReservation]
-            && [[obj objectForKey:kResponseKeyClassId] isEqualToString:theClass.classId] ) {
-            theClass.reservationId = [NSNumber numberWithInt:[[obj objectForKey:kResponseKeyReservationId] intValue]];
-            theClass.isActionReservation = NO;
-        }
-        else if ( [[obj objectForKey:kParamAction] isEqualToString:kRequestDeleteReservation]
-                 && [[obj objectForKey:kResponseKeyReservationId] isEqualToString:[NSString stringWithFormat:@"%@", theClass.reservationId]] ) {
-            theClass.reservationId = [NSNumber numberWithInt:0];
-            theClass.isActionReservation = NO;
-        }
-        else if ( [[obj objectForKey:kParamAction] isEqualToString:kRequestMakeAttendance]
-                 && [[obj objectForKey:kResponseKeyClassId] isEqualToString:theClass.classId] ) {
-            theClass.aId = [NSNumber numberWithInt:[[obj objectForKey:kResponseKeyAttendanceId] intValue]];
-            theClass.isActionAttendance = NO;
-        }
-        else if ( [[obj objectForKey:kParamAction] isEqualToString:kRequestDeleteAttendance]
-                 && [[obj objectForKey:kResponseKeyAttendanceId] isEqualToString:[NSString stringWithFormat:@"%@", theClass.aId]] ) {
-            theClass.aId = [NSNumber numberWithInt:0];
-            theClass.isActionAttendance = NO;
-        }
-    }
-    [self setClass:theClass];
-}
-- (void) failureRequest:(NSString *)action errorMessage:(NSString *)errorMessage
-{
-    NSLog(@"Failure");
 }
 
 @end

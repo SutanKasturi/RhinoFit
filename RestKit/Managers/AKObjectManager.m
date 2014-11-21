@@ -24,6 +24,8 @@
 #import "AddNewBenchmarkRequest.h"
 #import "MyMembershipsRequest.h"
 #import "AvailableBenchmarksRequest.h"
+#import "MyBenchmarkDataRequest.h"
+#import "DeleteBenchmarkData.h"
 
 static AKObjectManager *sharedManager = nil;
 
@@ -48,10 +50,12 @@ static AKObjectManager *sharedManager = nil;
             RKLogError(@"Failed to create Application Data Directory at path '%@' : %@", RKApplicationDataDirectory(), error);
         }
         
-//        RKLogConfigureByName("RestKit/ObjectMapping", RKLogLevelInfo);
+//        RKLogConfigureByName("RestKit/ObjectMapping", RKLogLevelTrace);
 //        RKLogConfigureByName("RestKit/CoreData", RKLogLevelTrace);
-        RKLogConfigureByName("RestKit/Netowrk", RKLogLevelTrace);
-        RKLogConfigureByName("RestKit/Netowrk", RKLogLevelDebug);
+//        RKLogConfigureByName("RestKit/Netowrk", RKLogLevelTrace);
+//        RKLogConfigureByName("RestKit/Netowrk", RKLogLevelDebug);
+//        RKLogConfigureByName("RestKit/Netowrk", RKLogLevelInfo);
+//        RKLogConfigureByName("RestKit/Netowrk", RKLogLevelCritical);
         
         [managedObjectStore createPersistentStoreCoordinator];
         NSString *path = [RKApplicationDataDirectory() stringByAppendingPathComponent:@"RhinoFit.sqlite"];
@@ -104,20 +108,143 @@ static AKObjectManager *sharedManager = nil;
 }
 
 - (void) setupRequestDescriptors {
+    // LoginRequest
+    RKRequestDescriptor *loginRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[LoginRequest getLoginRequestMapping]
+                                                                                                 objectClass:[LoginRequest class]
+                                                                                                 rootKeyPath:nil
+                                                                                                      method:RKRequestMethodPOST];
+    
+    
+    [self addRequestDescriptor:loginRequestDescriptors];
+    
+    // UserInfoRequest
+    RKRequestDescriptor *userInfoRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[UserInfoRequest getUserInfoRequestMapping]
+                                                                                                    objectClass:[UserInfoRequest class]
+                                                                                                    rootKeyPath:nil
+                                                                                                         method:RKRequestMethodPOST];
+    
+    
+    [self addRequestDescriptor:userInfoRequestDescriptors];
+    
+    // ClassRequest
+    RKRequestDescriptor *classesRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[ClassesRequest getClassesRequestMapping]
+                                                                                                   objectClass:[ClassesRequest class]
+                                                                                                   rootKeyPath:nil
+                                                                                                        method:RKRequestMethodPOST];
+    
+    
+    [self addRequestDescriptor:classesRequestDescriptors];
+    
+    // MakeReservationResquest
+    RKRequestDescriptor *makeReservationRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[MakeReservationRequest getMakeReservationRequestMapping]
+                                                                                                           objectClass:[MakeReservationRequest class]
+                                                                                                           rootKeyPath:nil
+                                                                                                                method:RKRequestMethodPOST];
+    
+    
+    [self addRequestDescriptor:makeReservationRequestDescriptors];
+    
+    // ListReservationResquest
+    RKRequestDescriptor *listReservationRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[ListReservationRequest getListReservationRequestMapping]
+                                                                                                           objectClass:[ListReservationRequest class]
+                                                                                                           rootKeyPath:nil
+                                                                                                                method:RKRequestMethodPOST];
+    
+    
+    [self addRequestDescriptor:listReservationRequestDescriptors];
+    
+    // DeleteReservationResquest
+    RKRequestDescriptor *deleteReservationRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[DeleteReservationRequest getDeleteReservationRequestMapping]
+                                                                                                             objectClass:[DeleteReservationRequest class]
+                                                                                                             rootKeyPath:nil
+                                                                                                                  method:RKRequestMethodPOST];
+    
+    
+    [self addRequestDescriptor:deleteReservationRequestDescriptors];
+    
+    // GetAttendanceResquest
+    RKRequestDescriptor *getAttendanceRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[GetAttendanceRequest getGetAttendanceRequestMapping]
+                                                                                                         objectClass:[GetAttendanceRequest class]
+                                                                                                         rootKeyPath:nil
+                                                                                                              method:RKRequestMethodPOST];
+    
+    
+    [self addRequestDescriptor:getAttendanceRequestDescriptors];
+    
+    // MakeAttendanceResquest
+    RKRequestDescriptor *makeAttendanceRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[MakeAttendanceRequest getMakeAttendanceRequestMapping]
+                                                                                                          objectClass:[MakeAttendanceRequest class]
+                                                                                                          rootKeyPath:nil
+                                                                                                               method:RKRequestMethodPOST];
+    
+    
+    [self addRequestDescriptor:makeAttendanceRequestDescriptors];
+    
+    // DeleteAttendanceResquest
+    RKRequestDescriptor *deleteAttendanceRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[DeleteAttendanceRequest getDeleteAttendanceRequestMapping]
+                                                                                                            objectClass:[DeleteAttendanceRequest class]
+                                                                                                            rootKeyPath:nil
+                                                                                                                 method:RKRequestMethodPOST];
+    
+    
+    [self addRequestDescriptor:deleteAttendanceRequestDescriptors];
+    
+    // MyBenchmarksResquest
+    RKRequestDescriptor *myBenchmarksRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[MyBenchmarksRequest getMyBenchmarksRequestMapping]
+                                                                                                        objectClass:[MyBenchmarksRequest class]
+                                                                                                        rootKeyPath:nil
+                                                                                                             method:RKRequestMethodPOST];
+    
+    
+    [self addRequestDescriptor:myBenchmarksRequestDescriptors];
+    
+    // AddNewBenchmarksResquest
+    RKRequestDescriptor *addNewBenchmarksRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[AddNewBenchmarkRequest getAddNewBenchmarkRequestMapping]
+                                                                                                            objectClass:[AddNewBenchmarkRequest class]
+                                                                                                            rootKeyPath:nil
+                                                                                                                 method:RKRequestMethodPOST];
+    
+    
+    [self addRequestDescriptor:addNewBenchmarksRequestDescriptors];
+    
+    // MyBenchmarkDataRequest
+    RKRequestDescriptor *myBenchmarkDataRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[MyBenchmarkDataRequest getMyBenchmarkDataRequestMapping]
+                                                                                                    objectClass:[MyBenchmarkDataRequest class]
+                                                                                                    rootKeyPath:nil
+                                                                                                         method:RKRequestMethodPOST];
+    
+    
+    [self addRequestDescriptor:myBenchmarkDataRequestDescriptors];
+    
+    // DeleteBenchmarkDataRequest
+    RKRequestDescriptor *deleteBenchmarkDataRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[DeleteBenchmarkData getDeleteBenchmarkDataRequestMapping]
+                                                                                                   objectClass:[DeleteBenchmarkData class]
+                                                                                                   rootKeyPath:nil
+                                                                                                        method:RKRequestMethodPOST];
+    
+    
+    [self addRequestDescriptor:deleteBenchmarkDataRequestDescriptors];
+    
+    // MyMembershipsResquest
+    RKRequestDescriptor *myMembershipsRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[MyMembershipsRequest getMyMembershipsRequestMapping]
+                                                                                                         objectClass:[MyMembershipsRequest class]
+                                                                                                         rootKeyPath:nil
+                                                                                                              method:RKRequestMethodPOST];
+    
+    
+    [self addRequestDescriptor:myMembershipsRequestDescriptors];
+    
+    // AvailableBenchmarksRequest
+    RKRequestDescriptor *availableBenchmarksRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[AvailableBenchmarksRequest getAvailableBenchmarksRequestMapping]
+                                                                                                               objectClass:[AvailableBenchmarksRequest class]
+                                                                                                               rootKeyPath:nil
+                                                                                                                    method:RKRequestMethodPOST];
+    
+    
+    [self addRequestDescriptor:availableBenchmarksRequestDescriptors];
 }
 
 - (void) setupResponseDescriptors {
-    [self setupRequestResponseDescriptors];
-//    [self setupUserResponseDescriptors];
-//    [self setupClassResponseDescriptors];
-//    [self setupReservationResponseDescriptors];
-//    [self setupAttendanceResponseDescriptors];
-}
-
-
-#pragma mark - Request Mapping
-
-- (void) setupRequestResponseDescriptors {
     // Request Fial
     RKResponseDescriptor *requestFailResponseDescriptors = [RKResponseDescriptor responseDescriptorWithMapping:[RequestFail getRequestFailMapping]
                                                                                                         method:RKRequestMethodAny
@@ -136,221 +263,6 @@ static AKObjectManager *sharedManager = nil;
                                                                                                       statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
     
     [self addResponseDescriptor:requestSuccessResponseDescriptors];
-    
-    // LoginRequest
-    RKRequestDescriptor *loginRequestResponseDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[LoginRequest getLoginRequestMapping]
-                                                                                                 objectClass:[LoginRequest class]
-                                                                                                 rootKeyPath:nil
-                                                                                                      method:RKRequestMethodPOST];
-    
-    
-    [self addRequestDescriptor:loginRequestResponseDescriptors];
-    
-    // UserInfoRequest
-    RKRequestDescriptor *userInfoRequestResponseDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[UserInfoRequest getUserInfoRequestMapping]
-                                                                                                 objectClass:[UserInfoRequest class]
-                                                                                                 rootKeyPath:nil
-                                                                                                      method:RKRequestMethodPOST];
-    
-    
-    [self addRequestDescriptor:userInfoRequestResponseDescriptors];
-    
-    // UserInfoRequest
-    RKRequestDescriptor *classesRequestResponseDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[ClassesRequest getClassesRequestMapping]
-                                                                                                    objectClass:[ClassesRequest class]
-                                                                                                    rootKeyPath:nil
-                                                                                                         method:RKRequestMethodPOST];
-    
-    
-    [self addRequestDescriptor:classesRequestResponseDescriptors];
-    
-    // MakeReservationResquest
-    RKRequestDescriptor *makeReservationRequestResponseDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[MakeReservationRequest getMakeReservationRequestMapping]
-                                                                                                   objectClass:[MakeReservationRequest class]
-                                                                                                   rootKeyPath:nil
-                                                                                                        method:RKRequestMethodPOST];
-    
-    
-    [self addRequestDescriptor:makeReservationRequestResponseDescriptors];
-    
-    // ListReservationResquest
-    RKRequestDescriptor *listReservationRequestResponseDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[ListReservationRequest getListReservationRequestMapping]
-                                                                                                           objectClass:[ListReservationRequest class]
-                                                                                                           rootKeyPath:nil
-                                                                                                                method:RKRequestMethodPOST];
-    
-    
-    [self addRequestDescriptor:listReservationRequestResponseDescriptors];
-    
-    // DeleteReservationResquest
-    RKRequestDescriptor *deleteReservationRequestResponseDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[DeleteReservationRequest getDeleteReservationRequestMapping]
-                                                                                                           objectClass:[DeleteReservationRequest class]
-                                                                                                           rootKeyPath:nil
-                                                                                                                method:RKRequestMethodPOST];
-    
-    
-    [self addRequestDescriptor:deleteReservationRequestResponseDescriptors];
-    
-    // GetAttendanceResquest
-    RKRequestDescriptor *getAttendanceRequestResponseDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[GetAttendanceRequest getGetAttendanceRequestMapping]
-                                                                                                           objectClass:[GetAttendanceRequest class]
-                                                                                                           rootKeyPath:nil
-                                                                                                                method:RKRequestMethodPOST];
-    
-    
-    [self addRequestDescriptor:getAttendanceRequestResponseDescriptors];
-    
-    // MakeAttendanceResquest
-    RKRequestDescriptor *makeAttendanceRequestResponseDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[MakeAttendanceRequest getMakeAttendanceRequestMapping]
-                                                                                                           objectClass:[MakeAttendanceRequest class]
-                                                                                                           rootKeyPath:nil
-                                                                                                                method:RKRequestMethodPOST];
-    
-    
-    [self addRequestDescriptor:makeAttendanceRequestResponseDescriptors];
-    
-    // DeleteAttendanceResquest
-    RKRequestDescriptor *deleteAttendanceRequestResponseDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[DeleteAttendanceRequest getDeleteAttendanceRequestMapping]
-                                                                                                           objectClass:[DeleteAttendanceRequest class]
-                                                                                                           rootKeyPath:nil
-                                                                                                                method:RKRequestMethodPOST];
-    
-    
-    [self addRequestDescriptor:deleteAttendanceRequestResponseDescriptors];
-    
-    // MyBenchmarksResquest
-    RKRequestDescriptor *myBenchmarksRequestResponseDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[MyBenchmarksRequest getMyBenchmarksRequestMapping]
-                                                                                                            objectClass:[MyBenchmarksRequest class]
-                                                                                                            rootKeyPath:nil
-                                                                                                                 method:RKRequestMethodPOST];
-    
-    
-    [self addRequestDescriptor:myBenchmarksRequestResponseDescriptors];
-    
-    // AddNewBenchmarksResquest
-    RKRequestDescriptor *addNewBenchmarksRequestResponseDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[AddNewBenchmarkRequest getAddNewBenchmarkRequestMapping]
-                                                                                                        objectClass:[AddNewBenchmarkRequest class]
-                                                                                                        rootKeyPath:nil
-                                                                                                             method:RKRequestMethodPOST];
-    
-    
-    [self addRequestDescriptor:addNewBenchmarksRequestResponseDescriptors];
-    
-    // MyMembershipsResquest
-    RKRequestDescriptor *myMembershipsRequestResponseDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[MyMembershipsRequest getMyMembershipsRequestMapping]
-                                                                                                            objectClass:[MyMembershipsRequest class]
-                                                                                                            rootKeyPath:nil
-                                                                                                                 method:RKRequestMethodPOST];
-    
-    
-    [self addRequestDescriptor:myMembershipsRequestResponseDescriptors];
-    
-    // AvailableBenchmarksRequest
-    RKRequestDescriptor *availableBenchmarksRequestResponseDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[AvailableBenchmarksRequest getAvailableBenchmarksRequestMapping]
-                                                                                                         objectClass:[AvailableBenchmarksRequest class]
-                                                                                                         rootKeyPath:nil
-                                                                                                              method:RKRequestMethodPOST];
-    
-    
-    [self addRequestDescriptor:availableBenchmarksRequestResponseDescriptors];
 }
-
-#pragma mark - CoreData Mapping
-
-// UserInfo
-//- (void) setupUserResponseDescriptors {
-//    RKEntityMapping *userMapping = [RKEntityMapping mappingForEntityForName:kCoreDataUserInfo inManagedObjectStore:self.managedObjectStore];
-//    NSDictionary *userMappingDictionary = @{
-//                                            @"u_first":@"userFirstName",
-//                                            @"u_last":@"userLastName",
-//                                            @"u_address1":@"userAddress1",
-//                                            @"u_address2":@"userAddress2",
-//                                            @"u_city":@"userCity",
-//                                            @"u_state":@"userState",
-//                                            @"u_zip":@"userZip",
-//                                            @"u_country":@"userCountry",
-//                                            @"u_phone1":@"userPhone1",
-//                                            @"u_phone2":@"userPhone2"};
-//    
-//    [userMapping addAttributeMappingsFromDictionary:userMappingDictionary];
-//    
-//    RKResponseDescriptor *userResponseDescriptors = [RKResponseDescriptor responseDescriptorWithMapping:userMapping
-//                                                                                                 method:RKRequestMethodAny
-//                                                                                            pathPattern:nil
-//                                                                                                keyPath:nil
-//                                                                                            statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
-//    
-//    [self addResponseDescriptor:userResponseDescriptors];
-//}
-
-// Class
-//- (void) setupClassResponseDescriptors {
-//    RKEntityMapping *classMapping = [RKEntityMapping mappingForEntityForName:kCoreDataClass inManagedObjectStore:self.managedObjectStore];
-//    classMapping.identificationAttributes = @[@"classId"];
-//    NSDictionary *classMappingDictionary = @{
-//                                              @"start":@"stateDate",
-//                                              @"end":@"endDate",
-//                                              @"allDay":@"allDay",
-//                                              @"title":@"title",
-//                                              @"color":@"color",
-//                                              @"origcolor":@"origColor",
-//                                              @"reservation":@"reservation",
-//                                              @"instructorid":@"instructorId",
-//                                              @"instructorname":@"instructorName",
-//                                              @"id":@"classId",
-//                                              @"aid":@"aId",
-//                                              @"day":@"day"};
-//    
-//    [classMapping addAttributeMappingsFromDictionary:classMappingDictionary];
-//    
-//    RKResponseDescriptor *classResponseDescriptors = [RKResponseDescriptor responseDescriptorWithMapping:classMapping
-//                                                                                                   method:RKRequestMethodAny
-//                                                                                              pathPattern:nil
-//                                                                                                  keyPath:nil
-//                                                                                              statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
-//    
-//    [self addResponseDescriptor:classResponseDescriptors];
-//}
-//
-//
-//// Reservation
-//- (void) setupReservationResponseDescriptors {
-//    RKEntityMapping *reservationMapping = [RKEntityMapping mappingForEntityForName:kCoreDataReservation inManagedObjectStore:self.managedObjectStore];
-//    reservationMapping.identificationAttributes = @[@"reservationId"];
-//    NSDictionary *reservationMappingDictionary = @{
-//                                              @"resid":@"reservationId",
-//                                              @"title":@"title",
-//                                              @"when":@"when"};
-//    
-//    [reservationMapping addAttributeMappingsFromDictionary:reservationMappingDictionary];
-//    
-//    RKResponseDescriptor *reservationResponseDescriptors = [RKResponseDescriptor responseDescriptorWithMapping:reservationMapping
-//                                                                                                   method:RKRequestMethodAny
-//                                                                                              pathPattern:nil
-//                                                                                                  keyPath:nil
-//                                                                                              statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
-//    
-//    [self addResponseDescriptor:reservationResponseDescriptors];
-//}
-//
-//// Attendance
-//- (void) setupAttendanceResponseDescriptors {
-//    RKEntityMapping *attendanceMapping = [RKEntityMapping mappingForEntityForName:kCoreDataAttendance inManagedObjectStore:self.managedObjectStore];
-//    attendanceMapping.identificationAttributes = @[@"attendanceId"];
-//    NSDictionary *attendanceMappingDictionary = @{
-//                                                   @"resid":@"attendanceId",
-//                                                   @"title":@"title",
-//                                                   @"when":@"when"};
-//    
-//    [attendanceMapping addAttributeMappingsFromDictionary:attendanceMappingDictionary];
-//    
-//    RKResponseDescriptor *attendanceResponseDescriptors = [RKResponseDescriptor responseDescriptorWithMapping:attendanceMapping
-//                                                                                                        method:RKRequestMethodAny
-//                                                                                                   pathPattern:nil
-//                                                                                                       keyPath:nil
-//                                                                                                   statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
-//    
-//    [self addResponseDescriptor:attendanceResponseDescriptors];
-//}
 
 @end

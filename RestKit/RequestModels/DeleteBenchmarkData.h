@@ -1,15 +1,14 @@
 //
-//  AddNewBenchmarkRequest.h
+//  DeleteBenchmarkData.h
 //  RhinoFit
 //
-//  Created by Admin on 10/30/14.
+//  Created by Admin on 11/21/14.
 //  Copyright (c) 2014 Sutan. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import <RestKit/RestKit.h>
 
-@interface AddNewBenchmarkRequest : NSObject
+@interface DeleteBenchmarkData : NSObject
 
 @property (nonatomic, strong) NSString *action;
 @property (nonatomic, strong) NSString *token;
@@ -18,6 +17,6 @@
 @property (nonatomic, strong) NSString *value;
 @property (nonatomic, strong) NSString *dataid;
 
-+ (RKObjectMapping*) getAddNewBenchmarkRequestMapping;
++ (RKObjectMapping*) getDeleteBenchmarkDataRequestMapping;
 
 @end

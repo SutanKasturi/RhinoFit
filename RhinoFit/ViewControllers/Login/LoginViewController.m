@@ -14,7 +14,7 @@
 #import "NetworkManager.h"
 #import <MBProgressHUD/MBProgressHUD.h>
 
-@interface LoginViewController ()<NetworkManagerDelegate>
+@interface LoginViewController ()
 
 @end
 
@@ -54,8 +54,16 @@
         hud.dimBackground = YES;
         
         NetworkManager *networkManage = [NetworkManager sharedManager];
-        networkManage.delegate = self;
-        [networkManage sendEmailLogin:mEmailTextField.text password:mPasswordTextField.text];
+        [networkManage sendEmailLogin:mEmailTextField.text
+                             password:mPasswordTextField.text
+                              success:^(BOOL isLoggedIn) {
+                                  [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
+                                  if ( isLoggedIn == YES ) {
+                                      [self successfullyLoggedIn];
+                                  }
+                              } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                  [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
+                              }];
     }
 }
 
@@ -64,27 +72,6 @@
     UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
     AppDelegate *app = [[UIApplication sharedApplication] delegate];
     app.window.rootViewController = viewController;
-}
-
-#pragma mark - NetworkManagerDelegate
-
-- (void) successRequest:(NSString *)action result:(id)obj
-{
-    if ( ![action isEqualToString:kRequestLogin] )
-        return;
-    
-    [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
-    
-    if ( obj != nil && ![obj isEqualToString:@""] ) {
-        [self successfullyLoggedIn];
-    }
-}
-
-- (void) failureRequest:(NSString *)action errorMessage:(NSString *)errorMessage
-{
-    if ( ![action isEqualToString:kRequestLogin] )
-        return;
-    [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
 }
 
 @end

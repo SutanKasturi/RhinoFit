@@ -1,0 +1,42 @@
+//
+//  RhinoFit-Prefix.pch
+//  RhinoFit
+//
+//  Created by Admin on 11/21/14.
+//  Copyright (c) 2014 Sutan. All rights reserved.
+//
+
+#ifndef RhinoFit_RhinoFit_Prefix_pch
+#define RhinoFit_RhinoFit_Prefix_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+#import <Availability.h>
+
+#ifndef __IPHONE_5_0
+#warning "This project uses features only available in iOS SDK 5.0 and later."
+#endif
+
+#ifdef __OBJC__
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
+#import <RestKit.h>
+#import "Constants.h"
+#endif
+
+#if __IPHONE_OS_VERSION_MIN_REQUIRED
+#import <SystemConfiguration/SystemConfiguration.h>
+#import <MobileCoreServices/MobileCoreServices.h>
+#else
+#import <SystemConfiguration/SystemConfiguration.h>
+#import <CoreServices/CoreServices.h>
+#endif
+
+#if __IPHONE_7_0 && __IPHONE_OS_VERSION_MAX_ALLOWED >=  __IPHONE_7_0
+#define IS_RUNNING_IOS7 ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+#else
+#define IS_RUNNING_IOS7 NO
+#endif
+
+#endif

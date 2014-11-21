@@ -36,7 +36,7 @@
 - (void) showResult:(NSString*)result
 {
     [self.view setHidden:NO];
-    self.view.backgroundColor = [UIColor colorWithWhite:0 alpha:0.1f];
+    self.view.backgroundColor = [UIColor colorWithWhite:1.0f alpha:1.0f];
     [self.waitingIndicator stopAnimating];
     [self.waitingIndicator setHidden:YES];
     [self.resultLabel setText:result];

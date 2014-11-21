@@ -20,6 +20,9 @@
 		840C0CEB1A023D7B00E10ABF /* MyMembershipsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 840C0CEA1A023D7B00E10ABF /* MyMembershipsTableViewCell.m */; };
 		840C0CEE1A02410F00E10ABF /* AvailableBenchmarksRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 840C0CED1A02410F00E10ABF /* AvailableBenchmarksRequest.m */; };
 		840C0CF11A024EBD00E10ABF /* AvailableBenchmark.m in Sources */ = {isa = PBXBuildFile; fileRef = 840C0CF01A024EBD00E10ABF /* AvailableBenchmark.m */; };
+		845EDDCC1A1EB82000CA78A2 /* MyBenchmarkHistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 845EDDCB1A1EB82000CA78A2 /* MyBenchmarkHistoryViewController.m */; };
+		845EDDCF1A1EB83900CA78A2 /* MyBenchmarkHistoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 845EDDCE1A1EB83900CA78A2 /* MyBenchmarkHistoryTableViewCell.m */; };
+		845EDDD21A1EBBD800CA78A2 /* BenchmarkHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 845EDDD11A1EBBD800CA78A2 /* BenchmarkHistory.m */; };
 		847BB4D819F1197A00528DE4 /* RequestFail.m in Sources */ = {isa = PBXBuildFile; fileRef = 847BB4D219F1197A00528DE4 /* RequestFail.m */; };
 		847BB4D919F1197A00528DE4 /* RequestSuccess.m in Sources */ = {isa = PBXBuildFile; fileRef = 847BB4D419F1197A00528DE4 /* RequestSuccess.m */; };
 		847BB4E219F1254F00528DE4 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 847BB4E119F1254F00528DE4 /* MenuViewController.m */; };
@@ -62,6 +65,9 @@
 		847BB56D19F2D91700528DE4 /* MenuTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 847BB56C19F2D91700528DE4 /* MenuTableViewCell.m */; };
 		847BB57019F2E37800528DE4 /* AttendanceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 847BB56F19F2E37800528DE4 /* AttendanceTableViewCell.m */; };
 		8481227D19F0C04800CE53D5 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8481227C19F0C04800CE53D5 /* logo.png */; };
+		848EF2201A1F57B400E22429 /* MyBenchmarkDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 848EF21F1A1F57B400E22429 /* MyBenchmarkDataRequest.m */; };
+		848EF2231A1F714E00E22429 /* DeleteBenchmarkData.m in Sources */ = {isa = PBXBuildFile; fileRef = 848EF2221A1F714E00E22429 /* DeleteBenchmarkData.m */; };
+		848EF2261A1FACDB00E22429 /* BenchmarkSpinnerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 848EF2251A1FACDB00E22429 /* BenchmarkSpinnerViewController.m */; };
 		849541EC1A02D79A0097587A /* down_dark0.png in Resources */ = {isa = PBXBuildFile; fileRef = 849541EB1A02D79A0097587A /* down_dark0.png */; };
 		849B767B19F099B400680B2D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 849B767A19F099B400680B2D /* main.m */; };
 		849B767E19F099B400680B2D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 849B767D19F099B400680B2D /* AppDelegate.m */; };
@@ -139,6 +145,13 @@
 		840C0CED1A02410F00E10ABF /* AvailableBenchmarksRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AvailableBenchmarksRequest.m; path = RestKit/RequestModels/AvailableBenchmarksRequest.m; sourceTree = SOURCE_ROOT; };
 		840C0CEF1A024EBD00E10ABF /* AvailableBenchmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvailableBenchmark.h; sourceTree = "<group>"; };
 		840C0CF01A024EBD00E10ABF /* AvailableBenchmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AvailableBenchmark.m; sourceTree = "<group>"; };
+		8457BF0B1A1E81B40033C725 /* RhinoFit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RhinoFit-Prefix.pch"; sourceTree = "<group>"; };
+		845EDDCA1A1EB82000CA78A2 /* MyBenchmarkHistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyBenchmarkHistoryViewController.h; path = ViewControllers/MyBenchmarks/MyBenchmarkHistoryViewController.h; sourceTree = "<group>"; };
+		845EDDCB1A1EB82000CA78A2 /* MyBenchmarkHistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyBenchmarkHistoryViewController.m; path = ViewControllers/MyBenchmarks/MyBenchmarkHistoryViewController.m; sourceTree = "<group>"; };
+		845EDDCD1A1EB83900CA78A2 /* MyBenchmarkHistoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyBenchmarkHistoryTableViewCell.h; path = ViewControllers/MyBenchmarks/MyBenchmarkHistoryTableViewCell.h; sourceTree = "<group>"; };
+		845EDDCE1A1EB83900CA78A2 /* MyBenchmarkHistoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyBenchmarkHistoryTableViewCell.m; path = ViewControllers/MyBenchmarks/MyBenchmarkHistoryTableViewCell.m; sourceTree = "<group>"; };
+		845EDDD01A1EBBD800CA78A2 /* BenchmarkHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BenchmarkHistory.h; sourceTree = "<group>"; };
+		845EDDD11A1EBBD800CA78A2 /* BenchmarkHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BenchmarkHistory.m; sourceTree = "<group>"; };
 		847BB4D119F1197A00528DE4 /* RequestFail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestFail.h; sourceTree = "<group>"; };
 		847BB4D219F1197A00528DE4 /* RequestFail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestFail.m; sourceTree = "<group>"; };
 		847BB4D319F1197A00528DE4 /* RequestSuccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestSuccess.h; sourceTree = "<group>"; };
@@ -219,6 +232,12 @@
 		847BB56F19F2E37800528DE4 /* AttendanceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AttendanceTableViewCell.m; path = ViewControllers/Attendance/AttendanceTableViewCell.m; sourceTree = "<group>"; };
 		8481227C19F0C04800CE53D5 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
 		848122A719F0C58C00CE53D5 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginViewController.h; path = ViewControllers/Login/LoginViewController.h; sourceTree = "<group>"; };
+		848EF21E1A1F57B400E22429 /* MyBenchmarkDataRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyBenchmarkDataRequest.h; path = RestKit/RequestModels/MyBenchmarkDataRequest.h; sourceTree = SOURCE_ROOT; };
+		848EF21F1A1F57B400E22429 /* MyBenchmarkDataRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyBenchmarkDataRequest.m; path = RestKit/RequestModels/MyBenchmarkDataRequest.m; sourceTree = SOURCE_ROOT; };
+		848EF2211A1F714E00E22429 /* DeleteBenchmarkData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DeleteBenchmarkData.h; path = RestKit/RequestModels/DeleteBenchmarkData.h; sourceTree = SOURCE_ROOT; };
+		848EF2221A1F714E00E22429 /* DeleteBenchmarkData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DeleteBenchmarkData.m; path = RestKit/RequestModels/DeleteBenchmarkData.m; sourceTree = SOURCE_ROOT; };
+		848EF2241A1FACDB00E22429 /* BenchmarkSpinnerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BenchmarkSpinnerViewController.h; path = ViewControllers/MyBenchmarks/BenchmarkSpinnerViewController.h; sourceTree = "<group>"; };
+		848EF2251A1FACDB00E22429 /* BenchmarkSpinnerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BenchmarkSpinnerViewController.m; path = ViewControllers/MyBenchmarks/BenchmarkSpinnerViewController.m; sourceTree = "<group>"; };
 		849541EB1A02D79A0097587A /* down_dark0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = down_dark0.png; sourceTree = "<group>"; };
 		849B767519F099B400680B2D /* RhinoFit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RhinoFit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		849B767919F099B400680B2D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -301,8 +320,14 @@
 				840C0CCF1A01BCE600E10ABF /* MyBenchmarksViewController.m */,
 				840C0CD11A01BCFB00E10ABF /* AddBenchmarkViewController.h */,
 				840C0CD21A01BCFB00E10ABF /* AddBenchmarkViewController.m */,
+				845EDDCA1A1EB82000CA78A2 /* MyBenchmarkHistoryViewController.h */,
+				845EDDCB1A1EB82000CA78A2 /* MyBenchmarkHistoryViewController.m */,
 				840C0CD71A01C56600E10ABF /* MyBenchmarkTableViewCell.h */,
 				840C0CD81A01C56600E10ABF /* MyBenchmarkTableViewCell.m */,
+				845EDDCD1A1EB83900CA78A2 /* MyBenchmarkHistoryTableViewCell.h */,
+				845EDDCE1A1EB83900CA78A2 /* MyBenchmarkHistoryTableViewCell.m */,
+				848EF2241A1FACDB00E22429 /* BenchmarkSpinnerViewController.h */,
+				848EF2251A1FACDB00E22429 /* BenchmarkSpinnerViewController.m */,
 			);
 			name = MyBenchmarks;
 			sourceTree = "<group>";
@@ -339,6 +364,8 @@
 				840C0CE71A01C8B300E10ABF /* MyMembership.m */,
 				840C0CEF1A024EBD00E10ABF /* AvailableBenchmark.h */,
 				840C0CF01A024EBD00E10ABF /* AvailableBenchmark.m */,
+				845EDDD01A1EBBD800CA78A2 /* BenchmarkHistory.h */,
+				845EDDD11A1EBBD800CA78A2 /* BenchmarkHistory.m */,
 			);
 			name = Models;
 			path = RestKit/Models;
@@ -473,6 +500,10 @@
 				840C0CE11A01C89500E10ABF /* MyMembershipsRequest.m */,
 				840C0CEC1A02410F00E10ABF /* AvailableBenchmarksRequest.h */,
 				840C0CED1A02410F00E10ABF /* AvailableBenchmarksRequest.m */,
+				848EF21E1A1F57B400E22429 /* MyBenchmarkDataRequest.h */,
+				848EF21F1A1F57B400E22429 /* MyBenchmarkDataRequest.m */,
+				848EF2211A1F714E00E22429 /* DeleteBenchmarkData.h */,
+				848EF2221A1F714E00E22429 /* DeleteBenchmarkData.m */,
 			);
 			name = RequestModels;
 			sourceTree = "<group>";
@@ -586,6 +617,7 @@
 				8481227A19F0C04800CE53D5 /* Resources */,
 				849B767919F099B400680B2D /* Info.plist */,
 				849B767A19F099B400680B2D /* main.m */,
+				8457BF0B1A1E81B40033C725 /* RhinoFit-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -843,6 +875,7 @@
 				847BB55419F2AD0400528DE4 /* UserInfoRequest.m in Sources */,
 				847BB55219F2AD0400528DE4 /* ClassesRequest.m in Sources */,
 				847BB4EF19F1608900528DE4 /* CustomButton.m in Sources */,
+				845EDDCC1A1EB82000CA78A2 /* MyBenchmarkHistoryViewController.m in Sources */,
 				847BB4E219F1254F00528DE4 /* MenuViewController.m in Sources */,
 				840C0CD61A01BD1B00E10ABF /* MyMembershipsViewController.m in Sources */,
 				847BB52A19F184B600528DE4 /* LoginViewController.m in Sources */,
@@ -859,10 +892,12 @@
 				840C0CDC1A01C86800E10ABF /* MyBenchmarksRequest.m in Sources */,
 				849B767E19F099B400680B2D /* AppDelegate.m in Sources */,
 				847BB50F19F16A4600528DE4 /* AttendanceViewController.m in Sources */,
+				848EF2201A1F57B400E22429 /* MyBenchmarkDataRequest.m in Sources */,
 				847BB54319F2964E00528DE4 /* CoreDataHandler.m in Sources */,
 				847BB4FF19F160E900528DE4 /* Attendance.m in Sources */,
 				847BB55319F2AD0400528DE4 /* LoginRequest.m in Sources */,
 				847BB4FC19F160E900528DE4 /* Reservation.m in Sources */,
+				845EDDD21A1EBBD800CA78A2 /* BenchmarkHistory.m in Sources */,
 				847BB56319F2AE2400528DE4 /* DeleteAttendanceRequest.m in Sources */,
 				840C0CD31A01BCFB00E10ABF /* AddBenchmarkViewController.m in Sources */,
 				847BB54419F2964E00528DE4 /* RhinoFit.xcdatamodeld in Sources */,
@@ -874,6 +909,7 @@
 				849B767B19F099B400680B2D /* main.m in Sources */,
 				847BB54B19F2ACEC00528DE4 /* MakeReservationRequest.m in Sources */,
 				847BB51219F16ABE00528DE4 /* METransitions.m in Sources */,
+				848EF2261A1FACDB00E22429 /* BenchmarkSpinnerViewController.m in Sources */,
 				847BB52319F1795900528DE4 /* AKObjectManager.m in Sources */,
 				847BB56719F2B40800528DE4 /* RoundedView.m in Sources */,
 				847BB51519F16D5600528DE4 /* MEDynamicTransition.m in Sources */,
@@ -883,6 +919,7 @@
 				847BB54719F2A47500528DE4 /* ClassTableViewCell.m in Sources */,
 				847BB51B19F16DCC00528DE4 /* MEZoomAnimationController.m in Sources */,
 				847BB55A19F2ADE900528DE4 /* DeleteReservationRequest.m in Sources */,
+				848EF2231A1F714E00E22429 /* DeleteBenchmarkData.m in Sources */,
 				847BB56A19F2CCE300528DE4 /* ReservationTableViewCell.m in Sources */,
 				847BB53E19F2114300528DE4 /* WaitingViewController.m in Sources */,
 				847BB56019F2AE1400528DE4 /* MakeAttendanceRequest.m in Sources */,
@@ -890,6 +927,7 @@
 				847BB4F319F1608900528DE4 /* DemoTextView.m in Sources */,
 				840C0CE81A01C8B300E10ABF /* MyMembership.m in Sources */,
 				847BB4D919F1197A00528DE4 /* RequestSuccess.m in Sources */,
+				845EDDCF1A1EB83900CA78A2 /* MyBenchmarkHistoryTableViewCell.m in Sources */,
 				847BB50B19F16A2C00528DE4 /* ReservationViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1013,6 +1051,7 @@
 			baseConfigurationReference = 473B015B68D8152DBB4074F3 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PREFIX_HEADER = "RhinoFit/RhinoFit-Prefix.pch";
 				INFOPLIST_FILE = RhinoFit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1026,6 +1065,7 @@
 			baseConfigurationReference = 302F204E690C4B1284481685 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PREFIX_HEADER = "RhinoFit/RhinoFit-Prefix.pch";
 				INFOPLIST_FILE = RhinoFit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

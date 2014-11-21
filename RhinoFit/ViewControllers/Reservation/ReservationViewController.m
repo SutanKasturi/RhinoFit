@@ -13,7 +13,7 @@
 #import "UIViewController+ECSlidingViewController.h"
 #import "NetworkManager.h"
 
-@interface ReservationViewController ()<ReservationTableViewCellDelegate, NetworkManagerDelegate>
+@interface ReservationViewController ()<ReservationTableViewCellDelegate>
 
 @property (nonatomic, strong) WaitingViewController *waitingViewController;
 @property (nonatomic, strong) NSMutableArray *mReservations;
@@ -30,9 +30,28 @@
     if ( _mReservations )
         return _mReservations;
     
+    _mReservations = [[NSMutableArray alloc] init];
     NetworkManager *networkManager = [NetworkManager sharedManager];
-    networkManager.delegate = self;
-    [networkManager listReservation];
+    [networkManager listReservation:^(NSMutableArray *result) {
+        if ( _mReservations )
+            [_mReservations removeAllObjects];
+        if ( result != nil && [result count] > 0 ) {
+            [_mReservations addObjectsFromArray:result];
+            [self setTitleString];
+            [self.tableView reloadData];
+            if ( [[self mReservations] count] == 0 ) {
+                [waitingViewController showResult:kMessageNoReservations];
+            }
+            else
+                [waitingViewController.view setHidden:YES];
+        }
+        else {
+            [waitingViewController showResult:kMessageNoClasses];
+        }
+    } failure:^(NSString *error) {
+        [_mReservations removeAllObjects];
+        [waitingViewController showResult:error];
+    }];
     
     return nil;
 }
@@ -61,37 +80,7 @@
 
 - (void) setTitleString
 {
-    self.title = [NSString stringWithFormat:@"My Reservations(%d)", (int)[[self mReservations] count]];
-}
-
-#pragma mark - NetworkManagerDelegate
-
-- (void) successRequest:(NSString *)action result:(id)obj
-{
-    if ( ![action isEqualToString:kRequestListReservations] )
-        return;
-    
-    if ( obj != nil && [obj isKindOfClass:[NSMutableArray class]]) {
-        _mReservations = obj;
-        [self setTitleString];
-        [self.tableView reloadData];
-        if ( [[self mReservations] count] == 0 ) {
-            [waitingViewController showResult:kMessageNoReservations];
-        }
-        else
-            [waitingViewController.view setHidden:YES];
-    }
-    else {
-        [waitingViewController showResult:kMessageNoClasses];
-    }
-}
-
-- (void) failureRequest:(NSString *)action errorMessage:(NSString *)errorMessage
-{
-    if ( ![action isEqualToString:kRequestListReservations] )
-        return;
-    
-    [waitingViewController showResult:errorMessage];
+    self.title = [NSString stringWithFormat:@"My Reservations (%d)", (int)[[self mReservations] count]];
 }
 
 #pragma mark - UITableViewDataSource
@@ -127,6 +116,7 @@
     [[self mReservations] removeObject:cell.mReservation];
     [self.tableView deleteRowsAtIndexPaths:@[[self.tableView indexPathForCell:cell]] withRowAnimation:UITableViewRowAnimationAutomatic];
     [self.tableView endUpdates];
+    [self setTitleString];
 }
 
 @end

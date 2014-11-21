@@ -10,7 +10,7 @@
 #import "Constants.h"
 #import "NetworkManager.h"
 
-@interface ReservationTableViewCell()<NetworkManagerDelegate>
+@interface ReservationTableViewCell()
 
 @end
 
@@ -61,8 +61,19 @@
 - (void) cancelReservation
 {
     NetworkManager *networkManage = [NetworkManager sharedManager];
-    networkManage.delegate = self;
-    [networkManage deleteReservation:[NSString stringWithFormat:@"%@",mReservation.reservationId]];
+    [networkManage deleteReservation:[NSString stringWithFormat:@"%@",mReservation.reservationId]
+                             success:^(BOOL isSuccess) {
+                                 if ( isSuccess ) {
+                                         mReservation.reservationId = [NSNumber numberWithInt:0];
+                                         mReservation.isActionReservation = NO;
+                                         [self.delegate didCanceledReservation:self];
+                                         return;
+                                 }
+                                 [self setReservation:mReservation];
+                             }
+                             failure:^(NSString *error) {
+                                 [self setReservation:mReservation];
+                             }];
 }
 
 - (void) setReservation:(Reservation *)aReservation
@@ -82,31 +93,6 @@
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"EEEE, MMMM dd, yyyy"];
     whenLabel.text = [df stringFromDate:mReservation.when];
-}
-
-#pragma mark - NetworkManagerDelegate
-
-- (void) successRequest:(NSString *)action result:(id)obj
-{
-    NSLog(@"Success");
-    if ( mReservation == nil )
-        return;
-    
-    if ( [obj isKindOfClass:[NSDictionary class]] ) {
-       if ( [[obj objectForKey:kParamAction] isEqualToString:kRequestDeleteReservation]
-                 && [[obj objectForKey:kResponseKeyReservationId] isEqualToString:[NSString stringWithFormat:@"%@", mReservation.reservationId]] ) {
-            mReservation.reservationId = [NSNumber numberWithInt:0];
-            mReservation.isActionReservation = NO;
-           [self.delegate didCanceledReservation:self];
-           return;
-        }
-    }
-    [self setReservation:mReservation];
-}
-
-- (void) failureRequest:(NSString *)action errorMessage:(NSString *)errorMessage
-{
-    NSLog(@"Failure");
 }
 
 @end
