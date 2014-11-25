@@ -11,3 +11,8 @@ RhinoFit
 5. My Memberships
 6. My Benchmarks
 7. Add Benchmark
+
+#Third Milstone:
+- Small changes to existing app
+- Changes to My Benchmarks Screen
+- New Benchmark History Screen
