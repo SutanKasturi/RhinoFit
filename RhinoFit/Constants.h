@@ -54,6 +54,8 @@ extern NSString *const kMessageNoAttendance;
 extern NSString *const kMessageNoMyBenchmarks;
 extern NSString *const kMessageDeleteBenchmark;
 extern NSString *const kMessageNoMyMemberships;
+extern NSString *const kMessageNoAvailableBenchmarks;
+extern NSString *const kMessageNoMyBenchmarkHistories;
 
 // Button Names
 

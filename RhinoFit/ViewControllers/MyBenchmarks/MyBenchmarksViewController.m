@@ -30,15 +30,35 @@
 @synthesize waitingViewController;
 @synthesize selectedIndexPath;
 
+static NSMutableArray * availableBenchmark;
+
++ (NSMutableArray*) getAvailableBenchmarks {
+    return availableBenchmark;
+}
+
+- (void)getAvailableBenchmark
+{
+    if ( availableBenchmark != nil ) {
+        [self getMyBenchmarks];
+        return;
+    }
+    
+    [[NetworkManager sharedManager] getAvailableBenchmarks:^(NSMutableArray *result) {
+        if ( result == nil || [result count] == 0 ) {
+            [waitingViewController showResult:kMessageNoAvailableBenchmarks];
+        }
+        else {
+            availableBenchmark = result;
+            [self getMyBenchmarks];
+        }
+    } failure:^(NSString *error) {
+        [waitingViewController showResult:error];
+    }];
+}
+
+
 - (void)getMyBenchmarks
 {
-//    if ( _mMyBenchmarks ) {
-//        [waitingViewController.view setHidden:YES];
-//        return;
-//    }
-    
-//    _mMyBenchmarks = [[NSMutableArray alloc] init];
-
     [[NetworkManager sharedManager] getMyBenchmarks:^(NSMutableArray *result) {
         if ( result == nil || [result count] == 0 ) {
             [waitingViewController showResult:kMessageNoMyBenchmarks];
@@ -46,6 +66,25 @@
         else {
             [waitingViewController.view setHidden:YES];
             _mMyBenchmarks = result;
+            NSMutableArray *unavailableBenchmark = [[NSMutableArray alloc] init];
+            NSMutableArray *benchmarksTemp = [[NSMutableArray alloc] initWithArray:availableBenchmark];
+            for ( MyBenchmark *benchmark in _mMyBenchmarks ) {
+                BOOL isAvailable = NO;
+                for ( AvailableBenchmark *availableBenchmark in benchmarksTemp ) {
+                    if ( [benchmark.benchmarkId intValue] == [availableBenchmark.benchmarkId intValue] ) {
+                        isAvailable = YES;
+                        [benchmarksTemp removeObject:availableBenchmark];
+                        break;
+                    }
+                }
+                if ( isAvailable == NO ) {
+                    [unavailableBenchmark addObject:benchmark];
+                }
+            }
+            for ( MyBenchmark *benchmark in unavailableBenchmark ) {
+                [_mMyBenchmarks removeObject:benchmark];
+            }
+            [self refresh];
             [self.tableView reloadData];
         }
     } failure:^(NSString *error) {
@@ -53,11 +92,37 @@
     }];
 }
 
+- (void) refresh {
+    // 1. Create a dictionary of views
+    NSDictionary *viewsDictionary = @{@"tableView":self.tableView, @"bottomView": self.bottomLayoutGuide, @"topView": self.topLayoutGuide};
+    
+    // 2. Define the views Positions
+    NSArray *tableview_constraint_POS_V1 = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[topView]-0-[tableView]-0-[bottomView]|"
+                                                                                   options:0
+                                                                                   metrics:nil
+                                                                                     views:viewsDictionary];
+    NSArray *tableview_constraint_POS_V2 = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[topView]-0-[tableView]-64-[bottomView]|"
+                                                                                   options:0
+                                                                                   metrics:nil
+                                                                                     views:viewsDictionary];
+    if ( availableBenchmark == nil || [availableBenchmark count] == [_mMyBenchmarks count] ) {
+        [self.addBenchmarkButton setHidden:YES];
+//        [self.view removeConstraint:tableview_constraint_POS_V2[1]];
+        [self.view addConstraints:tableview_constraint_POS_V1];
+    }
+    else {
+        [self.addBenchmarkButton setHidden:NO];
+//        [self.view removeConstraint:tableview_constraint_POS_V1[1]];
+        [self.view addConstraints:tableview_constraint_POS_V2];
+    }
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
     [self.addBenchmarkButton setButtonType:CustomButtonBlue];
+    [self.addBenchmarkButton setHidden:YES];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -68,7 +133,10 @@
         [self addChildViewController:waitingViewController];
         [self.view addSubview:waitingViewController.view];
         [waitingViewController showWaitingIndicator];
-        [self getMyBenchmarks];
+//        [self getMyBenchmarks];
+    }
+    if ( availableBenchmark == nil ) {
+        [self getAvailableBenchmark];
     }
 }
 
@@ -171,6 +239,7 @@
         [self.tableView insertRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
     [self.tableView endUpdates];
+    [self refresh];
 }
 
 - (int) getSeconds:(NSString*)minuteAndSecond

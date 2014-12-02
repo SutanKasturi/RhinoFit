@@ -14,4 +14,6 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet CustomButton *addBenchmarkButton;
 
++ (NSMutableArray*) getAvailableBenchmarks;
+
 @end

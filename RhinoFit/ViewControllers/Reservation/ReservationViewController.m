@@ -46,7 +46,7 @@
                 [waitingViewController.view setHidden:YES];
         }
         else {
-            [waitingViewController showResult:kMessageNoClasses];
+            [waitingViewController showResult:kMessageNoReservations];
         }
     } failure:^(NSString *error) {
         [_mReservations removeAllObjects];

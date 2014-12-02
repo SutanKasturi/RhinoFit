@@ -77,7 +77,7 @@
 
 - (void) setTitleString
 {
-    self.title = [NSString stringWithFormat:@"My Attendace (%d)", (int)[mAttendanceArray count]];
+    self.title = [NSString stringWithFormat:@"My Attendance (%d)", (int)[mAttendanceArray count]];
 }
 
 #pragma mark - TapGesture

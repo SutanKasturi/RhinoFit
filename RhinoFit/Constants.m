@@ -12,7 +12,7 @@
 NSString *const kAppBaseUrl = @"https://my.rhinofit.ca/";
 
 // Menu Items
-NSString *const kMenuClasses = @"Classes";
+NSString *const kMenuClasses = @"My Classes";
 NSString *const kMenuMyReservations = @"My Reservations";
 NSString *const kMenuMyAttendance = @"My Attendance";
 NSString *const kMenuMyBenchmarks = @"My Benchmarks";
@@ -42,16 +42,18 @@ NSString *const kMessageMakeReservation = @"Make a reservation for this class?";
 NSString *const kMessageCancelReservation = @"Are you sure you want to cancel this reservation?";
 NSString *const kMessageMarkAttendance = @"Are you sure you want to mark this class as attended?";
 NSString *const kMessageCancelAttendance = @"Are you sure you want to cancel this attendance?";
-NSString *const kMessageNoClasses = @"There is no classes scheduled for this day";
+NSString *const kMessageNoClasses = @"There are no classes scheduled for this day";
 NSString *const kMessageIsReservation = @"You are reserved in this class";
 NSString *const kMessageIsAttended = @"You have attended this class";
 NSString *const kMessageIsReservationAndAttended = @"You have reserved and attended this class";
 NSString *const kMessageUnkownError = @"Unkown Error";
-NSString *const kMessageNoReservations = @"You have no upcoming reservations.";
+NSString *const kMessageNoReservations = @"You currently have no upcoming reservations.";
 NSString *const kMessageNoAttendance = @"You have not attended any classes in this month.";
 NSString *const kMessageNoMyBenchmarks = @"You currently have no benchmarks";
 NSString *const kMessageDeleteBenchmark = @"Are you sure you want to delete this entry?";
 NSString *const kMessageNoMyMemberships = @"You currently have no memberships";
+NSString *const kMessageNoAvailableBenchmarks = @"There are no available benchmarks";
+NSString *const kMessageNoMyBenchmarkHistories = @"There are no benchmark histories";
 
 // Button Names
 

@@ -25,6 +25,7 @@
 
 @synthesize mBenchmark;
 @synthesize mBenchmarkHistory;
+@synthesize measurementLabel;
 @synthesize waitingViewController;
 @synthesize selectedCell;
 
@@ -33,7 +34,7 @@
     [[NetworkManager sharedManager] getMyBenchmarkData:[mBenchmark.benchmarkId stringValue]
                                                success:^(NSMutableArray *result) {
                                                    if ( result == nil || [result count] == 0 ) {
-                                                       [waitingViewController showResult:kMessageNoMyBenchmarks];
+                                                       [waitingViewController showResult:kMessageNoMyBenchmarkHistories];
                                                    }
                                                    else {
                                                        [waitingViewController.view setHidden:YES];
@@ -50,6 +51,7 @@
     // Do any additional setup after loading the view.
     
     [self setTitleString];
+    measurementLabel.text = [mBenchmark.type capitalizedString];
 }
 
 - (void)viewDidAppear:(BOOL)animated

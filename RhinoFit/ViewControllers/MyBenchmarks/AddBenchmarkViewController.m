@@ -13,6 +13,7 @@
 #import "AvailableBenchmark.h"
 #import "WaitingViewController.h"
 #import "BenchmarkSpinnerViewController.h"
+#import "MyBenchmarksViewController.h"
 #import <MBProgressHUD/MBProgressHUD.h>
 
 @interface AddBenchmarkViewController ()<BenchmarkSpinnerViewControllerDelegate>
@@ -20,7 +21,9 @@
 @property (nonatomic, strong) AvailableBenchmark *selectedBenchmark;
 @property (nonatomic, strong) WaitingViewController *waitingViewController;
 @property (nonatomic, strong) UIView *overlayView;
+@property (nonatomic, strong) UIButton *overlayButton;
 @property (nonatomic, strong) BenchmarkSpinnerViewController *benchmarkSpinnerViewController;
+@property (nonatomic, strong) NSMutableArray * availableBenchmark;
 
 @end
 
@@ -38,14 +41,20 @@
 @synthesize deleteBenchmarkButton;
 @synthesize waitingViewController;
 @synthesize overlayView;
+@synthesize overlayButton;
 @synthesize benchmarkSpinnerViewController;
-
-static NSMutableArray * availableBenchmark;
+@synthesize availableBenchmark;
 
 - (void)getAvailableBenchmark
 {
     if ( availableBenchmark && [availableBenchmark count] > 0 ) {
         [self setAvailableBenchmarkLabels];
+        return;
+    }
+    
+    availableBenchmark = [MyBenchmarksViewController getAvailableBenchmarks];
+    if ( availableBenchmark ) {
+        [self getAvailableBenchmark];
         return;
     }
     
@@ -71,7 +80,7 @@ static NSMutableArray * availableBenchmark;
     }
     
     if ( [availableBenchmark count] == 0 ) {
-        [waitingViewController showResult:@"There is no available benchmark"];
+        [waitingViewController showResult:kMessageNoAvailableBenchmarks];
         return;
     }
     benchmarkSpinnerViewController.mBenchmarkArray = availableBenchmark;
@@ -134,6 +143,11 @@ static NSMutableArray * availableBenchmark;
 {
     if ( waitingViewController == nil ) {
         overlayView = [[UIView alloc] initWithFrame:self.view.bounds];
+        
+        overlayButton = [[UIButton alloc] initWithFrame:self.view.bounds];
+        [overlayButton addTarget:self action:@selector(hideBenchmarkSpinner) forControlEvents:UIControlEventTouchUpInside];
+        [self.overlayView addSubview:overlayButton];
+        
         benchmarkSpinnerViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"BenchmarkSpinnerViewController"];
         CGRect rect = benchmarkSpinnerButton.frame;
         benchmarkSpinnerViewController.view.frame = CGRectMake(rect.origin.x + 10, rect.origin.y + rect.size.height, rect.size.width - 10, 300);
@@ -143,9 +157,6 @@ static NSMutableArray * availableBenchmark;
         [overlayView addSubview:benchmarkSpinnerViewController.view];
         [self addChildViewController:benchmarkSpinnerViewController];
         [self.view addSubview:overlayView];
-        
-//        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapHandler)];
-//        [overlayView addGestureRecognizer:tapGestureRecognizer];
         
         waitingViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"WaitingViewController"];
         waitingViewController.view.frame = self.view.bounds;
@@ -164,6 +175,9 @@ static NSMutableArray * availableBenchmark;
     // Dispose of any resources that can be recreated.
 }
 
+- (void) hideBenchmarkSpinner {
+    [self onBenchmarkSpinner:nil];
+}
 - (void) setEditableBenchmark:(BOOL)isEditable
 {
     [benchmarkTextField setEnabled:isEditable];
@@ -177,6 +191,7 @@ static NSMutableArray * availableBenchmark;
         measurementLabel.text = @"";
     
     if ( self.mBenchmarkHistory ) {
+        [benchmarkSpinnerButton setEnabled:NO];
         [benchmarkButton setEnabled:NO];
         [benchmarkTextField setEnabled:NO];
     }
