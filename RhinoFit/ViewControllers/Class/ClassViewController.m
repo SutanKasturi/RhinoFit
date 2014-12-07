@@ -14,8 +14,10 @@
 #import "WaitingViewController.h"
 #import "Constants.h"
 #import "ClassTableViewCell.h"
+#import "ScrollViewController.h"
+#import "TrackWodViewController.h"
 
-@interface ClassViewController ()<DemoTextFieldDelegate>
+@interface ClassViewController ()<DemoTextFieldDelegate, ClassTableViewCellDelegate>
 
 @property (nonatomic, strong) METransitions *transitions;
 @property (nonatomic, strong) UIPanGestureRecognizer *dynamicTransitionPanGesture;
@@ -115,7 +117,7 @@
                             else
                                 classes = [[NSMutableArray alloc] init];
                             if ( result != nil && [result isKindOfClass:[NSArray class]] && [result count] > 0 ) {
-                                [classes addObjectsFromArray:result];
+                                [classes addObjectsFromArray:[result sortedArrayUsingSelector:@selector(compare:)]];
                                 [self.tableView reloadData];
                                 [waitingViewController.view setHidden:YES];
                                 [waitingView setHidden:YES];
@@ -152,6 +154,7 @@
     ClassTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     [cell setClass:classes[indexPath.row]];
+    cell.delegate = self;
     
     return cell;
 }
@@ -163,5 +166,14 @@
 
 - (IBAction)menuButtonTapped:(id)sender {
     [self.slidingViewController anchorTopViewToRightAnimated:YES];
+}
+
+#pragma mark - ClassTableViewCellDelegate
+- (void)onTrackWod:(RhinoFitClass *)rhinofitClass {
+    ScrollViewController *scrollViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"ScrollViewController"];
+    TrackWodViewController *trackWodViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"TrackWodViewController"];
+    trackWodViewController.mClass = rhinofitClass;
+    [scrollViewController setContentViewController:trackWodViewController];
+    [self.navigationController pushViewController:trackWodViewController animated:YES];
 }
 @end

@@ -16,5 +16,6 @@
 @property (weak, nonatomic) IBOutlet DemoTextField *mEmailTextField;
 @property (weak, nonatomic) IBOutlet DemoTextField *mPasswordTextField;
 @property (weak, nonatomic) IBOutlet CustomButton *mLoginButton;
+@property (weak, nonatomic) IBOutlet UILabel *rhinofitLabel;
 
 @end

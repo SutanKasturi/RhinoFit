@@ -18,8 +18,22 @@
 //  limitations under the License.
 //
 
-#import <CoreData/CoreDataErrors.h>
 #import "RKLog.h"
+
+@interface RKNSLogLogger : NSObject <RKLogging>
+@end
+
+#if RKLOG_USE_NSLOGGER && __has_include("LCLNSLogger_RK.h")
+  #import "LCLNSLogger_RK.h"
+  #define RKLOG_CLASS LCLNSLogger_RK
+
+#elif __has_include("DDLog.h")
+  #import "RKLumberjackLogger.h"
+  #define RKLOG_CLASS RKLumberjackLogger
+
+#else
+  #define RKLOG_CLASS RKNSLogLogger
+#endif
 
 // Hook into Objective-C runtime to configure logging when we are loaded
 @interface RKLogInitializer : NSObject
@@ -31,7 +45,39 @@
 {
     RKlcl_configure_by_name("RestKit*", RKLogLevelDefault);
     RKlcl_configure_by_name("App", RKLogLevelDefault);
+    if (RKGetLoggingClass() == Nil) RKSetLoggingClass([RKLOG_CLASS class]);
     RKLogInfo(@"RestKit logging initialized...");
+}
+
+@end
+
+static Class <RKLogging> RKLoggingClass;
+
+Class <RKLogging> RKGetLoggingClass(void)
+{
+    return RKLoggingClass;
+}
+
+void RKSetLoggingClass(Class <RKLogging> loggingClass)
+{
+    RKLoggingClass = loggingClass;
+}
+
+@implementation RKNSLogLogger
+
++ (void)logWithComponent:(_RKlcl_component_t)component
+                   level:(_RKlcl_level_t)level
+                    path:(const char *)file
+                    line:(uint32_t)line
+                function:(const char *)function
+                  format:(NSString *)format, ...
+{
+    va_list args;
+    va_start(args, format);
+    NSString *message = [[NSString alloc] initWithFormat:format arguments:args];
+    va_end(args);
+    const char *fileName = (fileName = strrchr(file, '/')) ? fileName + 1 : file;
+    NSLog(@"%s %s:%s:%d %@", _RKlcl_level_header_1[level], _RKlcl_component_header[component], fileName, line, message);
 }
 
 @end
@@ -110,8 +156,20 @@ int RKLogLevelForString(NSString *logLevel, NSString *envVarName)
     }
 }
 
+void RKLogIntegerAsBinary(NSUInteger bitMask)
+{
+    NSUInteger bit = ~(NSUIntegerMax >> 1);
+    NSMutableString *string = [NSMutableString string];
+    do {
+        [string appendString:(((NSUInteger)bitMask & bit) ? @"1" : @"0")];
+    } while (bit >>= 1);
+    
+    NSLog(@"Value of %ld in binary: %@", (long)bitMask, string);
+}
+
 void RKLogValidationError(NSError *error)
 {
+#ifdef _COREDATADEFINES_H    
     if ([[error domain] isEqualToString:@"NSCocoaErrorDomain"]) {
         NSDictionary *userInfo = [error userInfo];
         NSArray *errors = [userInfo valueForKey:@"NSDetailedErrors"];
@@ -140,22 +198,16 @@ void RKLogValidationError(NSError *error)
                        [userInfo valueForKey:NSValidationObjectErrorKey]);
         }
     }
+#else
+    RKLogError(@"Validation Error: %@ (userInfo: %@)", error, [error userInfo]);
+#endif
 }
 
-void RKLogIntegerAsBinary(NSUInteger bitMask)
-{
-    NSUInteger bit = ~(NSUIntegerMax >> 1);
-    NSMutableString *string = [NSMutableString string];
-    do {
-        [string appendString:(((NSUInteger)bitMask & bit) ? @"1" : @"0")];
-    } while (bit >>= 1);
-
-    NSLog(@"Value of %ld in binary: %@", (long)bitMask, string);
-}
-
+#ifdef _COREDATADEFINES_H
 void RKLogCoreDataError(NSError *error)
 {
     RKLogToComponentWithLevelWhileExecutingBlock(RKlcl_cRestKitCoreData, RKLogLevelError, ^{
         RKLogValidationError(error);
     });
 }
+#endif

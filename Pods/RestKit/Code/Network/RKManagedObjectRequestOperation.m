@@ -18,11 +18,14 @@
 //  limitations under the License.
 //
 
+#ifdef _COREDATADEFINES_H
+#if __has_include("RKManagedObjectCaching.h")
+
 #import "RKManagedObjectRequestOperation.h"
 #import "RKLog.h"
 #import "RKHTTPUtilities.h"
 #import "RKResponseMapperOperation.h"
-#import "RKRequestOperationSubclass.h"
+#import "RKObjectRequestOperationSubclass.h"
 #import "NSManagedObjectContext+RKAdditions.h"
 #import "NSManagedObject+RKAdditions.h"
 #import "RKObjectUtilities.h"
@@ -413,13 +416,16 @@ static NSSet *RKManagedObjectsFromMappingResultWithMappingInfo(RKMappingResult *
 // Defined in RKObjectManager.h
 BOOL RKDoesArrayOfResponseDescriptorsContainOnlyEntityMappings(NSArray *responseDescriptors);
 
+@interface RKObjectRequestOperation ()
+@property (nonatomic, strong, readwrite) NSError *error;
+@property (nonatomic, strong, readwrite) RKMappingResult *mappingResult;
+@end
+
 @interface RKManagedObjectRequestOperation ()
 // Core Data specific
 @property (nonatomic, strong) NSManagedObjectContext *privateContext;
 @property (nonatomic, copy) NSManagedObjectID *targetObjectID;
 @property (nonatomic, strong) RKManagedObjectResponseMapperOperation *responseMapperOperation;
-@property (nonatomic, strong, readwrite) NSError *error;
-@property (nonatomic, strong, readwrite) RKMappingResult *mappingResult;
 @property (nonatomic, copy) id (^willMapDeserializedResponseBlock)(id deserializedResponseBody);
 @property (nonatomic, strong) NSDictionary *mappingInfo;
 @property (nonatomic, strong) NSCachedURLResponse *cachedResponse;
@@ -540,9 +546,9 @@ BOOL RKDoesArrayOfResponseDescriptorsContainOnlyEntityMappings(NSArray *response
         if (! RKDoesArrayOfResponseDescriptorsContainOnlyEntityMappings(matchingResponseDescriptors)) return NO;
 
         // Check for a change in the Etag
-        NSString *cachedEtag = [[(NSHTTPURLResponse *)[self.cachedResponse response] allHeaderFields] objectForKey:@"Etag"];
-        NSString *responseEtag = [[response allHeaderFields] objectForKey:@"Etag"];
-        if (! [cachedEtag isEqualToString:responseEtag]) return NO;
+        NSString *cachedEtag = [[(NSHTTPURLResponse *)[self.cachedResponse response] allHeaderFields] objectForKey:@"ETag"];
+        NSString *responseEtag = [[response allHeaderFields] objectForKey:@"ETag"];
+        if (!(cachedEtag && responseEtag && [cachedEtag isEqualToString:responseEtag])) return NO;
         
         // Response data has changed
         NSData *responseData = self.HTTPRequestOperation.responseData;
@@ -562,8 +568,7 @@ BOOL RKDoesArrayOfResponseDescriptorsContainOnlyEntityMappings(NSArray *response
 
 - (void)performMappingOnResponseWithCompletionBlock:(void(^)(RKMappingResult *mappingResult, NSError *error))completionBlock
 {
-    NSURL *URL = RKRelativeURLFromURLAndResponseDescriptors(self.HTTPRequestOperation.response.URL, self.responseDescriptors);
-    NSArray *fetchRequests = RKArrayOfFetchRequestFromBlocksWithURL(self.fetchRequestBlocks, URL);
+    NSArray *fetchRequests = [self fetchRequestsMatchingResponseURL];
     if ([fetchRequests count] && [self canSkipMapping]) {
         RKLogDebug(@"Managed object mapping requested for cached response which was previously mapped: skipping...");
         NSMutableArray *managedObjects = [NSMutableArray array];
@@ -595,7 +600,7 @@ BOOL RKDoesArrayOfResponseDescriptorsContainOnlyEntityMappings(NSArray *response
     self.responseMapperOperation.managedObjectCache = self.managedObjectCache;
     [self.responseMapperOperation setWillMapDeserializedResponseBlock:self.willMapDeserializedResponseBlock];
     [self.responseMapperOperation setQueuePriority:[self queuePriority]];    
-    __weak __typeof(&*self)weakSelf = self;
+    __weak __typeof(self)weakSelf = self;
     [self.responseMapperOperation setDidFinishMappingBlock:^(RKMappingResult *mappingResult, NSError *responseMappingError) {
         if ([weakSelf isCancelled]) return completionBlock(mappingResult, responseMappingError);
         
@@ -603,29 +608,31 @@ BOOL RKDoesArrayOfResponseDescriptorsContainOnlyEntityMappings(NSArray *response
         NSError *error = nil;
         
         // Handle any cleanup
-        success = [weakSelf deleteTargetObjectIfAppropriate:&error];
-        if (! success || [weakSelf isCancelled]) {
-            return completionBlock(nil, error);
+        if (weakSelf.targetObjectID
+            && NSLocationInRange(weakSelf.HTTPRequestOperation.response.statusCode, RKStatusCodeRangeForClass(RKStatusCodeClassSuccessful))
+            && [[[weakSelf.HTTPRequestOperation.request HTTPMethod] uppercaseString] isEqualToString:@"DELETE"]) {
+            success = [weakSelf deleteTargetObject:&error];
+            if (! success || [weakSelf isCancelled]) {
+                return completionBlock(nil, error);
+            }
         }
+
+        if (!responseMappingError) {
+            success = [weakSelf deleteLocalObjectsMissingFromMappingResult:mappingResult error:&error];
+            if (! success || [weakSelf isCancelled]) {
+                return completionBlock(nil, error);
+            }
         
-        success = [weakSelf deleteLocalObjectsMissingFromMappingResult:mappingResult error:&error];
-        if (! success || [weakSelf isCancelled]) {
-            return completionBlock(nil, error);
-        }
-        
-        // Persist our mapped objects
-        success = [weakSelf obtainPermanentObjectIDsForInsertedObjects:&error];
-        if (! success || [weakSelf isCancelled]) {
-            return completionBlock(nil, error);
-        }
-        if (weakSelf.willSaveMappingContextBlock) {
-            [weakSelf.privateContext performBlockAndWait:^{
-                weakSelf.willSaveMappingContextBlock(weakSelf.privateContext);
-            }];
-        }
-        success = [weakSelf saveContext:&error];
-        if (! success || [weakSelf isCancelled]) {
-            return completionBlock(nil, error);
+            // Persist our mapped objects
+            success = [weakSelf obtainPermanentObjectIDsForInsertedObjects:&error];
+            if (! success || [weakSelf isCancelled]) {
+                return completionBlock(nil, error);
+            }
+            
+            success = [weakSelf saveContext:&error];
+            if (! success || [weakSelf isCancelled]) {
+                return completionBlock(nil, error);
+            }
         }
         
         // Refetch all managed objects nested at key paths within the results dictionary before returning
@@ -640,15 +647,12 @@ BOOL RKDoesArrayOfResponseDescriptorsContainOnlyEntityMappings(NSArray *response
     [[RKObjectRequestOperation responseMappingQueue] addOperation:self.responseMapperOperation];
 }
 
-- (BOOL)deleteTargetObjectIfAppropriate:(NSError **)error
+- (BOOL)deleteTargetObject:(NSError **)error
 {
     __block BOOL _blockSuccess = YES;
 
-    if (self.targetObjectID
-        && NSLocationInRange(self.HTTPRequestOperation.response.statusCode, RKStatusCodeRangeForClass(RKStatusCodeClassSuccessful))
-        && [[[self.HTTPRequestOperation.request HTTPMethod] uppercaseString] isEqualToString:@"DELETE"]) {
-
-        // 2xx DELETE request, proceed with deletion from the MOC
+    if (self.targetObjectID) {
+        // 2xx/404/410 DELETE request, proceed with deletion from the MOC
         __block NSError *_blockError = nil;
         [self.privateContext performBlockAndWait:^{
             NSManagedObject *backgroundThreadObject = [self.privateContext existingObjectWithID:self.targetObjectID error:&_blockError];
@@ -669,34 +673,24 @@ BOOL RKDoesArrayOfResponseDescriptorsContainOnlyEntityMappings(NSArray *response
 
 - (NSSet *)localObjectsFromFetchRequests:(NSArray *)fetchRequests matchingRequestURL:(NSError **)error
 {
-    NSMutableSet *localObjects = [NSMutableSet set];    
+    NSMutableSet *localObjects = [NSMutableSet set];
     __block NSError *_blockError;
     __block NSArray *_blockObjects;
     
-    // Pass the fetch request blocks a relative `NSURL` object if possible
-    NSURL *URL = RKRelativeURLFromURLAndResponseDescriptors(self.HTTPRequestOperation.response.URL, self.responseDescriptors);
-    for (RKFetchRequestBlock fetchRequestBlock in [self.fetchRequestBlocks reverseObjectEnumerator]) {
-        NSFetchRequest *fetchRequest = fetchRequestBlock(URL);
-        if (fetchRequest) {
-            // Workaround for iOS 5 -- The log statement crashes if the entity is not assigned before logging
-            [fetchRequest setEntity:[[[[self.privateContext persistentStoreCoordinator] managedObjectModel] entitiesByName] objectForKey:[fetchRequest entityName]]];
-            RKLogDebug(@"Found fetch request matching URL '%@': %@", URL, fetchRequest);
-
-            [self.privateContext performBlockAndWait:^{
-                _blockObjects = [self.privateContext executeFetchRequest:fetchRequest error:&_blockError];
-            }];
-
-            if (_blockObjects == nil) {
-                if (error) *error = _blockError;
-                return nil;
-            }
-            RKLogTrace(@"Fetched local objects matching URL '%@' with fetch request '%@': %@", URL, fetchRequest, _blockObjects);
-            [localObjects addObjectsFromArray:_blockObjects];
-        } else {
-            RKLogTrace(@"Fetch request block %@ returned nil fetch request for URL: '%@'", fetchRequestBlock, URL);
+    for (NSFetchRequest *fetchRequest in fetchRequests) {
+        [self.privateContext performBlockAndWait:^{
+            _blockObjects = [self.privateContext executeFetchRequest:fetchRequest error:&_blockError];
+        }];
+        
+        if (_blockObjects == nil) {
+            if (error) *error = _blockError;
+            return nil;
         }
+        RKLogTrace(@"Fetched local objects matching URL with fetch request '%@': %@", fetchRequest, _blockObjects);
+        [localObjects addObjectsFromArray:_blockObjects];
+        
     }
-
+    
     return localObjects;
 }
 
@@ -824,7 +818,17 @@ BOOL RKDoesArrayOfResponseDescriptorsContainOnlyEntityMappings(NSArray *response
 
 - (BOOL)saveContext:(NSError **)error
 {
-    if ([self.privateContext hasChanges]) {
+    if (self.willSaveMappingContextBlock) {
+        [self.privateContext performBlockAndWait:^{
+            self.willSaveMappingContextBlock(self.privateContext);
+        }];
+    }
+    
+    __block BOOL hasChanges;
+    [self.privateContext performBlockAndWait:^{
+        hasChanges = [self.privateContext hasChanges];
+    }];
+    if (hasChanges) {
         return [self saveContext:self.privateContext error:error];
     } else if ([self.targetObject isKindOfClass:[NSManagedObject class]]) {
         NSManagedObjectContext *context = [(NSManagedObject *)self.targetObject managedObjectContext];
@@ -858,6 +862,29 @@ BOOL RKDoesArrayOfResponseDescriptorsContainOnlyEntityMappings(NSArray *response
     self.mappingInfo = mapper.mappingInfo;
 }
 
+- (void)willFinish
+{
+    NSMutableIndexSet *deleteableStatusCodes = [NSMutableIndexSet indexSet];
+    [deleteableStatusCodes addIndex:404]; // Not Found
+    [deleteableStatusCodes addIndex:410]; // Gone
+    if (self.error && self.targetObjectID
+        && [[[self.HTTPRequestOperation.request HTTPMethod] uppercaseString] isEqualToString:@"DELETE"]
+        && [deleteableStatusCodes containsIndex:self.HTTPRequestOperation.response.statusCode]) {
+        NSError *error = nil;
+        if (! [self deleteTargetObject:&error]) {
+            RKLogWarning(@"Secondary error encountered while attempting to delete target object in response to 404 (Not Found) or 410 (Gone) status code: %@", error);
+            self.error = error;
+        } else {
+            if (! [self saveContext:&error]) {
+                
+            } else {
+                // All good, clear any errors
+                self.error = nil;
+            }
+        }
+    }
+}
+
 #pragma mark - NSCopying
 
 - (id)copyWithZone:(NSZone *)zone {
@@ -872,3 +899,6 @@ BOOL RKDoesArrayOfResponseDescriptorsContainOnlyEntityMappings(NSArray *response
 }
 
 @end
+
+#endif
+#endif

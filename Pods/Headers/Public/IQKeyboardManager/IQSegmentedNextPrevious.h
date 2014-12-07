@@ -1,1 +1,1 @@
-../../../IQKeyboardManager/IQKeyBoardManager/IQSegmentedNextPrevious.h
+../../../IQKeyboardManager/IQKeyBoardManager/IQSegmentedNextPrevious/IQSegmentedNextPrevious.h

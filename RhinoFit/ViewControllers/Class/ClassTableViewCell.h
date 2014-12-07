@@ -9,14 +9,24 @@
 #import <UIKit/UIKit.h>
 #import "RhinoFitClass.h"
 
+@protocol ClassTableViewCellDelegate <NSObject>
+
+@optional
+- (void) onTrackWod:(RhinoFitClass*)rhinofitClass;
+
+@end
+
 @interface ClassTableViewCell : UITableViewCell
 
 @property (nonatomic, strong) RhinoFitClass *theClass;
+
+@property (weak, nonatomic) id<ClassTableViewCellDelegate> delegate;
 
 @property (weak, nonatomic) IBOutlet UIButton *reservationButton;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *reservationIndicator;
 @property (weak, nonatomic) IBOutlet UIButton *attendanceButton;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *attendanceIndicator;
+@property (weak, nonatomic) IBOutlet UIButton *trackWodButton;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;

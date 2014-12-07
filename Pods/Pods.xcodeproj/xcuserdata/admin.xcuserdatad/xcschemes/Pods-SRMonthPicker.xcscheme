@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2DD0BA9DC02D003A7981E5C2"
+               BlueprintIdentifier = "FC2D83A42A64DF5408C612C5"
                BuildableName = "libPods-SRMonthPicker.a"
                BlueprintName = "Pods-SRMonthPicker"
                ReferencedContainer = "container:Pods.xcodeproj">

@@ -61,6 +61,7 @@ static NSMutableArray * availableBenchmark;
 {
     [[NetworkManager sharedManager] getMyBenchmarks:^(NSMutableArray *result) {
         if ( result == nil || [result count] == 0 ) {
+            waitingViewController.view.frame = self.tableView.frame;
             [waitingViewController showResult:kMessageNoMyBenchmarks];
         }
         else {
@@ -84,10 +85,11 @@ static NSMutableArray * availableBenchmark;
             for ( MyBenchmark *benchmark in unavailableBenchmark ) {
                 [_mMyBenchmarks removeObject:benchmark];
             }
-            [self refresh];
             [self.tableView reloadData];
         }
+        [self refresh];
     } failure:^(NSString *error) {
+        waitingViewController.view.frame = self.tableView.frame;
         [waitingViewController showResult:error];
     }];
 }
@@ -138,6 +140,9 @@ static NSMutableArray * availableBenchmark;
     if ( availableBenchmark == nil ) {
         [self getAvailableBenchmark];
     }
+    else {
+        [self getMyBenchmarks];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -187,26 +192,27 @@ static NSMutableArray * availableBenchmark;
     
     MyBenchmark *selectedBenchmark = nil;
     NSIndexPath *path = nil;
-    BOOL isNew = NO;
+    
     for ( int i = 0; i < [[self mMyBenchmarks] count]; i++ ) {
         MyBenchmark *theBenchmark = [self mMyBenchmarks][i];
         if ( [theBenchmark.benchmarkId intValue] >= [available.benchmarkId intValue] ) {
             if ( [theBenchmark.benchmarkId intValue] == [available.benchmarkId intValue] ) {
                 selectedBenchmark = theBenchmark;
             }
-            else {
-                isNew = YES;
-            }
-            
             path = [NSIndexPath indexPathForRow:i inSection:0];
             break;
         }
     }
+    BOOL isNew = NO;
     if ( selectedBenchmark == nil ) {
+        isNew = YES;
         selectedBenchmark = [[MyBenchmark alloc] init];
         selectedBenchmark.benchmarkId = available.benchmarkId;
         selectedBenchmark.title = available.bdescription;
         selectedBenchmark.type = available.btype;
+        if ( path == nil ) {
+            path = [NSIndexPath indexPathForRow:[[self mMyBenchmarks] count] inSection:0];
+        }
     }
     selectedBenchmark.lastDate = date;
     selectedBenchmark.lastScore = result;
@@ -237,9 +243,14 @@ static NSMutableArray * availableBenchmark;
     }
     else {
         [self.tableView insertRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationAutomatic];
+        if ( [[self mMyBenchmarks] count] == [availableBenchmark count] ) {
+            [self refresh];
+        }
+        else if ( [[self mMyBenchmarks] count] == 1 ) {
+            [waitingViewController.view setHidden:YES];
+        }
     }
     [self.tableView endUpdates];
-    [self refresh];
 }
 
 - (int) getSeconds:(NSString*)minuteAndSecond
@@ -294,9 +305,17 @@ static NSMutableArray * availableBenchmark;
 
 - (void)removeMyBenchmark {
     if ( selectedIndexPath && selectedIndexPath.row < [[self mMyBenchmarks] count]) {
+        [[self mMyBenchmarks] removeObjectAtIndex:selectedIndexPath.row];
         [self.tableView beginUpdates];
         [self.tableView deleteRowsAtIndexPaths:@[selectedIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         [self.tableView endUpdates];
+        if ( [[self mMyBenchmarks] count] == 0 ) {
+            [waitingViewController.view setHidden:NO];
+            [waitingViewController showResult:kMessageNoMyBenchmarks];
+        }
+        else if ( [[self mMyBenchmarks] count] == [availableBenchmark count] - 1 ) {
+            [self refresh];
+        }
     }
 }
 @end

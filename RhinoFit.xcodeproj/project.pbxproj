@@ -75,6 +75,29 @@
 		849B768619F099B400680B2D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 849B768519F099B400680B2D /* Images.xcassets */; };
 		849B768919F099B400680B2D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 849B768719F099B400680B2D /* LaunchScreen.xib */; };
 		849B769519F099B400680B2D /* RhinoFitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 849B769419F099B400680B2D /* RhinoFitTests.m */; };
+		84B642B81A3455C400787EE7 /* avatar.png in Resources */ = {isa = PBXBuildFile; fileRef = 84B642B71A3455C400787EE7 /* avatar.png */; };
+		84B642BC1A345DA100787EE7 /* ScrollContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B642BB1A345DA100787EE7 /* ScrollContentViewController.m */; };
+		84B642C01A34655C00787EE7 /* UpdateUserInfoRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B642BF1A34655C00787EE7 /* UpdateUserInfoRequest.m */; };
+		84B642C51A348B8C00787EE7 /* GetWodInfoRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B642C41A348B8C00787EE7 /* GetWodInfoRequest.m */; };
+		84B642C81A348C8400787EE7 /* WodInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B642C71A348C8400787EE7 /* WodInfo.m */; };
+		84B642CB1A349E8A00787EE7 /* TrackWodRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B642CA1A349E8A00787EE7 /* TrackWodRequest.m */; };
+		84B642CE1A34A61800787EE7 /* GetMyWodsRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B642CD1A34A61800787EE7 /* GetMyWodsRequest.m */; };
+		84B642D11A34A7B000787EE7 /* MyWodsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B642D01A34A7B000787EE7 /* MyWodsTableViewCell.m */; };
+		84BD477D1A3156CD0082E67B /* WallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BD477C1A3156CD0082E67B /* WallViewController.m */; };
+		84BD47801A3156E70082E67B /* WallTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BD477F1A3156E70082E67B /* WallTableViewCell.m */; };
+		84BD47831A31611C0082E67B /* PostWallMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BD47821A31611C0082E67B /* PostWallMessageViewController.m */; };
+		84BD47861A3161320082E67B /* PostWallMessageContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BD47851A3161320082E67B /* PostWallMessageContentViewController.m */; };
+		84BD478A1A316A710082E67B /* MyProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BD47891A316A710082E67B /* MyProfileViewController.m */; };
+		84BD47901A316A960082E67B /* MyProfileEditContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BD478F1A316A960082E67B /* MyProfileEditContentViewController.m */; };
+		84BD47931A316EB20082E67B /* ScrollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BD47921A316EB20082E67B /* ScrollViewController.m */; };
+		84BD47961A31AD120082E67B /* TrackWodViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BD47951A31AD120082E67B /* TrackWodViewController.m */; };
+		84BD47991A31AD5E0082E67B /* MyWodsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BD47981A31AD5E0082E67B /* MyWodsViewController.m */; };
+		84BD479C1A31AE810082E67B /* Wall.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BD479B1A31AE810082E67B /* Wall.m */; };
+		84BD479F1A31B01F0082E67B /* GetWallPostsRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BD479E1A31B01F0082E67B /* GetWallPostsRequest.m */; };
+		84BD47A31A31BFDA0082E67B /* TakePhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BD47A21A31BFDA0082E67B /* TakePhoto.m */; };
+		84BD47A71A325A9C0082E67B /* ImageUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BD47A61A325A9C0082E67B /* ImageUploader.m */; };
+		84BD47AA1A32645F0082E67B /* AddWallPostRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BD47A91A32645F0082E67B /* AddWallPostRequest.m */; };
+		84BD47AD1A32A09E0082E67B /* MyProfileContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BD47AC1A32A09E0082E67B /* MyProfileContentViewController.m */; };
 		84F2B87919F0E4210007B929 /* blackButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F2B85D19F0E4210007B929 /* blackButton.png */; };
 		84F2B87A19F0E4210007B929 /* blackButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F2B85E19F0E4210007B929 /* blackButton@2x.png */; };
 		84F2B87B19F0E4210007B929 /* blackButtonHighlight.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F2B85F19F0E4210007B929 /* blackButtonHighlight.png */; };
@@ -250,6 +273,52 @@
 		849B768E19F099B400680B2D /* RhinoFitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RhinoFitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		849B769319F099B400680B2D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		849B769419F099B400680B2D /* RhinoFitTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RhinoFitTests.m; sourceTree = "<group>"; };
+		84B642B71A3455C400787EE7 /* avatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = avatar.png; sourceTree = "<group>"; };
+		84B642B91A3459EF00787EE7 /* ScrollContentDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScrollContentDelegate.h; path = ViewControllers/ScrollContentDelegate.h; sourceTree = "<group>"; };
+		84B642BA1A345DA100787EE7 /* ScrollContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScrollContentViewController.h; path = ViewControllers/ScrollContentViewController.h; sourceTree = "<group>"; };
+		84B642BB1A345DA100787EE7 /* ScrollContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ScrollContentViewController.m; path = ViewControllers/ScrollContentViewController.m; sourceTree = "<group>"; };
+		84B642BE1A34655C00787EE7 /* UpdateUserInfoRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UpdateUserInfoRequest.h; path = RestKit/RequestModels/UpdateUserInfoRequest.h; sourceTree = SOURCE_ROOT; };
+		84B642BF1A34655C00787EE7 /* UpdateUserInfoRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UpdateUserInfoRequest.m; path = RestKit/RequestModels/UpdateUserInfoRequest.m; sourceTree = SOURCE_ROOT; };
+		84B642C31A348B8C00787EE7 /* GetWodInfoRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GetWodInfoRequest.h; path = RestKit/RequestModels/GetWodInfoRequest.h; sourceTree = SOURCE_ROOT; };
+		84B642C41A348B8C00787EE7 /* GetWodInfoRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GetWodInfoRequest.m; path = RestKit/RequestModels/GetWodInfoRequest.m; sourceTree = SOURCE_ROOT; };
+		84B642C61A348C8400787EE7 /* WodInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WodInfo.h; sourceTree = "<group>"; };
+		84B642C71A348C8400787EE7 /* WodInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WodInfo.m; sourceTree = "<group>"; };
+		84B642C91A349E8A00787EE7 /* TrackWodRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TrackWodRequest.h; path = RestKit/RequestModels/TrackWodRequest.h; sourceTree = SOURCE_ROOT; };
+		84B642CA1A349E8A00787EE7 /* TrackWodRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TrackWodRequest.m; path = RestKit/RequestModels/TrackWodRequest.m; sourceTree = SOURCE_ROOT; };
+		84B642CC1A34A61800787EE7 /* GetMyWodsRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GetMyWodsRequest.h; path = RestKit/RequestModels/GetMyWodsRequest.h; sourceTree = SOURCE_ROOT; };
+		84B642CD1A34A61800787EE7 /* GetMyWodsRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GetMyWodsRequest.m; path = RestKit/RequestModels/GetMyWodsRequest.m; sourceTree = SOURCE_ROOT; };
+		84B642CF1A34A7B000787EE7 /* MyWodsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyWodsTableViewCell.h; path = ViewControllers/Class/MyWodsTableViewCell.h; sourceTree = "<group>"; };
+		84B642D01A34A7B000787EE7 /* MyWodsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyWodsTableViewCell.m; path = ViewControllers/Class/MyWodsTableViewCell.m; sourceTree = "<group>"; };
+		84BD477B1A3156CD0082E67B /* WallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WallViewController.h; path = ViewControllers/Wall/WallViewController.h; sourceTree = "<group>"; };
+		84BD477C1A3156CD0082E67B /* WallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WallViewController.m; path = ViewControllers/Wall/WallViewController.m; sourceTree = "<group>"; };
+		84BD477E1A3156E70082E67B /* WallTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WallTableViewCell.h; path = ViewControllers/Wall/WallTableViewCell.h; sourceTree = "<group>"; };
+		84BD477F1A3156E70082E67B /* WallTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WallTableViewCell.m; path = ViewControllers/Wall/WallTableViewCell.m; sourceTree = "<group>"; };
+		84BD47811A31611C0082E67B /* PostWallMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PostWallMessageViewController.h; path = ViewControllers/Wall/PostWallMessageViewController.h; sourceTree = "<group>"; };
+		84BD47821A31611C0082E67B /* PostWallMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PostWallMessageViewController.m; path = ViewControllers/Wall/PostWallMessageViewController.m; sourceTree = "<group>"; };
+		84BD47841A3161320082E67B /* PostWallMessageContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PostWallMessageContentViewController.h; path = ViewControllers/Wall/PostWallMessageContentViewController.h; sourceTree = "<group>"; };
+		84BD47851A3161320082E67B /* PostWallMessageContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PostWallMessageContentViewController.m; path = ViewControllers/Wall/PostWallMessageContentViewController.m; sourceTree = "<group>"; };
+		84BD47881A316A710082E67B /* MyProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyProfileViewController.h; path = ViewControllers/Profile/MyProfileViewController.h; sourceTree = "<group>"; };
+		84BD47891A316A710082E67B /* MyProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyProfileViewController.m; path = ViewControllers/Profile/MyProfileViewController.m; sourceTree = "<group>"; };
+		84BD478E1A316A960082E67B /* MyProfileEditContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyProfileEditContentViewController.h; path = ViewControllers/Profile/MyProfileEditContentViewController.h; sourceTree = "<group>"; };
+		84BD478F1A316A960082E67B /* MyProfileEditContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyProfileEditContentViewController.m; path = ViewControllers/Profile/MyProfileEditContentViewController.m; sourceTree = "<group>"; };
+		84BD47911A316EB20082E67B /* ScrollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScrollViewController.h; path = ViewControllers/ScrollViewController.h; sourceTree = "<group>"; };
+		84BD47921A316EB20082E67B /* ScrollViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ScrollViewController.m; path = ViewControllers/ScrollViewController.m; sourceTree = "<group>"; };
+		84BD47941A31AD120082E67B /* TrackWodViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TrackWodViewController.h; path = ViewControllers/Class/TrackWodViewController.h; sourceTree = "<group>"; };
+		84BD47951A31AD120082E67B /* TrackWodViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TrackWodViewController.m; path = ViewControllers/Class/TrackWodViewController.m; sourceTree = "<group>"; };
+		84BD47971A31AD5E0082E67B /* MyWodsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyWodsViewController.h; path = ViewControllers/Class/MyWodsViewController.h; sourceTree = "<group>"; };
+		84BD47981A31AD5E0082E67B /* MyWodsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyWodsViewController.m; path = ViewControllers/Class/MyWodsViewController.m; sourceTree = "<group>"; };
+		84BD479A1A31AE810082E67B /* Wall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Wall.h; sourceTree = "<group>"; };
+		84BD479B1A31AE810082E67B /* Wall.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Wall.m; sourceTree = "<group>"; };
+		84BD479D1A31B01E0082E67B /* GetWallPostsRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GetWallPostsRequest.h; path = RestKit/RequestModels/GetWallPostsRequest.h; sourceTree = SOURCE_ROOT; };
+		84BD479E1A31B01F0082E67B /* GetWallPostsRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GetWallPostsRequest.m; path = RestKit/RequestModels/GetWallPostsRequest.m; sourceTree = SOURCE_ROOT; };
+		84BD47A11A31BFDA0082E67B /* TakePhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TakePhoto.h; sourceTree = "<group>"; };
+		84BD47A21A31BFDA0082E67B /* TakePhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TakePhoto.m; sourceTree = "<group>"; };
+		84BD47A51A325A9C0082E67B /* ImageUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageUploader.h; sourceTree = "<group>"; };
+		84BD47A61A325A9C0082E67B /* ImageUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageUploader.m; sourceTree = "<group>"; };
+		84BD47A81A32645F0082E67B /* AddWallPostRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddWallPostRequest.h; path = RestKit/RequestModels/AddWallPostRequest.h; sourceTree = SOURCE_ROOT; };
+		84BD47A91A32645F0082E67B /* AddWallPostRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddWallPostRequest.m; path = RestKit/RequestModels/AddWallPostRequest.m; sourceTree = SOURCE_ROOT; };
+		84BD47AB1A32A09E0082E67B /* MyProfileContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyProfileContentViewController.h; path = ViewControllers/Profile/MyProfileContentViewController.h; sourceTree = "<group>"; };
+		84BD47AC1A32A09E0082E67B /* MyProfileContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyProfileContentViewController.m; path = ViewControllers/Profile/MyProfileContentViewController.m; sourceTree = "<group>"; };
 		84F2B85D19F0E4210007B929 /* blackButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blackButton.png; sourceTree = "<group>"; };
 		84F2B85E19F0E4210007B929 /* blackButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blackButton@2x.png"; sourceTree = "<group>"; };
 		84F2B85F19F0E4210007B929 /* blackButtonHighlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blackButtonHighlight.png; sourceTree = "<group>"; };
@@ -366,6 +435,10 @@
 				840C0CF01A024EBD00E10ABF /* AvailableBenchmark.m */,
 				845EDDD01A1EBBD800CA78A2 /* BenchmarkHistory.h */,
 				845EDDD11A1EBBD800CA78A2 /* BenchmarkHistory.m */,
+				84BD479A1A31AE810082E67B /* Wall.h */,
+				84BD479B1A31AE810082E67B /* Wall.m */,
+				84B642C61A348C8400787EE7 /* WodInfo.h */,
+				84B642C71A348C8400787EE7 /* WodInfo.m */,
 			);
 			name = Models;
 			path = RestKit/Models;
@@ -433,6 +506,12 @@
 				847BB50619F16A1500528DE4 /* ClassViewController.m */,
 				847BB54519F2A47500528DE4 /* ClassTableViewCell.h */,
 				847BB54619F2A47500528DE4 /* ClassTableViewCell.m */,
+				84BD47941A31AD120082E67B /* TrackWodViewController.h */,
+				84BD47951A31AD120082E67B /* TrackWodViewController.m */,
+				84BD47971A31AD5E0082E67B /* MyWodsViewController.h */,
+				84BD47981A31AD5E0082E67B /* MyWodsViewController.m */,
+				84B642CF1A34A7B000787EE7 /* MyWodsTableViewCell.h */,
+				84B642D01A34A7B000787EE7 /* MyWodsTableViewCell.m */,
 			);
 			name = Class;
 			sourceTree = "<group>";
@@ -462,6 +541,8 @@
 		847BB51C19F1795900528DE4 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				84BD47A51A325A9C0082E67B /* ImageUploader.h */,
+				84BD47A61A325A9C0082E67B /* ImageUploader.m */,
 				847BB51D19F1795900528DE4 /* AKObjectManager.h */,
 				847BB51E19F1795900528DE4 /* AKObjectManager.m */,
 				847BB52119F1795900528DE4 /* NetworkManager.h */,
@@ -480,6 +561,8 @@
 				847BB54F19F2AD0400528DE4 /* LoginRequest.m */,
 				847BB55019F2AD0400528DE4 /* UserInfoRequest.h */,
 				847BB55119F2AD0400528DE4 /* UserInfoRequest.m */,
+				84B642BE1A34655C00787EE7 /* UpdateUserInfoRequest.h */,
+				84B642BF1A34655C00787EE7 /* UpdateUserInfoRequest.m */,
 				847BB54919F2ACEC00528DE4 /* MakeReservationRequest.h */,
 				847BB54A19F2ACEC00528DE4 /* MakeReservationRequest.m */,
 				847BB55519F2ADD800528DE4 /* ListReservationRequest.h */,
@@ -504,6 +587,16 @@
 				848EF21F1A1F57B400E22429 /* MyBenchmarkDataRequest.m */,
 				848EF2211A1F714E00E22429 /* DeleteBenchmarkData.h */,
 				848EF2221A1F714E00E22429 /* DeleteBenchmarkData.m */,
+				84BD479D1A31B01E0082E67B /* GetWallPostsRequest.h */,
+				84BD479E1A31B01F0082E67B /* GetWallPostsRequest.m */,
+				84BD47A81A32645F0082E67B /* AddWallPostRequest.h */,
+				84BD47A91A32645F0082E67B /* AddWallPostRequest.m */,
+				84B642C31A348B8C00787EE7 /* GetWodInfoRequest.h */,
+				84B642C41A348B8C00787EE7 /* GetWodInfoRequest.m */,
+				84B642C91A349E8A00787EE7 /* TrackWodRequest.h */,
+				84B642CA1A349E8A00787EE7 /* TrackWodRequest.m */,
+				84B642CC1A34A61800787EE7 /* GetMyWodsRequest.h */,
+				84B642CD1A34A61800787EE7 /* GetMyWodsRequest.m */,
 			);
 			name = RequestModels;
 			sourceTree = "<group>";
@@ -530,6 +623,7 @@
 		8481227B19F0C04800CE53D5 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				84B642B71A3455C400787EE7 /* avatar.png */,
 				849541EB1A02D79A0097587A /* down_dark0.png */,
 				847BB50019F1696000528DE4 /* icon_menu.png */,
 				847BB50119F1696000528DE4 /* icon_menu@2x.png */,
@@ -542,6 +636,9 @@
 		848122A619F0C55F00CE53D5 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				84B642BD1A345DA600787EE7 /* Utils */,
+				84BD47871A316A500082E67B /* Profile */,
+				84BD477A1A3156920082E67B /* Wall */,
 				840C0CCD1A01BCAC00E10ABF /* MyBenchmarks */,
 				840C0CCC1A01BC9800E10ABF /* MyMemberships */,
 				847BB50C19F16A3000528DE4 /* Attendace */,
@@ -549,8 +646,6 @@
 				847BB50419F169EF00528DE4 /* Class */,
 				847BB4DF19F1253200528DE4 /* Menu */,
 				848122AA19F0C59000CE53D5 /* Login */,
-				847BB53C19F2114300528DE4 /* WaitingViewController.h */,
-				847BB53D19F2114300528DE4 /* WaitingViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -567,6 +662,7 @@
 		848122AB19F0C5E000CE53D5 /* CustomUI */ = {
 			isa = PBXGroup;
 			children = (
+				84BD47A01A31BFDA0082E67B /* TakePhoto */,
 				847BB4E319F1608900528DE4 /* CustomButton */,
 				847BB4EA19F1608900528DE4 /* CustomInputText */,
 				847BB56419F2B40800528DE4 /* CustomView */,
@@ -638,6 +734,58 @@
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
+		};
+		84B642BD1A345DA600787EE7 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				847BB53C19F2114300528DE4 /* WaitingViewController.h */,
+				847BB53D19F2114300528DE4 /* WaitingViewController.m */,
+				84BD47911A316EB20082E67B /* ScrollViewController.h */,
+				84BD47921A316EB20082E67B /* ScrollViewController.m */,
+				84B642B91A3459EF00787EE7 /* ScrollContentDelegate.h */,
+				84B642BA1A345DA100787EE7 /* ScrollContentViewController.h */,
+				84B642BB1A345DA100787EE7 /* ScrollContentViewController.m */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
+		84BD477A1A3156920082E67B /* Wall */ = {
+			isa = PBXGroup;
+			children = (
+				84BD477B1A3156CD0082E67B /* WallViewController.h */,
+				84BD477C1A3156CD0082E67B /* WallViewController.m */,
+				84BD477E1A3156E70082E67B /* WallTableViewCell.h */,
+				84BD477F1A3156E70082E67B /* WallTableViewCell.m */,
+				84BD47811A31611C0082E67B /* PostWallMessageViewController.h */,
+				84BD47821A31611C0082E67B /* PostWallMessageViewController.m */,
+				84BD47841A3161320082E67B /* PostWallMessageContentViewController.h */,
+				84BD47851A3161320082E67B /* PostWallMessageContentViewController.m */,
+			);
+			name = Wall;
+			sourceTree = "<group>";
+		};
+		84BD47871A316A500082E67B /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				84BD47881A316A710082E67B /* MyProfileViewController.h */,
+				84BD47891A316A710082E67B /* MyProfileViewController.m */,
+				84BD478E1A316A960082E67B /* MyProfileEditContentViewController.h */,
+				84BD478F1A316A960082E67B /* MyProfileEditContentViewController.m */,
+				84BD47AB1A32A09E0082E67B /* MyProfileContentViewController.h */,
+				84BD47AC1A32A09E0082E67B /* MyProfileContentViewController.m */,
+			);
+			name = Profile;
+			sourceTree = "<group>";
+		};
+		84BD47A01A31BFDA0082E67B /* TakePhoto */ = {
+			isa = PBXGroup;
+			children = (
+				84BD47A11A31BFDA0082E67B /* TakePhoto.h */,
+				84BD47A21A31BFDA0082E67B /* TakePhoto.m */,
+			);
+			name = TakePhoto;
+			path = CustomUI/TakePhoto;
+			sourceTree = SOURCE_ROOT;
 		};
 		84F2B85C19F0E4210007B929 /* buttons */ = {
 			isa = PBXGroup;
@@ -752,6 +900,7 @@
 				TargetAttributes = {
 					849B767419F099B400680B2D = {
 						CreatedOnToolsVersion = 6.0.1;
+						DevelopmentTeam = 98UCNHCPGU;
 					};
 					849B768D19F099B400680B2D = {
 						CreatedOnToolsVersion = 6.0.1;
@@ -819,6 +968,7 @@
 				849B768619F099B400680B2D /* Images.xcassets in Resources */,
 				847BB50319F1696000528DE4 /* icon_menu@2x.png in Resources */,
 				84F2B88D19F0E4210007B929 /* tanButton.png in Resources */,
+				84B642B81A3455C400787EE7 /* avatar.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -870,20 +1020,30 @@
 			buildActionMask = 2147483647;
 			files = (
 				847BB4FD19F160E900528DE4 /* UserInfo.m in Sources */,
+				84BD47961A31AD120082E67B /* TrackWodViewController.m in Sources */,
 				847BB57019F2E37800528DE4 /* AttendanceTableViewCell.m in Sources */,
+				84BD478A1A316A710082E67B /* MyProfileViewController.m in Sources */,
 				847BB51819F16DB100528DE4 /* MEFoldAnimationController.m in Sources */,
+				84BD479C1A31AE810082E67B /* Wall.m in Sources */,
+				84BD47991A31AD5E0082E67B /* MyWodsViewController.m in Sources */,
+				84BD47AA1A32645F0082E67B /* AddWallPostRequest.m in Sources */,
 				847BB55419F2AD0400528DE4 /* UserInfoRequest.m in Sources */,
 				847BB55219F2AD0400528DE4 /* ClassesRequest.m in Sources */,
+				84B642CE1A34A61800787EE7 /* GetMyWodsRequest.m in Sources */,
 				847BB4EF19F1608900528DE4 /* CustomButton.m in Sources */,
 				845EDDCC1A1EB82000CA78A2 /* MyBenchmarkHistoryViewController.m in Sources */,
+				84B642C01A34655C00787EE7 /* UpdateUserInfoRequest.m in Sources */,
+				84B642C51A348B8C00787EE7 /* GetWodInfoRequest.m in Sources */,
 				847BB4E219F1254F00528DE4 /* MenuViewController.m in Sources */,
 				840C0CD61A01BD1B00E10ABF /* MyMembershipsViewController.m in Sources */,
 				847BB52A19F184B600528DE4 /* LoginViewController.m in Sources */,
 				840C0CEE1A02410F00E10ABF /* AvailableBenchmarksRequest.m in Sources */,
 				847BB4FE19F160E900528DE4 /* RhinoFitClass.m in Sources */,
 				840C0CDF1A01C88400E10ABF /* AddNewBenchmarkRequest.m in Sources */,
+				84B642CB1A349E8A00787EE7 /* TrackWodRequest.m in Sources */,
 				847BB4D819F1197A00528DE4 /* RequestFail.m in Sources */,
 				840C0CF11A024EBD00E10ABF /* AvailableBenchmark.m in Sources */,
+				84BD47A71A325A9C0082E67B /* ImageUploader.m in Sources */,
 				847BB56D19F2D91700528DE4 /* MenuTableViewCell.m in Sources */,
 				847BB55D19F2AE0200528DE4 /* GetAttendanceRequest.m in Sources */,
 				847BB55719F2ADD800528DE4 /* ListReservationRequest.m in Sources */,
@@ -891,6 +1051,7 @@
 				847BB52519F1795900528DE4 /* NetworkManager.m in Sources */,
 				840C0CDC1A01C86800E10ABF /* MyBenchmarksRequest.m in Sources */,
 				849B767E19F099B400680B2D /* AppDelegate.m in Sources */,
+				84BD47861A3161320082E67B /* PostWallMessageContentViewController.m in Sources */,
 				847BB50F19F16A4600528DE4 /* AttendanceViewController.m in Sources */,
 				848EF2201A1F57B400E22429 /* MyBenchmarkDataRequest.m in Sources */,
 				847BB54319F2964E00528DE4 /* CoreDataHandler.m in Sources */,
@@ -906,29 +1067,40 @@
 				840C0CE51A01C8A700E10ABF /* MyBenchmark.m in Sources */,
 				840C0CD91A01C56600E10ABF /* MyBenchmarkTableViewCell.m in Sources */,
 				840C0CD01A01BCE600E10ABF /* MyBenchmarksViewController.m in Sources */,
+				84BD47831A31611C0082E67B /* PostWallMessageViewController.m in Sources */,
 				849B767B19F099B400680B2D /* main.m in Sources */,
 				847BB54B19F2ACEC00528DE4 /* MakeReservationRequest.m in Sources */,
 				847BB51219F16ABE00528DE4 /* METransitions.m in Sources */,
 				848EF2261A1FACDB00E22429 /* BenchmarkSpinnerViewController.m in Sources */,
 				847BB52319F1795900528DE4 /* AKObjectManager.m in Sources */,
+				84B642D11A34A7B000787EE7 /* MyWodsTableViewCell.m in Sources */,
+				84BD47901A316A960082E67B /* MyProfileEditContentViewController.m in Sources */,
 				847BB56719F2B40800528DE4 /* RoundedView.m in Sources */,
 				847BB51519F16D5600528DE4 /* MEDynamicTransition.m in Sources */,
 				847BB4F219F1608900528DE4 /* DemoTextField.m in Sources */,
+				84B642C81A348C8400787EE7 /* WodInfo.m in Sources */,
 				840C0CEB1A023D7B00E10ABF /* MyMembershipsTableViewCell.m in Sources */,
 				847BB4F019F1608900528DE4 /* EffectButton.m in Sources */,
+				84BD477D1A3156CD0082E67B /* WallViewController.m in Sources */,
 				847BB54719F2A47500528DE4 /* ClassTableViewCell.m in Sources */,
 				847BB51B19F16DCC00528DE4 /* MEZoomAnimationController.m in Sources */,
 				847BB55A19F2ADE900528DE4 /* DeleteReservationRequest.m in Sources */,
 				848EF2231A1F714E00E22429 /* DeleteBenchmarkData.m in Sources */,
 				847BB56A19F2CCE300528DE4 /* ReservationTableViewCell.m in Sources */,
 				847BB53E19F2114300528DE4 /* WaitingViewController.m in Sources */,
+				84BD47A31A31BFDA0082E67B /* TakePhoto.m in Sources */,
+				84BD479F1A31B01F0082E67B /* GetWallPostsRequest.m in Sources */,
 				847BB56019F2AE1400528DE4 /* MakeAttendanceRequest.m in Sources */,
 				840C0CE21A01C89500E10ABF /* MyMembershipsRequest.m in Sources */,
 				847BB4F319F1608900528DE4 /* DemoTextView.m in Sources */,
 				840C0CE81A01C8B300E10ABF /* MyMembership.m in Sources */,
 				847BB4D919F1197A00528DE4 /* RequestSuccess.m in Sources */,
+				84BD47AD1A32A09E0082E67B /* MyProfileContentViewController.m in Sources */,
+				84BD47801A3156E70082E67B /* WallTableViewCell.m in Sources */,
 				845EDDCF1A1EB83900CA78A2 /* MyBenchmarkHistoryTableViewCell.m in Sources */,
+				84B642BC1A345DA100787EE7 /* ScrollContentViewController.m in Sources */,
 				847BB50B19F16A2C00528DE4 /* ReservationViewController.m in Sources */,
+				84BD47931A316EB20082E67B /* ScrollViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1051,6 +1223,7 @@
 			baseConfigurationReference = 473B015B68D8152DBB4074F3 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PREFIX_HEADER = "RhinoFit/RhinoFit-Prefix.pch";
 				INFOPLIST_FILE = RhinoFit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1065,6 +1238,7 @@
 			baseConfigurationReference = 302F204E690C4B1284481685 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PREFIX_HEADER = "RhinoFit/RhinoFit-Prefix.pch";
 				INFOPLIST_FILE = RhinoFit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;

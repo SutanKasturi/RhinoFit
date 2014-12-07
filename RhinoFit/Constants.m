@@ -17,12 +17,15 @@ NSString *const kMenuMyReservations = @"My Reservations";
 NSString *const kMenuMyAttendance = @"My Attendance";
 NSString *const kMenuMyBenchmarks = @"My Benchmarks";
 NSString *const kMenuMyMemberships = @"My Memberships";
+NSString *const kMenuWall = @"Gyms Wall";
+NSString *const kMenuMyProfile = @"My Profile";
 NSString *const kMenuLogout = @"Log out";
+NSString *const kMenuMyWods = @"My Wods";
 
 // Request
 NSString *const kRequestLogin = @"login";
 NSString *const kRequestGetClassess = @"getclasses";
-NSString *const kRequestGetUserInfo = @"getuserinfo";
+//NSString *const kRequestGetUserInfo = @"getuserinfo";
 NSString *const kRequestMakeReservation = @"makereservation";
 NSString *const kRequestListReservations = @"listreservations";
 NSString *const kRequestDeleteReservation = @"deletereservation";
@@ -35,6 +38,13 @@ NSString *const kRequestNewBenchmark = @"addbenchmark";
 NSString *const kRequestMyMemberships = @"listmemberships";
 NSString *const kRequestMyBenchmarkData = @"listmybenchmarkdata";
 NSString *const kRequestDeleteBenchmarkData = @"deletebenchmarkdata";
+NSString *const kRequestGetWallPosts = @"getwallposts";
+NSString *const kRequestAddWallPost = @"addwallpost";
+NSString *const kRequestGetUserInfo = @"getuserinfo";
+NSString *const kRequestUpdateUserInfo = @"updateuserinfo";
+NSString *const kRequestGetWodInfo = @"getwodinfo";
+NSString *const kRequestTrackWod = @"trackwod";
+NSString *const kRequestGetMyWods = @"getmywods";
 
 // Messages
 NSString* const kMessageInvalidLogin = @"Invalid Login";
@@ -54,6 +64,8 @@ NSString *const kMessageDeleteBenchmark = @"Are you sure you want to delete this
 NSString *const kMessageNoMyMemberships = @"You currently have no memberships";
 NSString *const kMessageNoAvailableBenchmarks = @"There are no available benchmarks";
 NSString *const kMessageNoMyBenchmarkHistories = @"There are no benchmark histories";
+NSString *const kMessageNoWalls = @"There are no walls";
+NSString *const kMessageNoMyWods = @"There are no wods";
 
 // Button Names
 
@@ -125,6 +137,16 @@ NSString *const kResponseKeyInstructorName = @"instructorname";
 NSString *const kResponseKeyClassId = @"id";
 NSString *const kResponseKeyDay = @"day";
 
+// getwodinfo
+NSString *const kResponseKeyWodCanEdit = @"canedit";
+NSString *const kResponseKeyWodId = @"id";
+NSString *const kResponseKeyWodName = @"name";
+NSString *const kResponseKeyWodResults = @"results";
+NSString *const kResponseKeyWodStart = @"start";
+NSString *const kResponseKeyWodTitle = @"title";
+NSString *const kResponseKeyWodWod = @"wod";
+NSString *const kResponseKeyWodWodId = @"wodid";
+
 // getuserinfo
 NSString *const kResponseKeyUserAddress1 = @"u_address1";
 NSString *const kResponseKeyUserAddress2 = @"u_address2";
@@ -136,6 +158,9 @@ NSString *const kResponseKeyUserPhone1 = @"u_phone1";
 NSString *const kResponseKeyUserPhone2 = @"u_phone2";
 NSString *const kResponseKeyUserState = @"u_state";
 NSString *const kResponseKeyUserZip = @"u_zip";
+NSString *const kResponseKeyUserEmail = @"u_email";
+NSString *const kResponseKeyUserName = @"u_username";
+NSString *const kResponseKeyUserPicture = @"u_photo";
 
 // reservation
 NSString *const kResponseKeyReservationId = @"resid";
@@ -147,8 +172,22 @@ NSString *const kResponseKeyAttendanceId = @"aid";
 NSString *const kResponseKeyAttendanceTitle = @"title";
 NSString *const kResponseKeyAttendanceWhen = @"when";
 
+// wall
+NSString *const kResponseKeyWallId = @"id";
+NSString *const kResponseKeyWallMessage = @"msg";
+NSString *const kResponseKeyWallUserName = @"name";
+NSString *const kResponseKeyWallPic = @"pic";
+NSString *const kResponseKeyWallUserPicture = @"profilepic";
+NSString *const kResponseKeyWallYours = @"yours";
+
 // result
 NSString *const kResponseKeyResult = @"result";
+
+// Notification
+
+NSString *const kNotificationGetUserInfo = @"get_user_info";
+NSString *const kNotificationUpdateProfile = @"update_profile";
+NSString *const kNotificationMyWods = @"my_wods";
 
 @implementation Constants
 

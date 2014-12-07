@@ -13,6 +13,8 @@
 #import "RequestFail.h"
 #import "LoginRequest.h"
 #import "UserInfoRequest.h"
+#import "UpdateUserInfoRequest.h"
+
 #import "ClassesRequest.h"
 #import "RhinoFitClass.h"
 #import "MakeReservationRequest.h"
@@ -21,6 +23,12 @@
 #import "GetAttendanceRequest.h"
 #import "MakeAttendanceRequest.h"
 #import "DeleteAttendanceRequest.h"
+
+#import "GetWodInfoRequest.h"
+#import "WodInfo.h"
+#import "TrackWodRequest.h"
+#import "GetMyWodsRequest.h"
+
 #import "DeleteBenchmarkData.h"
 #import "Reservation.h"
 #import "Attendance.h"
@@ -34,6 +42,12 @@
 #import "MyBenchmarkDataRequest.h"
 #import "MyMembership.h"
 #import "AvailableBenchmark.h"
+
+#import "Wall.h"
+#import "GetWallPostsRequest.h"
+#import "AddWallPostRequest.h"
+
+#import "ImageUploader.h"
 
 @implementation NetworkManager
 
@@ -56,6 +70,16 @@ static UserInfo* currentUser;
     return nil;
 }
 
+- (void) updateuserInfo {
+    CoreDataHandler *cdHandler = [[CoreDataHandler alloc] init];
+    
+    NSArray *result = [cdHandler getAllDataForEntity:kCoreDataUserInfo];
+    for ( UserInfo *user in result ) {
+        currentUser = user;
+        return;
+    }
+}
+
 - (void) deleteUser
 {
     if ( currentUser == nil )
@@ -67,7 +91,7 @@ static UserInfo* currentUser;
     [sharedInstance removeObjectForKey:kParamToken];
     
     CoreDataHandler *cdHandler = [[CoreDataHandler alloc] init];
-    [cdHandler deleteAllDataForEntity:kCoreDataUserInfo sortField:@"userFirstName"];
+    [cdHandler deleteAllDataForEntity:kCoreDataUserInfo sortField:kResponseKeyUserName];
 }
 
 - (NSString*) getToken
@@ -79,13 +103,6 @@ static UserInfo* currentUser;
     }
     
     return @"";
-}
-
-// Classes
-- (NSArray*) getClasses:(NSDate*)date
-{
-    CoreDataHandler *cdHandler = [[CoreDataHandler alloc] init];
-    return [cdHandler getAllDataForEntity:kCoreDataClass];
 }
 
 - (void)sendEmailLogin:(NSString *)email
@@ -133,6 +150,14 @@ static UserInfo* currentUser;
              }];
 }
 
+#pragma mark - Classes
+- (NSArray*) getClasses:(NSDate*)date
+{
+    CoreDataHandler *cdHandler = [[CoreDataHandler alloc] init];
+    return [cdHandler getAllDataForEntity:kCoreDataClass];
+}
+
+#pragma mark - User Info
 - (void) getUserInfo:(void (^)(id result))success
              failure:(void (^)(NSString *error))failure
 {
@@ -161,22 +186,111 @@ static UserInfo* currentUser;
                      else {
                          CoreDataHandler *cdHandler = [[CoreDataHandler alloc] init];
                          NSDictionary *userInfo = @{
-                                                    @"userFirstName":[response objectForKey:kResponseKeyUserFirstName],
-                                                    @"userLastName":[response objectForKey:kResponseKeyUserLastName],
-                                                    @"userAddress1":[response objectForKey:kResponseKeyUserAddress1],
-                                                    @"userAddress2":[response objectForKey:kResponseKeyUserAddress2],
-                                                    @"userCity":[response objectForKey:kResponseKeyUserCity],
-                                                    @"userCountry":[response objectForKey:kResponseKeyUserCountry],
-                                                    @"userPhone1":[response objectForKey:kResponseKeyUserPhone1],
-                                                    @"userPhone2":[response objectForKey:kResponseKeyUserPhone2],
-                                                    @"userState":[response objectForKey:kResponseKeyUserState],
-                                                    @"userZip":[response objectForKey:kResponseKeyUserZip]
+                                                    @"userFirstName":[response objectForKey:kResponseKeyUserFirstName]?[response objectForKey:kResponseKeyUserFirstName]:@"",
+                                                    @"userLastName":[response objectForKey:kResponseKeyUserLastName]?[response objectForKey:kResponseKeyUserLastName]:@"",
+                                                    @"userAddress1":[response objectForKey:kResponseKeyUserAddress1]?[response objectForKey:kResponseKeyUserAddress1]:@"",
+                                                    @"userAddress2":[response objectForKey:kResponseKeyUserAddress2]?[response objectForKey:kResponseKeyUserAddress2]:@"",
+                                                    @"userCity":[response objectForKey:kResponseKeyUserCity]?[response objectForKey:kResponseKeyUserCity]:@"",
+                                                    @"userCountry":[response objectForKey:kResponseKeyUserCountry]?[response objectForKey:kResponseKeyUserCountry]:@"",
+                                                    @"userPhone1":[response objectForKey:kResponseKeyUserPhone1]?[response objectForKey:kResponseKeyUserPhone1]:@"",
+                                                    @"userPhone2":[response objectForKey:kResponseKeyUserPhone2]?[response objectForKey:kResponseKeyUserPhone2]:@"",
+                                                    @"userState":[response objectForKey:kResponseKeyUserState]?[response objectForKey:kResponseKeyUserState]:@"",
+                                                    @"userZip":[response objectForKey:kResponseKeyUserZip]?[response objectForKey:kResponseKeyUserZip]:@"",
+                                                    @"userEmail":[response objectForKey:kResponseKeyUserName]?[response objectForKey:kResponseKeyUserName]:@"",
+                                                    @"userPicture":[response objectForKey:kResponseKeyUserPicture]?[response objectForKey:kResponseKeyUserPicture]:@""
                                                     };
+                         [cdHandler deleteAllDataForEntity:kCoreDataUserInfo sortField:@"userEmail"];
                          [cdHandler insertNewRecord:kCoreDataUserInfo fields:userInfo];
+                         [self updateuserInfo];
                          if ( success )
                              success(userInfo);
+                         
+                         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationUpdateProfile object:userInfo];
                      }
-                 }             }
+                 }
+             }
+             failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                 NSLog(@"Error : %@", error.description);
+                 if ( failure )
+                     failure(error.localizedDescription);
+             }];
+}
+
+- (void) updateUserInfo:(UIImage*)image
+              firstName:(NSString*)firstName
+               lastName:(NSString*)lastName
+               address1:(NSString*)address1
+               address2:(NSString*)address2
+                   city:(NSString*)city
+       stateAndProvince:(NSString*)stateAndProvice
+           zipAndPostal:(NSString*)zipAndPostal
+                country:(NSString*)country
+              homePhone:(NSString*)homePhone
+            mobilePhone:(NSString*)mobilePhone
+                  email:(NSString*)email
+                success:(void (^)(id result))success
+                failure:(void (^)(NSString *error))failure {
+    UpdateUserInfoRequest *dataObject = [UpdateUserInfoRequest new];
+    [dataObject setAction:kRequestGetUserInfo];
+    [dataObject setToken:[self getToken]];
+    if ( image )
+        [dataObject setFile:UIImageJPEGRepresentation(image, 1.0f)];
+    [dataObject setU_first:firstName];
+    [dataObject setU_last:lastName];
+    [dataObject setU_address1:address1];
+    [dataObject setU_address2:address2];
+    [dataObject setU_city:city];
+    [dataObject setU_state:stateAndProvice];
+    [dataObject setU_zip:zipAndPostal];
+    [dataObject setU_country:country];
+    [dataObject setU_phone1:homePhone];
+    [dataObject setU_phone2:mobilePhone];
+    [dataObject setU_username:email];
+    
+    [self postObject:dataObject
+                path:@"api.php"
+          parameters:nil
+             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                 NSError *error;
+                 NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
+                 if ( error ) {
+                     if ( failure )
+                         failure(error.localizedDescription);
+                     [self errorMessage:error.localizedDescription];
+                 }
+                 else {
+                     if ( [response objectForKey:@"error"] ){
+                         NSString *error = [response objectForKey:@"error"];
+                         if ( failure )
+                             failure(error);
+                         [self errorMessage:error];
+                     }
+                     else {
+                         CoreDataHandler *cdHandler = [[CoreDataHandler alloc] init];
+                         NSDictionary *userInfo = @{
+                                                    @"userFirstName":[response objectForKey:kResponseKeyUserFirstName]?[response objectForKey:kResponseKeyUserFirstName]:@"",
+                                                    @"userLastName":[response objectForKey:kResponseKeyUserLastName]?[response objectForKey:kResponseKeyUserLastName]:@"",
+                                                    @"userAddress1":[response objectForKey:kResponseKeyUserAddress1]?[response objectForKey:kResponseKeyUserAddress1]:@"",
+                                                    @"userAddress2":[response objectForKey:kResponseKeyUserAddress2]?[response objectForKey:kResponseKeyUserAddress2]:@"",
+                                                    @"userCity":[response objectForKey:kResponseKeyUserCity]?[response objectForKey:kResponseKeyUserCity]:@"",
+                                                    @"userCountry":[response objectForKey:kResponseKeyUserCountry]?[response objectForKey:kResponseKeyUserCountry]:@"",
+                                                    @"userPhone1":[response objectForKey:kResponseKeyUserPhone1]?[response objectForKey:kResponseKeyUserPhone1]:@"",
+                                                    @"userPhone2":[response objectForKey:kResponseKeyUserPhone2]?[response objectForKey:kResponseKeyUserPhone2]:@"",
+                                                    @"userState":[response objectForKey:kResponseKeyUserState]?[response objectForKey:kResponseKeyUserState]:@"",
+                                                    @"userZip":[response objectForKey:kResponseKeyUserZip]?[response objectForKey:kResponseKeyUserZip]:@"",
+                                                    @"userEmail":[response objectForKey:kResponseKeyUserName]?[response objectForKey:kResponseKeyUserName]:@"",
+                                                    @"userPicture":[response objectForKey:kResponseKeyUserPicture]?[response objectForKey:kResponseKeyUserPicture]:@""
+                                                    };
+                         [cdHandler deleteAllDataForEntity:kCoreDataUserInfo sortField:@"userEmail"];
+                         [cdHandler insertNewRecord:kCoreDataUserInfo fields:userInfo];
+                         [self updateuserInfo];
+                         if ( success )
+                             success(userInfo);
+                         
+                         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationUpdateProfile object:userInfo];
+                     }
+                 }
+             }
              failure:^(RKObjectRequestOperation *operation, NSError *error) {
                  NSLog(@"Error : %@", error.description);
                  if ( failure )
@@ -207,6 +321,9 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     // Convert the RFC 3339 date time string to an NSDate.
     return [sRFC3339DateFormatter dateFromString:rfc3339DateTimeString];
 }
+
+
+#pragma mark - Classes
 
 - (void) getClassess:(NSString*)startDate
              endDate:(NSString *)endDate
@@ -251,7 +368,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                              RhinoFitClass *class = [[RhinoFitClass alloc] init];
                              class.startDate = [self getDateFromRFC3339DateTimeString:[theClass objectForKey:kResponseKeyStartDate]];
                              class.endDate = [self getDateFromRFC3339DateTimeString:[theClass objectForKey:kResponseKeyEndDate]];
-                             class.allDay = [NSNumber numberWithBool:[theClass objectForKey:kResponseKeyAllDay]];
+                             class.allDay = [NSNumber numberWithBool:[[theClass objectForKey:kResponseKeyAllDay] boolValue]];
                              class.title = [theClass objectForKey:kResponseKeyTitle];
                              class.color = [theClass objectForKey:kResponseKeyColor];
                              class.origColor = [theClass objectForKey:kResponseKeyOrigColor];
@@ -612,6 +729,201 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
              }];
 }
 
+
+#pragma mark - WODs
+
+- (void) getWodInfo:(NSString*)classId
+          startDate:(NSDate*)startDate
+            success:(void (^)(id results))success
+            failure:(void (^)(NSString *error))failure {
+    GetWodInfoRequest *dataObject = [[GetWodInfoRequest alloc] init];
+    [dataObject setAction:kRequestGetWodInfo];
+    [dataObject setToken:[self getToken]];
+    [dataObject setId:classId];
+    [dataObject setStart:startDate];
+    
+    [self postObject:dataObject
+                path:@"api.php"
+          parameters:nil
+             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                 if ( operation.HTTPRequestOperation.response.statusCode != 200 ) {
+                     if ( failure )
+                         failure(operation.HTTPRequestOperation.responseString);
+                     return;
+                 }
+                 NSError *error;
+                 NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
+                 if ( error || response == nil ) {
+                     if ( failure )
+                         failure(error.localizedDescription);
+                 }
+                 else if ( [response isKindOfClass:[NSDictionary class]] ){
+                     if ( [response objectForKey:@"error"] ) {
+                         NSString *error = [response objectForKey:@"error"];
+                         if ( failure )
+                             failure(error);
+                     }
+                     else {
+                         WodInfo *wodInfo = [[WodInfo alloc] init];
+                         wodInfo.name = [response objectForKey:kResponseKeyWodName];
+                         wodInfo.canEdit = ![[response objectForKey:kResponseKeyWodCanEdit] boolValue];
+                         wodInfo.classId = [response objectForKey:kResponseKeyWodId];
+                         wodInfo.results = [response objectForKey:kResponseKeyWodResults];
+                         wodInfo.startDate = [self getDateFromRFC3339DateTimeString:[response objectForKey:kResponseKeyWodStart]];
+                         wodInfo.title = [response objectForKey:kResponseKeyWodTitle];
+                         wodInfo.wod = [response objectForKey:kResponseKeyWodWod];
+                         wodInfo.wodId = [response objectForKey:kResponseKeyWodWodId];
+                         if ( success )
+                             success(wodInfo);
+                     }
+                 }
+                 else {
+                     if ( failure )
+                         failure(kMessageUnkownError);
+                 }
+             }
+             failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                 NSLog(@"Error : %@", error.description);
+                 if ( failure )
+                     failure(error.localizedDescription);
+             }];
+}
+
+- (void) trackWod:(NSString*)classId
+        startDate:(NSDate*)startDate
+              wod:(NSString*)wod
+            title:(NSString*)title
+          results:(NSString*)results
+          success:(void (^)(id results))success
+          failure:(void (^)(NSString *error))failure {
+    TrackWodRequest *dataObject = [[TrackWodRequest alloc] init];
+    [dataObject setAction:kRequestGetWodInfo];
+    [dataObject setToken:[self getToken]];
+    [dataObject setId:classId];
+    [dataObject setStart:startDate];
+    [dataObject setWod:wod];
+    [dataObject setTitle:title];
+    [dataObject setResults:results];
+    
+    [self postObject:dataObject
+                path:@"api.php"
+          parameters:nil
+             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                 if ( operation.HTTPRequestOperation.response.statusCode != 200 ) {
+                     if ( failure )
+                         failure(operation.HTTPRequestOperation.responseString);
+                     return;
+                 }
+                 NSError *error;
+                 NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
+                 if ( error || response == nil ) {
+                     if ( failure )
+                         failure(error.localizedDescription);
+                 }
+                 else if ( [response isKindOfClass:[NSDictionary class]] ){
+                     if ( [response objectForKey:@"error"] ) {
+                         NSString *error = [response objectForKey:@"error"];
+                         if ( failure )
+                             failure(error);
+                     }
+                     else {
+//                         WodInfo *wodInfo = [[WodInfo alloc] init];
+//                         wodInfo.name = [response objectForKey:kResponseKeyWodName];
+//                         wodInfo.canEdit = ![[response objectForKey:kResponseKeyWodCanEdit] boolValue];
+//                         wodInfo.classId = [response objectForKey:kResponseKeyWodId];
+//                         wodInfo.results = [response objectForKey:kResponseKeyWodResults];
+//                         wodInfo.startDate = [self getDateFromRFC3339DateTimeString:[response objectForKey:kResponseKeyWodStart]];
+//                         wodInfo.title = [response objectForKey:kResponseKeyWodTitle];
+//                         wodInfo.wod = [response objectForKey:kResponseKeyWodWod];
+//                         wodInfo.wodId = [response objectForKey:kResponseKeyWodWodId];
+                         if ( success )
+                             success(response);
+                     }
+                 }
+                 else {
+                     if ( failure )
+                         failure(kMessageUnkownError);
+                 }
+             }
+             failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                 NSLog(@"Error : %@", error.description);
+                 if ( failure )
+                     failure(error.localizedDescription);
+             }];
+}
+
+- (void) getMyWods:(NSString*)startDate
+           endDate:(NSString *)endDate
+           success:(void (^)(NSArray*result))success
+           failure:(void (^)(NSString *error))failure {
+    GetMyWodsRequest *dataObject = [GetMyWodsRequest new];
+    [dataObject setAction:kRequestGetMyWods];
+    [dataObject setToken:[self getToken]];
+    [dataObject setStartdate:startDate];
+    [dataObject setEnddate:endDate];
+    
+    [self postObject:dataObject
+                path:@"api.php"
+          parameters:nil
+             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                 if ( operation.HTTPRequestOperation.response.statusCode != 200 ) {
+                     if ( failure ) {
+                         failure(operation.HTTPRequestOperation.responseString);
+                     }
+                     return;
+                 }
+                 NSError *error;
+                 NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
+                 if ( error || response == nil ) {
+                     if ( failure )
+                         failure(error.localizedDescription);
+                 }
+                 else {
+                     if ( ![response isKindOfClass:[NSArray class]] && [response objectForKey:@"error"] ){
+                         NSString *error = [response objectForKey:@"error"];
+                         if ( failure )
+                             failure(error);
+                     }
+                     else {
+                         NSMutableArray *result = [[NSMutableArray alloc] init];
+                         NSLog(@"%@", response);
+                         for ( NSDictionary *dict in response ) {
+                             WodInfo *wodInfo = [[WodInfo alloc] init];
+                             wodInfo.name = [dict objectForKey:kResponseKeyWodName];
+                             wodInfo.canEdit = ![[dict objectForKey:kResponseKeyWodCanEdit] boolValue];
+                             wodInfo.classId = [dict objectForKey:kResponseKeyWodId];
+                             wodInfo.results = [dict objectForKey:kResponseKeyWodResults];
+                             NSDateFormatter *df = [[NSDateFormatter alloc] init];
+                             [df setDateFormat:@"yyyy-MM-dd hh:mm"];
+                             wodInfo.startDate = ![[dict objectForKey:kResponseKeyWodStart] isKindOfClass:[NSNull class]]
+                                                        ?[df dateFromString:[dict objectForKey:kResponseKeyWodStart]]:nil;
+                             wodInfo.title = [dict objectForKey:kResponseKeyWodTitle];
+                             wodInfo.wod = [dict objectForKey:kResponseKeyWodWod];
+                             wodInfo.wodId = [dict objectForKey:kResponseKeyWodWodId];
+                             [result addObject:wodInfo];
+                         }
+                         if ( success ) {
+                             success(result);
+                         }
+                     }
+                 }
+             }
+             failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                 NSLog(@"Error : %@", error.description);
+                 if ( operation.HTTPRequestOperation.response.statusCode == RKStatusCodeClassSuccessful ) {
+                     if ( success )
+                         success(nil);
+                 }
+                 else {
+                     if ( failure )
+                         failure(error.localizedDescription);
+                 }
+             }];
+}
+
+
+#pragma mark - Benchmark
+
 - (void) getMyBenchmarks:(void (^)(NSMutableArray*result))success
                  failure:(void (^)(NSString *error))failure
 {
@@ -645,17 +957,19 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                          NSMutableArray *result = [[NSMutableArray alloc] init];
                          for ( NSDictionary *dict in response ) {
                              NSLog(@"%@", dict);
-                             MyBenchmark *benchmark = [[MyBenchmark alloc] init];
-                             benchmark.benchmarkId = [NSNumber numberWithInt:[[dict objectForKey:kParamBId] intValue]];
-                             benchmark.title = [dict objectForKey:kParamBDesc];
-                             benchmark.type = [dict objectForKey:kParamBType];
-                             NSDateFormatter *df = [[NSDateFormatter alloc] init];
-                             [df setDateFormat:@"yyyy-MM-dd"];
-                             benchmark.currentDate = [df dateFromString:[dict objectForKey:kParamBBestDate]];
-                             benchmark.currentScore = [dict objectForKey:kParamBBestResults];
-                             benchmark.lastDate = [df dateFromString:[dict objectForKey:kParamBLastDate]];
-                             benchmark.lastScore = [dict objectForKey:kParamBLastResults];
-                             [result addObject:benchmark];
+                             if ( ![[dict objectForKey:kParamBBestResults] isKindOfClass:[NSNull class]] ) {
+                                 MyBenchmark *benchmark = [[MyBenchmark alloc] init];
+                                 benchmark.benchmarkId = [NSNumber numberWithInt:[[dict objectForKey:kParamBId] intValue]];
+                                 benchmark.title = [dict objectForKey:kParamBDesc];
+                                 benchmark.type = [dict objectForKey:kParamBType];
+                                 NSDateFormatter *df = [[NSDateFormatter alloc] init];
+                                 [df setDateFormat:@"yyyy-MM-dd"];
+                                 benchmark.currentDate = [df dateFromString:[dict objectForKey:kParamBBestDate]];
+                                 benchmark.currentScore = [dict objectForKey:kParamBBestResults];
+                                 benchmark.lastDate = [df dateFromString:[dict objectForKey:kParamBLastDate]];
+                                 benchmark.lastScore = [dict objectForKey:kParamBLastResults];
+                                 [result addObject:benchmark];
+                             }
                          }
                          if ( success )
                              success(result);
@@ -961,4 +1275,117 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
              }];
 }
 
+#pragma mark - Walls
+
+- (void) getWallPosts:(void (^)(NSMutableArray*result))success
+              failure:(void (^)(NSString *error))failure {
+    GetWallPostsRequest *dataObject = [[GetWallPostsRequest alloc] init];
+    [dataObject setAction:kRequestGetWallPosts];
+    [dataObject setToken:[self getToken]];
+    
+    [self postObject:dataObject
+                path:@"api.php"
+          parameters:nil
+             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                 if ( operation.HTTPRequestOperation.response.statusCode != 200 ) {
+                     if ( failure )
+                         failure(operation.HTTPRequestOperation.responseString);
+                     return;
+                 }
+                 NSError *error;
+                 NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
+                 if ( error || response == nil ) {
+                     if ( failure )
+                         failure (error.localizedDescription);
+                 }
+                 else {
+                     if ( [response isKindOfClass:[NSDictionary class]] && [response objectForKey:@"error"] ) {
+                         NSString *error = [response objectForKey:@"error"];
+                         if ( failure )
+                             failure(error);
+                     }
+                     else if ( [response isKindOfClass:[NSArray class]] ){
+                         if ( success ) {
+                             NSMutableArray *result = [[NSMutableArray alloc] init];
+                             for ( NSDictionary *dict in response ) {
+                                 Wall *wall = [[Wall alloc] init];
+                                 wall.wallId = [NSNumber numberWithInt:[[dict objectForKey:kResponseKeyWallId] intValue]];
+                                 wall.msg = [dict objectForKey:kResponseKeyWallMessage]?[dict objectForKey:kResponseKeyWallMessage]:@"";
+                                 wall.name = [dict objectForKey:kResponseKeyWallUserName]?[dict objectForKey:kResponseKeyWallUserName]:@"";
+                                 wall.profilePic = [dict objectForKey:kResponseKeyWallUserPicture]?[dict objectForKey:kResponseKeyWallUserPicture]:@"";
+                                 wall.yours = [dict objectForKey:kResponseKeyWallYours];
+                                 wall.pic = ![[dict objectForKey:kResponseKeyWallPic] isKindOfClass:[NSNull class]]?[dict objectForKey:kResponseKeyWallPic]:@"";
+                                 [result addObject:wall];
+                             }
+                             success (result);
+                         }
+                     }
+                     else {
+                         if ( failure )
+                             failure(kMessageUnkownError);
+                     }
+                 }
+             }
+             failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                 NSLog(@"Error : %@", error.description);
+                 if ( failure )
+                     failure(error.localizedDescription);
+             }];
+}
+
+- (void) addWallPostWithImage:(UIImage*)image
+             message:(NSString*)message
+             success:(void (^)(NSNumber*wallId))success
+             failure:(void (^)(NSString *error))failure {
+    AddWallPostRequest *dataObject = [[AddWallPostRequest alloc] init];
+    [dataObject setAction:kRequestAddWallPost];
+    [dataObject setToken:[self getToken]];
+    [dataObject setMsg:message];
+    [dataObject setFile:UIImageJPEGRepresentation(image, 1.0)];
+    
+    [self postObject:dataObject
+                path:@"api.php"
+          parameters:nil
+             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                 if ( operation.HTTPRequestOperation.response.statusCode != 200 ) {
+                     if ( failure )
+                         failure(operation.HTTPRequestOperation.responseString);
+                     return;
+                 }
+                 NSError *error;
+                 NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
+                 if ( error || response == nil ) {
+                     if ( failure )
+                         failure (error.localizedDescription);
+                 }
+                 else {
+                     if ( [response isKindOfClass:[NSDictionary class]] && [response objectForKey:@"error"] ) {
+                         NSString *error = [response objectForKey:@"error"];
+                         if ( failure )
+                             failure(error);
+                     }
+                     else if ( [response isKindOfClass:[NSDictionary class]] && [response objectForKey:kResponseKeyWallId] ){
+                         if ( success ) {
+                             success ([response objectForKey:kResponseKeyWallId]);
+                         }
+                     }
+                     else {
+                         if ( failure )
+                             failure(kMessageUnkownError);
+                     }
+                 }
+             }
+             failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                 NSLog(@"Error : %@", error.description);
+                 if ( failure )
+                     failure(error.localizedDescription);
+             }];
+}
+
+- (void) addWallPost:(NSString*)imageUrl
+             message:(NSString*)message
+             success:(void (^)(BOOL isSuccess))success
+             failure:(void (^)(NSString *error))failure {
+    
+}
 @end

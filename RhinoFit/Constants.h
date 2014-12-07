@@ -19,12 +19,15 @@ extern NSString *const kMenuMyReservations;
 extern NSString *const kMenuMyAttendance;
 extern NSString *const kMenuMyBenchmarks;
 extern NSString *const kMenuMyMemberships;
+extern NSString *const kMenuWall;
+extern NSString *const kMenuMyProfile;
 extern NSString *const kMenuLogout;
+extern NSString *const kMenuMyWods;
 
 // Request
 extern NSString *const kRequestLogin;
 extern NSString *const kRequestGetClassess;
-extern NSString *const kRequestGetUserInfo;
+//extern NSString *const kRequestGetUserInfo;
 extern NSString *const kRequestMakeReservation;
 extern NSString *const kRequestListReservations;
 extern NSString *const kRequestDeleteReservation;
@@ -37,6 +40,13 @@ extern NSString *const kRequestNewBenchmark;
 extern NSString *const kRequestMyMemberships;
 extern NSString *const kRequestMyBenchmarkData;
 extern NSString *const kRequestDeleteBenchmarkData;
+extern NSString *const kRequestGetWallPosts;
+extern NSString *const kRequestAddWallPost;
+extern NSString *const kRequestGetUserInfo;
+extern NSString *const kRequestUpdateUserInfo;
+extern NSString *const kRequestGetWodInfo;
+extern NSString *const kRequestTrackWod;
+extern NSString *const kRequestGetMyWods;
 
 // Messages
 extern NSString *const kMessageInvalidLogin;
@@ -56,6 +66,8 @@ extern NSString *const kMessageDeleteBenchmark;
 extern NSString *const kMessageNoMyMemberships;
 extern NSString *const kMessageNoAvailableBenchmarks;
 extern NSString *const kMessageNoMyBenchmarkHistories;
+extern NSString *const kMessageNoWalls;
+extern NSString *const kMessageNoMyWods;
 
 // Button Names
 
@@ -127,6 +139,16 @@ extern NSString *const kResponseKeyInstructorName;
 extern NSString *const kResponseKeyClassId;
 extern NSString *const kResponseKeyDay;
 
+// getwodinfo
+extern NSString *const kResponseKeyWodCanEdit;
+extern NSString *const kResponseKeyWodId;
+extern NSString *const kResponseKeyWodName;
+extern NSString *const kResponseKeyWodResults;
+extern NSString *const kResponseKeyWodStart;
+extern NSString *const kResponseKeyWodTitle;
+extern NSString *const kResponseKeyWodWod;
+extern NSString *const kResponseKeyWodWodId;
+
 // getuserinfo
 extern NSString *const kResponseKeyUserAddress1;
 extern NSString *const kResponseKeyUserAddress2;
@@ -138,6 +160,9 @@ extern NSString *const kResponseKeyUserPhone1;
 extern NSString *const kResponseKeyUserPhone2;
 extern NSString *const kResponseKeyUserState;
 extern NSString *const kResponseKeyUserZip;
+extern NSString *const kResponseKeyUserEmail;
+extern NSString *const kResponseKeyUserName;
+extern NSString *const kResponseKeyUserPicture;
 
 // reservation
 extern NSString *const kResponseKeyReservationId;
@@ -149,8 +174,23 @@ extern NSString *const kResponseKeyAttendanceId;
 extern NSString *const kResponseKeyAttendanceTitle;
 extern NSString *const kResponseKeyAttendanceWhen;
 
+// wall
+extern NSString *const kResponseKeyWallId;
+extern NSString *const kResponseKeyWallMessage;
+extern NSString *const kResponseKeyWallUserName;
+extern NSString *const kResponseKeyWallPic;
+extern NSString *const kResponseKeyWallUserPicture;
+extern NSString *const kResponseKeyWallYours;
+
 // result
 extern NSString *const kResponseKeyResult;
+
+
+// Notification
+
+extern NSString *const kNotificationGetUserInfo;
+extern NSString *const kNotificationUpdateProfile;
+extern NSString *const kNotificationMyWods;
 
 @interface Constants : NSObject
 

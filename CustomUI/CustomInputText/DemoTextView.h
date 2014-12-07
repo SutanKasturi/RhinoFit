@@ -7,11 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 
 @interface DemoTextView : UITextView<UITextViewDelegate>
 
 @property (nonatomic, setter = setRequired:) BOOL required;
+@property (nonatomic, strong) UIColor *borderColor;
 
 - (BOOL) validate;
 

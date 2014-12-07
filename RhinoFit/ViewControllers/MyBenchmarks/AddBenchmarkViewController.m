@@ -223,7 +223,7 @@
     
     [[NetworkManager sharedManager] addNewBenchmark:[NSString stringWithFormat:@"%@", selectedBenchmark.benchmarkId]
                                                date:dateTextField.text
-                                              value:[NSString stringWithFormat:@"%d",[measurementTextfield.text intValue]]
+                                              value:[selectedBenchmark.btype isEqualToString:@"minutes:seconds"] == YES ? measurementTextfield.text : [NSString stringWithFormat:@"%d",[measurementTextfield.text intValue]]
                                              dataId:dataId
                                             success:^(NSNumber *benchmarkDataId) {
                                                 [MBProgressHUD hideAllHUDsForView:self.view.superview animated:YES];

@@ -25,7 +25,7 @@
 - (NSArray*)getAllDataForEntity:(NSString*)entityName sortField:(NSString*)_sortField ascending:(bool)_ascending;
 - (NSArray*)getTopDataForEntity:(NSString*)entityName sortField:(NSString*)_sortField;
 - (NSArray*)getEntityDataByID:(NSString*)entityName idField:(NSString*)idField idValue:(NSNumber*)idValue;
-//- (NSArray*)getEntityDataByDate:(NSString*)entityName dateValue:(NSDate*)dateValue;
+- (NSArray*)getEntityData:(NSString*)entityName field:(NSString*)field value:(NSString*)value;
 
 - (void)storeImageForEntity:(NSString*)filePath EntityName:(NSString*)entityName PropertyName:(NSString*)propertyName;
 - (void)storeImageForEntity:(NSString*)filePath EntityName:(NSString*)entityName PropertyName:(NSString*)propertyName IDField:(NSString*)idField IDValue:(NSNumber*)idValue;

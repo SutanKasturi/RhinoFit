@@ -28,4 +28,6 @@
 @property (nonatomic, assign) BOOL isActionReservation;
 @property (nonatomic, assign) BOOL isActionAttendance;
 
+- (NSComparisonResult)compare:(RhinoFitClass*)otherObject;
+
 @end

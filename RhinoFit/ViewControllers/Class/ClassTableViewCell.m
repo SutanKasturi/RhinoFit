@@ -23,6 +23,7 @@
 @synthesize reservationIndicator;
 @synthesize attendanceButton;
 @synthesize attendanceIndicator;
+@synthesize trackWodButton;
 @synthesize titleLabel;
 @synthesize descriptionLabel;
 @synthesize timeLabel;
@@ -60,6 +61,9 @@
     }
     [self confirmPopup:message];
 }
+- (IBAction)onTrackWod:(id)sender {
+    [self.delegate onTrackWod:self.theClass];
+}
 
 - (void) confirmPopup:(NSString*)message
 {
@@ -89,6 +93,7 @@
         }
         else {
             [attendanceButton setEnabled:NO];
+            [trackWodButton setEnabled:NO];
             [attendanceIndicator setHidden:NO];
             [attendanceIndicator startAnimating];
             if ( [theClass.aId intValue] > 0 ) {
@@ -185,8 +190,10 @@
         [attendanceButton setEnabled:NO];
         [attendanceIndicator setHidden:NO];
         [attendanceIndicator startAnimating];
+        [trackWodButton setEnabled:NO];
     }
     else {
+        [trackWodButton setEnabled:YES];
         [attendanceButton setEnabled:YES];
         [attendanceIndicator setHidden:YES];
     }
@@ -196,21 +203,25 @@
         descriptionLabel.text = kMessageIsReservationAndAttended;
         [reservationButton setTitle:kButtonCancelReservation forState:UIControlStateNormal];
         [attendanceButton setTitle:kButtonCancelAttendance forState:UIControlStateNormal];
+        [trackWodButton setHidden:NO];
     }
     else if ( [theClass.reservationId intValue] > 0 ) {
         descriptionLabel.text = kMessageIsReservation;
         [reservationButton setTitle:kButtonCancelReservation forState:UIControlStateNormal];
         [attendanceButton setTitle:kButtonMarkAttended forState:UIControlStateNormal];
+        [trackWodButton setHidden:YES];
     }
     else if ( [theClass.aId intValue] > 0 ) {
         descriptionLabel.text = kMessageIsAttended;
         [reservationButton setTitle:kButtonMakeReservation forState:UIControlStateNormal];
         [attendanceButton setTitle:kButtonCancelAttendance forState:UIControlStateNormal];
+        [trackWodButton setHidden:NO];
     }
     else {
         descriptionLabel.text = @"";
         [reservationButton setTitle:kButtonMakeReservation forState:UIControlStateNormal];
         [attendanceButton setTitle:kButtonMarkAttended forState:UIControlStateNormal];
+        [trackWodButton setHidden:YES];
     }
     
     NSDateFormatter *df = [[NSDateFormatter alloc] init];

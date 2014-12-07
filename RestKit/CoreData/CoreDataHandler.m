@@ -180,31 +180,30 @@
     }
 }
 
-//- (NSArray*)getEntityDataByDate:(NSString*)entityName dateValue:(NSDate*)dateValue
-//{
-//    NSManagedObjectContext *mOC =[RKManagedObjectStore defaultStore].mainQueueManagedObjectContext;
-//    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-//    NSEntityDescription *entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:mOC];
-//    [request setEntity:entity];
-//    //    [request setResultType:NSDictionaryResultType];
-//    
-//    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-//    NSDateComponents *comps = [gregorian components:NSWeekdayCalendarUnit fromDate:<#(NSDate *)#>]
-//    NSPredicate *predicate = [NSPredicate predicateWithFormat:
-//                              @"(startDate >= %@) AND (endDate <=%@) AND day=%d", dateValue, dateValue, [dayValue intValue]];
-//    
-//    [request setPredicate:predicate];
-//    
-//    // Execute the fetch.
-//    NSError *error = nil;
-//    NSArray *objects = [mOC executeFetchRequest:request error:&error];
-//    if (objects == nil) {
-//        return nil;
-//    }
-//    else {
-//        return objects;
-//    }
-//}
+- (NSArray*)getEntityData:(NSString*)entityName field:(NSString*)field value:(NSString*)value
+{
+    NSManagedObjectContext *mOC =[RKManagedObjectStore defaultStore].mainQueueManagedObjectContext;
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:mOC];
+    [request setEntity:entity];
+    //    [request setResultType:NSDictionaryResultType];
+    
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:
+                              @"%K == %@", field, value];
+    
+    [request setPredicate:predicate];
+    
+    // Execute the fetch.
+    NSError *error = nil;
+    NSArray *objects = [mOC executeFetchRequest:request error:&error];
+    if (objects == nil) {
+        return nil;
+    }
+    else {
+        return objects;
+    }
+}
 
 - (NSArray*)getAllDataForEntity:(NSString*)entityName{
     NSManagedObjectContext *mOC =[RKManagedObjectStore defaultStore].mainQueueManagedObjectContext;

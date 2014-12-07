@@ -13,6 +13,8 @@
 #import "RequestFail.h"
 #import "LoginRequest.h"
 #import "UserInfoRequest.h"
+#import "UpdateUserInfoRequest.h"
+
 #import "ClassesRequest.h"
 #import "MakeReservationRequest.h"
 #import "ListReservationRequest.h"
@@ -20,12 +22,19 @@
 #import "GetAttendanceRequest.h"
 #import "MakeAttendanceRequest.h"
 #import "DeleteAttendanceRequest.h"
+
+#import "GetWodInfoRequest.h"
+#import "TrackWodRequest.h"
+#import "GetMyWodsRequest.h"
+
 #import "MyBenchmarksRequest.h"
 #import "AddNewBenchmarkRequest.h"
 #import "MyMembershipsRequest.h"
 #import "AvailableBenchmarksRequest.h"
 #import "MyBenchmarkDataRequest.h"
 #import "DeleteBenchmarkData.h"
+#import "GetWallPostsRequest.h"
+#import "AddWallPostRequest.h"
 
 static AKObjectManager *sharedManager = nil;
 
@@ -126,15 +135,43 @@ static AKObjectManager *sharedManager = nil;
     
     [self addRequestDescriptor:userInfoRequestDescriptors];
     
+    RKRequestDescriptor *updateUserInfoRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[UpdateUserInfoRequest updateUserInfoRequestMapping]
+                                                                                            objectClass:[UpdateUserInfoRequest class]
+                                                                                            rootKeyPath:nil
+                                                                                                 method:RKRequestMethodPOST];
+    
+    
+    [self addRequestDescriptor:updateUserInfoRequestDescriptors];
+    
     // ClassRequest
     RKRequestDescriptor *classesRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[ClassesRequest getClassesRequestMapping]
                                                                                                    objectClass:[ClassesRequest class]
                                                                                                    rootKeyPath:nil
                                                                                                         method:RKRequestMethodPOST];
     
-    
     [self addRequestDescriptor:classesRequestDescriptors];
     
+    // GetWodInfoRequest
+    RKRequestDescriptor *getWodInfoRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[GetWodInfoRequest getWodInfoRequestMapping]
+                                                                                           objectClass:[GetWodInfoRequest class]
+                                                                                           rootKeyPath:nil
+                                                                                                method:RKRequestMethodPOST];
+    [self addRequestDescriptor:getWodInfoRequestDescriptors];
+    
+    // TrackWodRequest
+    RKRequestDescriptor *trackWodRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[TrackWodRequest trackWodRequestMapping]
+                                                                                              objectClass:[TrackWodRequest class]
+                                                                                              rootKeyPath:nil
+                                                                                                   method:RKRequestMethodPOST];
+    [self addRequestDescriptor:trackWodRequestDescriptors];
+
+    // GetMyWodsRequest
+    RKRequestDescriptor *getMyWodsRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[GetMyWodsRequest getMyWodsRequestMapping]
+                                                                                            objectClass:[GetMyWodsRequest class]
+                                                                                            rootKeyPath:nil
+                                                                                                 method:RKRequestMethodPOST];
+    [self addRequestDescriptor:getMyWodsRequestDescriptors];
+
     // MakeReservationResquest
     RKRequestDescriptor *makeReservationRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[MakeReservationRequest getMakeReservationRequestMapping]
                                                                                                            objectClass:[MakeReservationRequest class]
@@ -242,6 +279,23 @@ static AKObjectManager *sharedManager = nil;
     
     
     [self addRequestDescriptor:availableBenchmarksRequestDescriptors];
+    
+    // Walls
+    RKRequestDescriptor *getWallPostRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[GetWallPostsRequest getWallPostsRequestMapping]
+                                                                                                       objectClass:[GetWallPostsRequest class]
+                                                                                                       rootKeyPath:nil
+                                                                                                            method:RKRequestMethodPOST];
+    
+    
+    [self addRequestDescriptor:getWallPostRequestDescriptors];
+    
+    RKRequestDescriptor *addWallPostRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[AddWallPostRequest addWallPostRequestMapping]
+                                                                                               objectClass:[AddWallPostRequest class]
+                                                                                               rootKeyPath:nil
+                                                                                                    method:RKRequestMethodPOST];
+    
+    
+    [self addRequestDescriptor:addWallPostRequestDescriptors];
 }
 
 - (void) setupResponseDescriptors {

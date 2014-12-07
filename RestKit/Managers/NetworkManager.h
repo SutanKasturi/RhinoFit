@@ -21,13 +21,13 @@
 - (NSArray*) getClasses:(NSDate*)date;
 
 
+// Login
 - (void) sendEmailLogin:(NSString*) email
                password:(NSString*) password
                 success:(void (^)(BOOL isLoggedIn))success
                 failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
-- (void) getUserInfo:(void (^)(id result))success
-             failure:(void (^)(NSString *error))failure;
 
+// Classes
 - (void) getClassess:(NSString*)startDate
              endDate:(NSString *)endDate
              success:(void (^)(NSArray*result))success
@@ -58,6 +58,26 @@
                   success:(void (^)(BOOL isSuccess))success
                   failure:(void (^)(NSString *error))failure;
 
+// Wods
+- (void) getWodInfo:(NSString*)classId
+          startDate:(NSDate*)startDate
+            success:(void (^)(id results))success
+            failure:(void (^)(NSString *error))failure;
+
+- (void) trackWod:(NSString*)classId
+        startDate:(NSDate*)startDate
+              wod:(NSString*)wod
+            title:(NSString*)title
+          results:(NSString*)results
+          success:(void (^)(id results))success
+          failure:(void (^)(NSString *error))failure;
+
+- (void) getMyWods:(NSString*)startDate
+             endDate:(NSString *)endDate
+             success:(void (^)(NSArray*result))success
+             failure:(void (^)(NSString *error))failure;
+
+// Benchmark
 - (void) getMyBenchmarks:(void (^)(NSMutableArray*result))success
                  failure:(void (^)(NSString *error))failure;
 - (void) addNewBenchmark:(NSString*)benchmarkId
@@ -83,5 +103,32 @@
 
 - (void) getMyMemberships:(void (^)(NSMutableArray*result))success
                         failure:(void (^)(NSString *error))failure;
+
+// Walls
+- (void) getWallPosts:(void (^)(NSMutableArray*result))success
+              failure:(void (^)(NSString *error))failure;
+
+- (void) addWallPostWithImage:(UIImage*)image
+             message:(NSString*)message
+             success:(void (^)(NSNumber*wallId))success
+             failure:(void (^)(NSString *error))failure;
+
+// User Info
+- (void) getUserInfo:(void (^)(id result))success
+             failure:(void (^)(NSString *error))failure;
+- (void) updateUserInfo:(UIImage*)image
+              firstName:(NSString*)firstName
+               lastName:(NSString*)lastName
+               address1:(NSString*)address1
+               address2:(NSString*)address2
+                   city:(NSString*)city
+       stateAndProvince:(NSString*)stateAndProvice
+           zipAndPostal:(NSString*)zipAndPostal
+                country:(NSString*)country
+              homePhone:(NSString*)homePhone
+            mobilePhone:(NSString*)mobilePhone
+                  email:(NSString*)email
+                success:(void (^)(id result))success
+                failure:(void (^)(NSString *error))failure;
 
 @end

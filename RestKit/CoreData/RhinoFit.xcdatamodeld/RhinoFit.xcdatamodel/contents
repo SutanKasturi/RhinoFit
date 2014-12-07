@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6244" systemVersion="13F34" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="14B25" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Attendance" representedClassName="Attendance" syncable="YES">
         <attribute name="attendanceId" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
@@ -29,10 +29,12 @@
         <attribute name="userAddress2" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userCity" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userCountry" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="userEmail" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userFirstName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userLastName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userPhone1" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userPhone2" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="userPicture" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userState" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userZip" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
@@ -40,6 +42,6 @@
         <element name="Attendance" positionX="-18" positionY="135" width="128" height="90"/>
         <element name="Reservation" positionX="-36" positionY="126" width="128" height="90"/>
         <element name="RhinoFitClass" positionX="-63" positionY="-18" width="128" height="223"/>
-        <element name="UserInfo" positionX="-54" positionY="81" width="128" height="193"/>
+        <element name="UserInfo" positionX="-54" positionY="81" width="128" height="225"/>
     </elements>
 </model>

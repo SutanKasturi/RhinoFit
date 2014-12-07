@@ -24,4 +24,8 @@
 //@dynamic startDate;
 //@dynamic title;
 
+- (NSComparisonResult)compare:(RhinoFitClass*)otherObject {
+    return [self.startDate compare:otherObject.startDate];
+}
+
 @end

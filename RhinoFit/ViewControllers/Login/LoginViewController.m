@@ -41,6 +41,10 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void) viewDidAppear:(BOOL)animated {
+    self.view.frame = self.view.bounds;
+}
+
 - (IBAction)onLogIn:(id)sender {
     BOOL isValid = YES;
     if ( ![mEmailTextField validate] )

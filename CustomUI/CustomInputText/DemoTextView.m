@@ -18,7 +18,8 @@
     
     [self setTintColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
     [self setBackgroundColor:[UIColor whiteColor]];
-    self.layer.borderColor = [UIColor colorWithWhite:1 alpha:0].CGColor;
+    _borderColor = [UIColor colorWithWhite:0.7f alpha:1.0f];
+    self.layer.borderColor = _borderColor.CGColor;
     self.delegate = self;
     required = YES;
 }
@@ -53,7 +54,7 @@
         return NO;
     }
     
-    self.layer.borderColor = [UIColor colorWithWhite:1 alpha:0].CGColor;
+    self.layer.borderColor = _borderColor.CGColor;
     
     return YES;
 }
@@ -62,7 +63,7 @@
 
 - (void)textViewDidBeginEditing:(UITextView *) textView
 {
-	self.layer.borderColor = [UIColor colorWithWhite:1 alpha:0].CGColor;
+	self.layer.borderColor = [UIColor colorWithWhite:0.7f alpha:1.0f].CGColor;
 }
 
 - (void)textViewDidEndEditing:(UITextView *) textView
@@ -70,6 +71,10 @@
     [self validate];
 }
 
+- (void) setBorderColor:(UIColor *)borderColor {
+    _borderColor = borderColor;
+    self.layer.borderColor = borderColor.CGColor;
+}
 //- (void) drawPlaceholderInRect:(CGRect)rect {
 //    NSDictionary *attributes = @{ NSFontAttributeName: [UIFont systemFontOfSize:fontSize], NSForegroundColorAttributeName : [UIColor colorWithRed:182/255. green:182/255. blue:183/255. alpha:1.0]};
 //    [self.placeholder drawInRect:CGRectInset(rect, 5, 5) withAttributes:attributes];

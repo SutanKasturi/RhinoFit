@@ -21,5 +21,7 @@
 @dynamic userPhone2;
 @dynamic userState;
 @dynamic userZip;
+@dynamic userEmail;
+@dynamic userPicture;
 
 @end

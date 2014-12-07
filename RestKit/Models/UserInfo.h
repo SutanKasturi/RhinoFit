@@ -22,5 +22,7 @@
 @property (nonatomic, retain) NSString * userPhone2;
 @property (nonatomic, retain) NSString * userState;
 @property (nonatomic, retain) NSString * userZip;
+@property (nonatomic, retain) NSString * userEmail;
+@property (nonatomic, retain) NSString * userPicture;
 
 @end
