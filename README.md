@@ -16,3 +16,11 @@ RhinoFit
 - Small changes to existing app
 - Changes to My Benchmarks Screen
 - New Benchmark History Screen
+
+#Fourth Milstone:
+- The Wall
+- Post a Wall Message
+- My Profile
+- Edit My Profile
+- Track WOD
+- My WODs
