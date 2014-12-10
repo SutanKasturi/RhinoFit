@@ -94,7 +94,7 @@ static UserInfo* currentUser;
     [sharedInstance removeObjectForKey:kParamToken];
     
     CoreDataHandler *cdHandler = [[CoreDataHandler alloc] init];
-    [cdHandler deleteAllDataForEntity:kCoreDataUserInfo sortField:kResponseKeyUserName];
+    [cdHandler deleteAllDataForEntity:kCoreDataUserInfo sortField:@"userEmail"];
 }
 
 - (NSString*) getToken
