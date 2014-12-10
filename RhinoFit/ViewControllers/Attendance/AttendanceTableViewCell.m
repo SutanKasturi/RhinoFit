@@ -91,6 +91,8 @@
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"EEEE, MMMM dd, yyyy"];
     whenLabel.text = [df stringFromDate:mAttendance.when];
+    [df setDateFormat:@"hh:mma"];
+    timeLabel.text = [df stringFromDate:mAttendance.when];
 }
 
 @end

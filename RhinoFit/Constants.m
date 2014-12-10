@@ -67,7 +67,7 @@ NSString *const kMessageNoMyMemberships = @"You currently have no memberships";
 NSString *const kMessageNoAvailableBenchmarks = @"There are no available benchmarks";
 NSString *const kMessageNoMyBenchmarkHistories = @"There are no benchmark histories";
 NSString *const kMessageNoWalls = @"There are no walls";
-NSString *const kMessageNoMyWods = @"There are no wods";
+NSString *const kMessageNoMyWods = @"You have not yet tracked any WODs. To track a WOD, find a class you have attended in \"My Classes\" and click \"Track WOD\"";
 
 // Button Names
 

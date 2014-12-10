@@ -150,7 +150,7 @@
 
 - (void) scrollToBottom {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[mWallPostArray count] - 1 inSection:0];
-    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
     [self.tableView reloadData];
 }
 
