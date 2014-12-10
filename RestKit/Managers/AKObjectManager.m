@@ -11,9 +11,12 @@
 #import "Constants.h"
 #import "RequestSuccess.h"
 #import "RequestFail.h"
+
 #import "LoginRequest.h"
 #import "UserInfoRequest.h"
 #import "UpdateUserInfoRequest.h"
+#import "GetCountriesRequest.h"
+#import "GetStatesRequest.h"
 
 #import "ClassesRequest.h"
 #import "MakeReservationRequest.h"
@@ -142,6 +145,20 @@ static AKObjectManager *sharedManager = nil;
     
     
     [self addRequestDescriptor:updateUserInfoRequestDescriptors];
+    
+    // GetCountryRequest
+    RKRequestDescriptor *getCountriesRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[GetCountriesRequest getCountriesRequestMapping]
+                                                                                                  objectClass:[GetCountriesRequest class]
+                                                                                                  rootKeyPath:nil
+                                                                                                       method:RKRequestMethodPOST];
+    [self addRequestDescriptor:getCountriesRequestDescriptors];
+    
+    // GetStatesRequest
+    RKRequestDescriptor *getStatesRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[GetStatesRequest getStatesRequestMapping]
+                                                                                                objectClass:[GetStatesRequest class]
+                                                                                                rootKeyPath:nil
+                                                                                                     method:RKRequestMethodPOST];
+    [self addRequestDescriptor:getStatesRequestDescriptors];
     
     // ClassRequest
     RKRequestDescriptor *classesRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[ClassesRequest getClassesRequestMapping]
@@ -315,8 +332,13 @@ static AKObjectManager *sharedManager = nil;
                                                                                                       pathPattern:nil
                                                                                                           keyPath:nil
                                                                                                       statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
-    
     [self addResponseDescriptor:requestSuccessResponseDescriptors];
+    
+    RKObjectMapping *userMapping = [RKObjectMapping mappingForClass:[NSArray class]];
+    [userMapping addPropertyMapping:[RKAttributeMapping attributeMappingFromKeyPath:nil toKeyPath:@""]];
+    
+    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:userMapping method:RKRequestMethodAny pathPattern:nil keyPath:nil statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    [self addResponseDescriptor:responseDescriptor];
 }
 
 @end

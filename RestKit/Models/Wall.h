@@ -14,6 +14,8 @@
 @property (nonatomic, strong) NSString *msg;
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *profilePic;
+@property (nonatomic, strong) UIImage *picImage;
 @property (nonatomic, strong) NSString *pic;
 @property (nonatomic, assign) BOOL yours;
+
 @end

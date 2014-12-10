@@ -41,12 +41,19 @@
     self.userNameLabel.text = wall.name;
     [self.markLabel setHidden:NO];
     [self.postImage setBackgroundColor:[UIColor colorWithWhite:0.0f alpha:0.5f]];
+    self.postImage.image = nil;
+    NSLog(@"%@", wall.pic);
     [self.postImage setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:wall.pic]]
-                          placeholderImage:[UIImage imageNamed:nil]
+                          placeholderImage:nil
                                    success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
                                        self.postImage.image = image;
-                                       [self.markLabel setHidden:YES];
-                                       [self.postImage setBackgroundColor:[UIColor clearColor]];
+                                       if ( image ) {
+                                           [self.markLabel setHidden:YES];
+                                           [self.postImage setBackgroundColor:[UIColor clearColor]];
+                                       }
+                                       else {
+                                           self.postImage.image = wall.picImage;
+                                       }
                                    }
                                    failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
                                        
@@ -54,7 +61,10 @@
     [self.avatarImage setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:wall.profilePic]]
                             placeholderImage:[UIImage imageNamed:@"avatar"]
                                      success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                         self.avatarImage.image = image;
+                                         if ( image )
+                                             self.avatarImage.image = image;
+                                         else
+                                             self.avatarImage.image = [UIImage imageNamed:@"avatar"];
                                      }
                                      failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
                                          

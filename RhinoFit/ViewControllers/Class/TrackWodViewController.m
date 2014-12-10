@@ -36,7 +36,7 @@
     self.descriptionTextView.text = @"";
     self.resultsTextView.text = @"";
     
-    float height = 507;
+    float height = 512;
     self.view.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, height);
     [self.delegate didChangeScrollContent:height];
     self.navigationItem.backBarButtonItem.title = @"";

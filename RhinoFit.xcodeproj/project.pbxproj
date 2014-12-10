@@ -75,6 +75,8 @@
 		849B768619F099B400680B2D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 849B768519F099B400680B2D /* Images.xcassets */; };
 		849B768919F099B400680B2D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 849B768719F099B400680B2D /* LaunchScreen.xib */; };
 		849B769519F099B400680B2D /* RhinoFitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 849B769419F099B400680B2D /* RhinoFitTests.m */; };
+		84A1786F1A368D3300C3D0BB /* GetCountriesRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A1786E1A368D3300C3D0BB /* GetCountriesRequest.m */; };
+		84A178721A368E3F00C3D0BB /* GetStatesRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A178711A368E3F00C3D0BB /* GetStatesRequest.m */; };
 		84B642B81A3455C400787EE7 /* avatar.png in Resources */ = {isa = PBXBuildFile; fileRef = 84B642B71A3455C400787EE7 /* avatar.png */; };
 		84B642BC1A345DA100787EE7 /* ScrollContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B642BB1A345DA100787EE7 /* ScrollContentViewController.m */; };
 		84B642C01A34655C00787EE7 /* UpdateUserInfoRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B642BF1A34655C00787EE7 /* UpdateUserInfoRequest.m */; };
@@ -273,6 +275,10 @@
 		849B768E19F099B400680B2D /* RhinoFitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RhinoFitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		849B769319F099B400680B2D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		849B769419F099B400680B2D /* RhinoFitTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RhinoFitTests.m; sourceTree = "<group>"; };
+		84A1786D1A368D3300C3D0BB /* GetCountriesRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GetCountriesRequest.h; path = RestKit/RequestModels/GetCountriesRequest.h; sourceTree = SOURCE_ROOT; };
+		84A1786E1A368D3300C3D0BB /* GetCountriesRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GetCountriesRequest.m; path = RestKit/RequestModels/GetCountriesRequest.m; sourceTree = SOURCE_ROOT; };
+		84A178701A368E3F00C3D0BB /* GetStatesRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GetStatesRequest.h; path = RestKit/RequestModels/GetStatesRequest.h; sourceTree = SOURCE_ROOT; };
+		84A178711A368E3F00C3D0BB /* GetStatesRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GetStatesRequest.m; path = RestKit/RequestModels/GetStatesRequest.m; sourceTree = SOURCE_ROOT; };
 		84B642B71A3455C400787EE7 /* avatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = avatar.png; sourceTree = "<group>"; };
 		84B642B91A3459EF00787EE7 /* ScrollContentDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScrollContentDelegate.h; path = ViewControllers/ScrollContentDelegate.h; sourceTree = "<group>"; };
 		84B642BA1A345DA100787EE7 /* ScrollContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScrollContentViewController.h; path = ViewControllers/ScrollContentViewController.h; sourceTree = "<group>"; };
@@ -597,6 +603,10 @@
 				84B642CA1A349E8A00787EE7 /* TrackWodRequest.m */,
 				84B642CC1A34A61800787EE7 /* GetMyWodsRequest.h */,
 				84B642CD1A34A61800787EE7 /* GetMyWodsRequest.m */,
+				84A1786D1A368D3300C3D0BB /* GetCountriesRequest.h */,
+				84A1786E1A368D3300C3D0BB /* GetCountriesRequest.m */,
+				84A178701A368E3F00C3D0BB /* GetStatesRequest.h */,
+				84A178711A368E3F00C3D0BB /* GetStatesRequest.m */,
 			);
 			name = RequestModels;
 			sourceTree = "<group>";
@@ -1047,6 +1057,7 @@
 				847BB56D19F2D91700528DE4 /* MenuTableViewCell.m in Sources */,
 				847BB55D19F2AE0200528DE4 /* GetAttendanceRequest.m in Sources */,
 				847BB55719F2ADD800528DE4 /* ListReservationRequest.m in Sources */,
+				84A1786F1A368D3300C3D0BB /* GetCountriesRequest.m in Sources */,
 				84F2B8A319F0EAB90007B929 /* Constants.m in Sources */,
 				847BB52519F1795900528DE4 /* NetworkManager.m in Sources */,
 				840C0CDC1A01C86800E10ABF /* MyBenchmarksRequest.m in Sources */,
@@ -1088,6 +1099,7 @@
 				848EF2231A1F714E00E22429 /* DeleteBenchmarkData.m in Sources */,
 				847BB56A19F2CCE300528DE4 /* ReservationTableViewCell.m in Sources */,
 				847BB53E19F2114300528DE4 /* WaitingViewController.m in Sources */,
+				84A178721A368E3F00C3D0BB /* GetStatesRequest.m in Sources */,
 				84BD47A31A31BFDA0082E67B /* TakePhoto.m in Sources */,
 				84BD479F1A31B01F0082E67B /* GetWallPostsRequest.m in Sources */,
 				847BB56019F2AE1400528DE4 /* MakeAttendanceRequest.m in Sources */,

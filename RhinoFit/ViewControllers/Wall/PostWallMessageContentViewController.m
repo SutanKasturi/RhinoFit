@@ -36,6 +36,7 @@
     if ( self.postImage == nil ) {
         if ( takePhoto == nil ) {
             takePhoto = [[TakePhoto alloc] init:self];
+            takePhoto.isAllowEditing = NO;
             takePhoto.actiondelegate = self;
             [self addChildViewController:takePhoto];
         }
@@ -45,7 +46,7 @@
         self.postImage = nil;
         self.postImageView.image = nil;
         [self setPictureButtonTitle];
-        [self.delegate didChangeContentHeight:-1];
+        [self.scrollDelegate didChangeScrollContent:-1];
     }
 }
 
@@ -68,6 +69,17 @@
                                                      message:self.messageTextView.text
                                                      success:^(NSNumber*wallId) {
                                                          [MBProgressHUD hideHUDForView:self.parentViewController.view.superview animated:YES];
+                                                         [self.navigationController popViewControllerAnimated:YES];
+//                                                         Wall *wall = [[Wall alloc] init];
+//                                                         wall.wallId = wallId;
+//                                                         wall.msg = self.messageTextView.text;
+//                                                         UserInfo *userInfo = [[NetworkManager sharedManager] getUser];
+//                                                         if ( userInfo ) {
+//                                                             wall.name = [NSString stringWithFormat:@"%@ %@", userInfo.userFirstName, userInfo.userLastName];
+//                                                             wall.profilePic = userInfo.userPicture;
+//                                                         }
+//                                                         wall.yours = YES;
+//                                                         wall.pic =
                                                      }
                                                      failure:^(NSString *error) {
                                                          [MBProgressHUD hideHUDForView:self.parentViewController.view.superview animated:YES];
@@ -78,10 +90,31 @@
 #pragma mark - TakePhotoDelegate
 
 - (void)setImage:(UIImage *)aImage {
-    self.postImage = aImage;
-    self.postImageView.image = aImage;
-    [self.delegate didChangeContentHeight:484];
+    self.postImage = [self imageWithImage:aImage];
+    self.postImageView.image = self.postImage;
+    [self.scrollDelegate didChangeScrollContent:484];
     [self setPictureButtonTitle];
+}
+
+- (UIImage *) imageWithImage:(UIImage*)image {
+    CGSize size = image.size;
+    CGFloat width = size.width;
+    CGFloat height = size.height;
+    if ( width > 800 ) {
+        height = height / width * 800;
+        width = 800;
+    }
+    if ( height > 800 ) {
+        width = width / height * 800;
+        height = 800;
+    }
+    size.width = width;
+    size.height = height;
+    UIGraphicsBeginImageContext(size);
+    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    UIImage *destImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return destImage;
 }
 
 @end

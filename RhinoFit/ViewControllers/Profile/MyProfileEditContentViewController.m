@@ -12,7 +12,7 @@
 #import <MBProgressHUD/MBProgressHUD.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 
-@interface MyProfileEditContentViewController ()<TakePhotoDelegate>
+@interface MyProfileEditContentViewController ()<TakePhotoDelegate, DemoTextFieldDelegate>
 
 @property (nonatomic, strong) TakePhoto *takePhoto;
 @property (nonatomic, strong) UIImage *mImage;
@@ -47,7 +47,8 @@
         [self.avatarImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:currentUser.userPicture]]
                                     placeholderImage:[UIImage imageNamed:@"avatar"]
                                              success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                                 self.avatarImageView.image = image;
+                                                 if ( image )
+                                                     self.avatarImageView.image = image;
                                              }
                                              failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
                                              }];
@@ -63,6 +64,33 @@
         self.homePhoneTextField.text = currentUser.userPhone1;
         self.mobilePhoneTextField.text = currentUser.userPhone2;
     }
+    [self.countryTextField setEnabled:NO];
+    [self.countryButton setEnabled:NO];
+    [self.countryIndicator setHidden:NO];
+    [self.countryIndicator startAnimating];
+    [self.stateAndProviceTextField setEnabled:NO];
+    [self.stateButton setEnabled:NO];
+    [self.stateIndicator setHidden:YES];
+    [[NetworkManager sharedManager] getCountries:^(id results) {
+        NSMutableArray *countries = [[NSMutableArray alloc] initWithArray:results];
+        [self.countryIndicator stopAnimating];
+        [self.countryIndicator setHidden:YES];
+        if ( [countries count] == 0 )
+            return;
+        
+        [countries insertObject:@"" atIndex:0];
+        [self.countryTextField setPickerArray:countries];
+        if ( currentUser )
+            [self.countryTextField setPicker1:currentUser.userCountry];
+        [self.countryTextField setType:TEXT_FIELD_PICKER];
+        [self.countryButton setEnabled:YES];
+        [self.countryTextField setEnabled:YES];
+        [self getStates];
+    }
+    failure:^(NSString *error) {
+        [self.countryIndicator stopAnimating];
+        [self.countryIndicator setHidden:YES];
+    }];
 }
 
 #pragma mark - Button Actions
@@ -140,4 +168,48 @@
     self.avatarImageView.image = aImage;
 }
 
+#pragma mark - TextField Dropdown Picker
+- (IBAction)onState:(id)sender {
+    [self.stateAndProviceTextField becomeFirstResponder];
+}
+- (IBAction)onCountry:(id)sender {
+    [self.countryTextField becomeFirstResponder];
+}
+
+#pragma mark - DemoTextFieldDelegate
+- (IBAction)onEndCountryTextField:(id)sender {
+    if ( sender == self.countryTextField ) {
+        self.stateAndProviceTextField.text = @"";
+        [self getStates];
+    }
+}
+
+#pragma mark - GetState
+- (void) getStates {
+    if ( [self.countryTextField.text isEqualToString:@""]  )
+        return;
+    [self.stateButton setEnabled:NO];
+    [self.stateAndProviceTextField setEnabled:NO];
+    [self.stateIndicator setHidden:NO];
+    [self.stateIndicator startAnimating];
+    [[NetworkManager sharedManager] getStates:self.countryTextField.text
+                                      success:^(id result) {
+                                          NSMutableArray *states = [[NSMutableArray alloc] initWithArray:result];
+                                          [self.stateIndicator stopAnimating];
+                                          [self.stateIndicator setHidden:YES];
+                                          if ( [states count] == 0 )
+                                              return;
+                                          [states insertObject:@"" atIndex:0];
+                                          [self.stateAndProviceTextField setPickerArray:states];
+                                          [self.stateAndProviceTextField setPicker1:self.stateAndProviceTextField.text];
+                                          [self.stateAndProviceTextField setType:TEXT_FIELD_PICKER];
+                                          
+                                          [self.stateButton setEnabled:YES];
+                                          [self.stateAndProviceTextField setEnabled:YES];
+                                      }
+                                      failure:^(NSString *error) {
+                                          [self.stateIndicator stopAnimating];
+                                          [self.stateIndicator setHidden:YES];
+                                      }];
+}
 @end

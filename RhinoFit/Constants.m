@@ -17,10 +17,10 @@ NSString *const kMenuMyReservations = @"My Reservations";
 NSString *const kMenuMyAttendance = @"My Attendance";
 NSString *const kMenuMyBenchmarks = @"My Benchmarks";
 NSString *const kMenuMyMemberships = @"My Memberships";
-NSString *const kMenuWall = @"Gyms Wall";
+NSString *const kMenuWall = @"The Wall";
 NSString *const kMenuMyProfile = @"My Profile";
 NSString *const kMenuLogout = @"Log out";
-NSString *const kMenuMyWods = @"My Wods";
+NSString *const kMenuMyWods = @"My WODS";
 
 // Request
 NSString *const kRequestLogin = @"login";
@@ -45,6 +45,8 @@ NSString *const kRequestUpdateUserInfo = @"updateuserinfo";
 NSString *const kRequestGetWodInfo = @"getwodinfo";
 NSString *const kRequestTrackWod = @"trackwod";
 NSString *const kRequestGetMyWods = @"getmywods";
+NSString *const kRequestGetCountries = @"getcountries";
+NSString *const kRequestGetStates = @"getstates";
 
 // Messages
 NSString* const kMessageInvalidLogin = @"Invalid Login";

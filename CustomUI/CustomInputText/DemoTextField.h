@@ -25,7 +25,7 @@ typedef enum {
 
 @optional
 - (void) didChangedDate:(NSDate*)date;
-- (void) didSelectedPicker:(int)row;
+- (void) didSelectedPicker:(id)sender row:(int)row;
 
 @end
 

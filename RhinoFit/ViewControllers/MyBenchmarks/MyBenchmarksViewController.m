@@ -86,6 +86,7 @@ static NSMutableArray * availableBenchmark;
                 [_mMyBenchmarks removeObject:benchmark];
             }
             [self.tableView reloadData];
+            [self setTitleString];
         }
         [self refresh];
     } failure:^(NSString *error) {
@@ -125,6 +126,7 @@ static NSMutableArray * availableBenchmark;
     
     [self.addBenchmarkButton setButtonType:CustomButtonBlue];
     [self.addBenchmarkButton setHidden:YES];
+    [self setTitleString];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -143,6 +145,11 @@ static NSMutableArray * availableBenchmark;
     else {
         [self getMyBenchmarks];
     }
+}
+
+- (void) setTitleString
+{
+    self.title = [NSString stringWithFormat:@"My Benchmarks (%d)", (int)[_mMyBenchmarks count]];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

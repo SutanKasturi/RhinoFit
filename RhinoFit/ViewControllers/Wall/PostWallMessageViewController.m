@@ -9,7 +9,7 @@
 #import "PostWallMessageViewController.h"
 #import "PostWallMessageContentViewController.h"
 
-@interface PostWallMessageViewController ()<PostWallMessageContentViewControllerDelegate>
+@interface PostWallMessageViewController ()<ScrollContentDelegate>
 
 @property (nonatomic, strong) PostWallMessageContentViewController *postWallMessageContentViewController;
 
@@ -33,7 +33,7 @@
         
         postWallMessageContentViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"PostWallMessageContentViewController"];
         postWallMessageContentViewController.view.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 484);
-        postWallMessageContentViewController.delegate = self;
+        postWallMessageContentViewController.scrollDelegate = self;
         [self addChildViewController:postWallMessageContentViewController];
         [self.scrollView addSubview:postWallMessageContentViewController.view];
         
@@ -54,7 +54,7 @@
 
 #pragma mark - PostWallMessageContentViewControllerDelegate
 
-- (void)didChangeContentHeight:(CGFloat)height {
+- (void)didChangeScrollContent:(CGFloat)height {
     if ( height == -1 ) {
         self.scrollView.contentSize = CGSizeMake(0, 0);
     }

@@ -26,5 +26,9 @@
 @property (weak, nonatomic) IBOutlet DemoTextField *mobilePhoneTextField;
 @property (weak, nonatomic) IBOutlet DemoTextField *emailTextField;
 @property (weak, nonatomic) IBOutlet CustomButton *saveButton;
+@property (weak, nonatomic) IBOutlet UIButton *countryButton;
+@property (weak, nonatomic) IBOutlet UIButton *stateButton;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *countryIndicator;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *stateIndicator;
 
 @end

@@ -63,6 +63,8 @@ static NSDate *startDate;
     
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapHandle)];
     [self.view addGestureRecognizer:tapGestureRecognizer];
+    
+    [self setTitleString];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -88,7 +90,7 @@ static NSDate *startDate;
 
 - (void) setTitleString
 {
-    self.title = [NSString stringWithFormat:@"My Attendance (%d)", (int)[mMyWods count]];
+    self.title = [NSString stringWithFormat:@"My WODS (%d)", (int)[mMyWods count]];
 }
 
 #pragma mark - UITableViewDataSource

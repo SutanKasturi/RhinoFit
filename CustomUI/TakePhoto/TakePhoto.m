@@ -52,8 +52,13 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [self.mParentViewController dismissViewControllerAnimated:NO completion:nil];
     
-    UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
-    [self.actiondelegate setImage:image];
+    if ( self.isAllowEditing ) {
+        UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
+        [self.actiondelegate setImage:image];
+    }
+    else {
+        [self.actiondelegate setImage:[info objectForKeyedSubscript:UIImagePickerControllerOriginalImage]];
+    }
 }
 
 #pragma mark - UIActionSheetDelegate
@@ -91,7 +96,7 @@
         return NO;
     }
     
-    cameraUI.allowsEditing = YES;
+    cameraUI.allowsEditing = self.isAllowEditing;
     cameraUI.showsCameraControls = YES;
     cameraUI.delegate = self;
     
@@ -124,7 +129,7 @@
         return NO;
     }
     
-    cameraUI.allowsEditing = YES;
+    cameraUI.allowsEditing = self.isAllowEditing;
     cameraUI.delegate = self;
     
     [self.mParentViewController presentViewController:cameraUI animated:YES completion:nil];

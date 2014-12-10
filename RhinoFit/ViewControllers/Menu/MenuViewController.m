@@ -69,7 +69,8 @@
     [self.mAvatarImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:userInfo.userPicture]]
                                  placeholderImage:[UIImage imageNamed:@"avatar"]
                                           success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                              self.mAvatarImageView.image = image;
+                                              if ( image )
+                                                  self.mAvatarImageView.image = image;
                                           }
                                           failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
                                               

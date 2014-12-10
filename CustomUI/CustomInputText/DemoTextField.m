@@ -358,7 +358,7 @@
 - (void) pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
     if ( type != TEXT_FIELD_MINUTEANDSECOND ) {
         self.text = [pickerArray objectAtIndex:row];
-        [self.pickerdelegate didSelectedPicker:(int)row];
+        [self.pickerdelegate didSelectedPicker:self row:(int)row];
     }
     else {
         if ( component == 0 ) {

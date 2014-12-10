@@ -27,17 +27,20 @@
 @synthesize waitingViewController;
 
 - (void) getWallPosts {
-    if ( mWallPostArray )
-        return;
-    
-    mWallPostArray = [[NSMutableArray alloc] init];
+//    if ( mWallPostArray )
+//        return;
+//    
+//    mWallPostArray = [[NSMutableArray alloc] init];
     [[NetworkManager sharedManager] getWallPosts:^(NSMutableArray *result) {
         if ( mWallPostArray )
             [mWallPostArray removeAllObjects];
+        else
+            mWallPostArray = [[NSMutableArray alloc] init];
         if ( result != nil && [result count] > 0 ) {
             [mWallPostArray addObjectsFromArray:result];
             [self.tableView reloadData];
             [waitingViewController.view setHidden:YES];
+            [self scrollToBottom];
         }
         else {
             [waitingViewController showResult:kMessageNoWalls];
@@ -61,10 +64,9 @@
         waitingViewController.view.frame = self.tableView.frame;
         [self addChildViewController:waitingViewController];
         [self.view addSubview:waitingViewController.view];
-        
-        [waitingViewController showWaitingIndicator];
-        [self getWallPosts];
     }
+    [waitingViewController showWaitingIndicator];
+    [self getWallPosts];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -144,6 +146,12 @@
     }
     
     return defaultSize.height + requiredHeight.size.height;
+}
+
+- (void) scrollToBottom {
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[mWallPostArray count] - 1 inSection:0];
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    [self.tableView reloadData];
 }
 
 @end

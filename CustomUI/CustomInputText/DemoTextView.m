@@ -39,11 +39,6 @@
     [super layoutSublayersOfLayer:layer];
     
     [layer setBorderWidth: 0.8];
-    
-    CGFloat width = self.superview.frame.size.width - 40.0f;
-    CGRect rect = layer.frame;
-    rect.size.width = width;
-    layer.frame = rect;
 }
 
 - (BOOL) validate

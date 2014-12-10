@@ -47,6 +47,8 @@ extern NSString *const kRequestUpdateUserInfo;
 extern NSString *const kRequestGetWodInfo;
 extern NSString *const kRequestTrackWod;
 extern NSString *const kRequestGetMyWods;
+extern NSString *const kRequestGetCountries;
+extern NSString *const kRequestGetStates;
 
 // Messages
 extern NSString *const kMessageInvalidLogin;

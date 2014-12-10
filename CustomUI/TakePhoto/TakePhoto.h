@@ -22,6 +22,7 @@
 @property (weak, nonatomic) id<TakePhotoDelegate> actiondelegate;
 
 @property (nonatomic, strong) UIViewController *mParentViewController;
+@property (nonatomic, assign) BOOL isAllowEditing;
 
 - (id)init:(UIViewController*)viewController;
 - (void) takePhoto;

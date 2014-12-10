@@ -130,5 +130,10 @@
                   email:(NSString*)email
                 success:(void (^)(id result))success
                 failure:(void (^)(NSString *error))failure;
+- (void) getCountries:(void (^)(id results))success
+              failure:(void (^)(NSString *error))failure;
+- (void) getStates:(NSString*)country
+           success:(void (^)(id result))success
+           failure:(void (^)(NSString *error))failure;
 
 @end
