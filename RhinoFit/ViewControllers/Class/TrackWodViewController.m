@@ -111,51 +111,46 @@
     }
 }
 - (IBAction)onTrackWod:(id)sender {
-    if ( mWodInfo && mWodInfo.canEdit ) {
-        BOOL isValidate = YES;
+    BOOL isValidate = YES;
+    if ( mWodInfo.canEdit == YES ) {
         if ( ![self.titleTextField validate] )
             isValidate = NO;
         if ( ![self.descriptionTextView validate] )
             isValidate = NO;
-        if ( ![self.resultsTextView validate] )
-            isValidate = NO;
-        
-        if ( isValidate == NO )
-            return;
-        
-        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.parentViewController.view.superview animated:YES];
-        hud.labelText = NSLocalizedString(@"Saving...", nil);
-        hud.dimBackground = YES;
-        
-        [[NetworkManager sharedManager] trackWod:mWodInfo.classId
-                                       startDate:mWodInfo.startDate
-                                             wod:self.descriptionTextView.text
-                                           title:self.titleTextField.text
-                                         results:self.resultsTextView.text
-                                         success:^(id results) {
-                                             [MBProgressHUD hideHUDForView:self.parentViewController.view.superview animated:YES];
-                                             if ( mClass ) {
-                                                 [MyWodsViewController setStartDate:mWodInfo.startDate];
-                                                 [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationMyWods object:nil];
-                                             }
-                                             else {
-                                                 mWodInfo.title = self.titleTextField.text;
-                                                 mWodInfo.wod = self.descriptionTextView.text;
-                                                 mWodInfo.results = self.resultsTextView.text;
-                                                 mWodInfo.wodId = [results objectForKey:kResponseKeyWodWodId];
-                                                 [self.wodDelegate didChangedWod];
-                                                 [self.navigationController popViewControllerAnimated:YES];
-                                             }
+    }
+    if ( ![self.resultsTextView validate] )
+        isValidate = NO;
+    
+    if ( isValidate == NO )
+        return;
+    
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.parentViewController.view.superview animated:YES];
+    hud.labelText = NSLocalizedString(@"Saving...", nil);
+    hud.dimBackground = YES;
+    
+    [[NetworkManager sharedManager] trackWod:mWodInfo.classId
+                                   startDate:mWodInfo.startDate
+                                         wod:self.descriptionTextView.text
+                                       title:self.titleTextField.text
+                                     results:self.resultsTextView.text
+                                     success:^(id results) {
+                                         [MBProgressHUD hideHUDForView:self.parentViewController.view.superview animated:YES];
+                                         if ( mClass ) {
+                                             [MyWodsViewController setStartDate:mWodInfo.startDate];
+                                             [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationMyWods object:nil];
                                          }
-                                         failure:^(NSString *error) {
-                                             [MBProgressHUD hideHUDForView:self.parentViewController.view.superview animated:YES];
-                                         }];
-    }
-    else {
-        [MyWodsViewController setStartDate:mWodInfo.startDate];
-        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationMyWods object:nil];
-
-    }
+                                         else {
+                                             mWodInfo.title = self.titleTextField.text;
+                                             mWodInfo.wod = self.descriptionTextView.text;
+                                             mWodInfo.results = self.resultsTextView.text;
+                                             mWodInfo.wodId = [results objectForKey:kResponseKeyWodWodId];
+                                             [self.wodDelegate didChangedWod];
+                                             [self.navigationController popViewControllerAnimated:YES];
+                                         }
+                                     }
+                                     failure:^(NSString *error) {
+                                         [MBProgressHUD hideHUDForView:self.parentViewController.view.superview animated:YES];
+                                     }];
 }
 
 @end
