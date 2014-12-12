@@ -30,13 +30,14 @@
     if ( _mReservations )
         return _mReservations;
     
-    _mReservations = [[NSMutableArray alloc] init];
     NetworkManager *networkManager = [NetworkManager sharedManager];
     [networkManager listReservation:^(NSMutableArray *result) {
         if ( _mReservations )
             [_mReservations removeAllObjects];
+        else
+            _mReservations = [[NSMutableArray alloc] init];
         if ( result != nil && [result count] > 0 ) {
-            [_mReservations addObjectsFromArray:result];
+            [_mReservations addObjectsFromArray:[result sortedArrayUsingSelector:@selector(compare:)]];
             [self setTitleString];
             [self.tableView reloadData];
             if ( [[self mReservations] count] == 0 ) {

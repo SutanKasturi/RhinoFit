@@ -116,12 +116,14 @@
                            success:^(NSDictionary *result) {
                                if ( result != nil ) {
                                    theClass.reservationId = [NSNumber numberWithInt:[[result objectForKey:kResponseKeyReservationId] intValue]];
-                                   theClass.isActionReservation = NO;
                                }
+                               theClass.isActionReservation = NO;
                                [self setClass:theClass];
                            }
                            failure:^(NSString *error) {
+                               theClass.isActionReservation = NO;
                                [self setClass:theClass];
+                               [[NetworkManager sharedManager] errorMessage:error];
                            }];
 }
 
@@ -131,12 +133,14 @@
                              success:^(BOOL isSuccess) {
                                  if ( isSuccess ) {
                                      theClass.reservationId = [NSNumber numberWithInt:0];
-                                     theClass.isActionReservation = NO;
                                  }
+                                 theClass.isActionReservation = NO;
                                  [self setClass:theClass];
                              }
                              failure:^(NSString *error) {
                                  [self setClass:theClass];
+                                 theClass.isActionReservation = NO;
+                                 [[NetworkManager sharedManager] errorMessage:error];
                              }];
 }
 
@@ -149,12 +153,14 @@
                           success:^(NSNumber *attendanceId) {
                               if ( attendanceId ) {
                                   theClass.aId = attendanceId;
-                                  theClass.isActionAttendance = NO;
                               }
+                              theClass.isActionAttendance = NO;
                               [self setClass:theClass];
                           }
                           failure:^(NSString *error) {
+                              theClass.isActionAttendance = NO;
                               [self setClass:theClass];
+                              [[NetworkManager sharedManager] errorMessage:error];
                           }];
 }
 
@@ -164,12 +170,14 @@
                                              success:^(BOOL isSuccess) {
                                                  if (isSuccess) {
                                                      theClass.aId = [NSNumber numberWithInt:0];
-                                                     theClass.isActionAttendance = NO;
                                                  }
+                                                 theClass.isActionAttendance = NO;
                                                  [self setClass:theClass];
                                              }
                                              failure:^(NSString *error) {
+                                                 theClass.isActionAttendance = NO;
                                                  [self setClass:theClass];
+                                                 [[NetworkManager sharedManager] errorMessage:error];
                                              }];
 }
 
@@ -225,7 +233,7 @@
     }
     
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
-    [df setDateFormat:@"hh:mm a"];
+    [df setDateFormat:@"h:mm a"];
     timeLabel.text = [df stringFromDate:theClass.startDate];
 }
 

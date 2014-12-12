@@ -15,4 +15,8 @@
 //@dynamic title;
 //@dynamic when;
 
+- (NSComparisonResult)compare:(Attendance*)otherObject {
+    return [self.when compare:otherObject.when];
+}
+
 @end

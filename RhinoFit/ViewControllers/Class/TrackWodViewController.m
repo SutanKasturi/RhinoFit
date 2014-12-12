@@ -89,7 +89,7 @@
         self.nameLabel.text = wodInfo.name;
         self.titleTextField.text = wodInfo.title;
         NSDateFormatter *df = [[NSDateFormatter alloc] init];
-        [df setDateFormat:@"hh:mm a"];
+        [df setDateFormat:@"h:mm a"];
         self.timeLabel.text = [df stringFromDate:wodInfo.startDate];
         [df setDateFormat:@"MMM dd, yyyy"];
         self.dateLabel.text = [df stringFromDate:wodInfo.startDate];
@@ -103,14 +103,10 @@
             [self.descriptionTextView setEditable:NO];
             [self.descriptionTextView setBorderColor:[UIColor clearColor]];
             [self.descriptionTextView setBackgroundColor:[UIColor colorWithWhite:0.5f alpha:0.1f]];
-            [self.resultsTextView setEditable:NO];
-            [self.resultsTextView setBorderColor:[UIColor clearColor]];
-            [self.resultsTextView setBackgroundColor:[UIColor colorWithWhite:0.5f alpha:0.1f]];
         }
         else {
             [self.titleTextField setEnabled:YES];
             [self.descriptionTextView setEditable:YES];
-            [self.resultsTextView setEditable:YES];
         }
     }
 }

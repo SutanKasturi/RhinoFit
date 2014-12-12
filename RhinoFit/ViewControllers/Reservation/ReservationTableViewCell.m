@@ -93,7 +93,7 @@
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"EEEE, MMMM dd, yyyy"];
     whenLabel.text = [df stringFromDate:mReservation.when];
-    [df setDateFormat:@"hh:mma"];
+    [df setDateFormat:@"h:mm a"];
     timeLabel.text = [df stringFromDate:mReservation.when];
 }
 

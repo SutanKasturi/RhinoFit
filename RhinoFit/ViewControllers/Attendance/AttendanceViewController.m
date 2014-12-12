@@ -127,8 +127,12 @@
     [[NetworkManager sharedManager] getAttendance:[NSString stringWithFormat:@"%@-%@-01", year, month]
                                           endDate:[NSString stringWithFormat:@"%@-%@-%d", year, month, (int)range.length]
                                           success:^(NSMutableArray *result) {
+                                              if ( mAttendanceArray )
+                                                  [mAttendanceArray removeAllObjects];
+                                              else
+                                                  mAttendanceArray = [[NSMutableArray alloc] init];
                                               if ( result != nil ) {
-                                                  mAttendanceArray = [[NSMutableArray alloc] initWithArray:result];
+                                                  [mAttendanceArray addObjectsFromArray:[result sortedArrayUsingSelector:@selector(compare:)]];
                                                   [self setTitleString];
                                                   [self.tableView reloadData];
                                                   if ( [[self mAttendanceArray] count] == 0 ) {

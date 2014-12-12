@@ -33,6 +33,7 @@
     [self.saveButton setButtonType:CustomButtonGrey];
     [self setupProfileContent];
     [self.emailTextField setType:TEXT_FIELD_EMAIL];
+    [self.address2TextField setRequired:NO];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -114,11 +115,11 @@
         isValidate = NO;
     if ( ![self.address1TextField validate] )
         isValidate = NO;
-    if ( ![self.address2TextField validate] )
-        isValidate = NO;
+//    if ( ![self.address2TextField validate] )
+//        isValidate = NO;
     if ( ![self.cityTextField validate] )
         isValidate = NO;
-    if ( ![self.stateAndProviceTextField validate] )
+    if ( [self.stateAndProviceTextField.pickerArray count] > 0 && ![self.stateAndProviceTextField validate] )
         isValidate = NO;
     if ( ![self.zipAndPostalTextField validate] )
         isValidate = NO;

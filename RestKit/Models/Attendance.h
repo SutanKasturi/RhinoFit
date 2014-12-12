@@ -15,4 +15,6 @@
 @property (nonatomic, strong) NSDate * when;
 @property (nonatomic, assign) BOOL isActionAttendance;
 
+- (NSComparisonResult)compare:(Attendance*)otherObject;
+
 @end

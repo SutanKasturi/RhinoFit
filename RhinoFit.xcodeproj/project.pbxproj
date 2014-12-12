@@ -20,6 +20,7 @@
 		840C0CEB1A023D7B00E10ABF /* MyMembershipsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 840C0CEA1A023D7B00E10ABF /* MyMembershipsTableViewCell.m */; };
 		840C0CEE1A02410F00E10ABF /* AvailableBenchmarksRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 840C0CED1A02410F00E10ABF /* AvailableBenchmarksRequest.m */; };
 		840C0CF11A024EBD00E10ABF /* AvailableBenchmark.m in Sources */ = {isa = PBXBuildFile; fileRef = 840C0CF01A024EBD00E10ABF /* AvailableBenchmark.m */; };
+		845E082B1A3AE9D800BFE627 /* kettlebell.png in Resources */ = {isa = PBXBuildFile; fileRef = 845E082A1A3AE9D800BFE627 /* kettlebell.png */; };
 		845EDDCC1A1EB82000CA78A2 /* MyBenchmarkHistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 845EDDCB1A1EB82000CA78A2 /* MyBenchmarkHistoryViewController.m */; };
 		845EDDCF1A1EB83900CA78A2 /* MyBenchmarkHistoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 845EDDCE1A1EB83900CA78A2 /* MyBenchmarkHistoryTableViewCell.m */; };
 		845EDDD21A1EBBD800CA78A2 /* BenchmarkHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 845EDDD11A1EBBD800CA78A2 /* BenchmarkHistory.m */; };
@@ -171,6 +172,7 @@
 		840C0CEF1A024EBD00E10ABF /* AvailableBenchmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvailableBenchmark.h; sourceTree = "<group>"; };
 		840C0CF01A024EBD00E10ABF /* AvailableBenchmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AvailableBenchmark.m; sourceTree = "<group>"; };
 		8457BF0B1A1E81B40033C725 /* RhinoFit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RhinoFit-Prefix.pch"; sourceTree = "<group>"; };
+		845E082A1A3AE9D800BFE627 /* kettlebell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kettlebell.png; sourceTree = "<group>"; };
 		845EDDCA1A1EB82000CA78A2 /* MyBenchmarkHistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyBenchmarkHistoryViewController.h; path = ViewControllers/MyBenchmarks/MyBenchmarkHistoryViewController.h; sourceTree = "<group>"; };
 		845EDDCB1A1EB82000CA78A2 /* MyBenchmarkHistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyBenchmarkHistoryViewController.m; path = ViewControllers/MyBenchmarks/MyBenchmarkHistoryViewController.m; sourceTree = "<group>"; };
 		845EDDCD1A1EB83900CA78A2 /* MyBenchmarkHistoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyBenchmarkHistoryTableViewCell.h; path = ViewControllers/MyBenchmarks/MyBenchmarkHistoryTableViewCell.h; sourceTree = "<group>"; };
@@ -633,6 +635,7 @@
 		8481227B19F0C04800CE53D5 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				845E082A1A3AE9D800BFE627 /* kettlebell.png */,
 				84B642B71A3455C400787EE7 /* avatar.png */,
 				849541EB1A02D79A0097587A /* down_dark0.png */,
 				847BB50019F1696000528DE4 /* icon_menu.png */,
@@ -961,6 +964,7 @@
 				84F2B88E19F0E4210007B929 /* tanButton@2x.png in Resources */,
 				84F2B87E19F0E4210007B929 /* blueButton@2x.png in Resources */,
 				84F2B87C19F0E4210007B929 /* blackButtonHighlight@2x.png in Resources */,
+				845E082B1A3AE9D800BFE627 /* kettlebell.png in Resources */,
 				84F2B87919F0E4210007B929 /* blackButton.png in Resources */,
 				8481227D19F0C04800CE53D5 /* logo.png in Resources */,
 				84F2B88519F0E4210007B929 /* greyButton.png in Resources */,

@@ -269,28 +269,32 @@ static UserInfo* currentUser;
                          [self errorMessage:error];
                      }
                      else {
- //                CoreDataHandler *cdHandler = [[CoreDataHandler alloc] init];
- //                NSDictionary *userInfo = @{
- //                                           @"userFirstName":firstName,
- //                                           @"userLastName":lastName,
- //                                           @"userAddress1":address1,
- //                                           @"userAddress2":address2,
- //                                           @"userCity":city,
- //                                           @"userCountry":country,
- //                                           @"userPhone1":homePhone,
- //                                           @"userPhone2":mobilePhone,
- //                                           @"userState":stateAndProvice,
- //                                           @"userZip":zipAndPostal,
- //                                           @"userEmail":email
- //                                           };
- //                [cdHandler deleteAllDataForEntity:kCoreDataUserInfo sortField:@"userEmail"];
- //                [cdHandler insertNewRecord:kCoreDataUserInfo fields:userInfo];
- //                [self updateuserInfo];
- //                if ( success )
- //                    success(nil);
-                         [self getUserInfo:success failure:failure];
-                         
- //                [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationUpdateProfile object:userInfo];
+                         CoreDataHandler *cdHandler = [[CoreDataHandler alloc] init];
+                         NSString *photo = [response objectForKey:@"photo"];
+                         if ( photo == nil || [photo isEqualToString:@""] || [photo isKindOfClass:[NSNull class]] ) {
+                             photo = [self getUser].userPicture;
+                         }
+                         NSDictionary *userInfo = @{
+                                                    @"userFirstName":firstName,
+                                                    @"userLastName":lastName,
+                                                    @"userAddress1":address1,
+                                                    @"userAddress2":address2,
+                                                    @"userCity":city,
+                                                    @"userCountry":country,
+                                                    @"userPhone1":homePhone,
+                                                    @"userPhone2":mobilePhone,
+                                                    @"userState":stateAndProvice,
+                                                    @"userZip":zipAndPostal,
+                                                    @"userEmail":email,
+                                                    @"userPicture":photo
+                                                    };
+                         [cdHandler deleteAllDataForEntity:kCoreDataUserInfo sortField:@"userEmail"];
+                         [cdHandler insertNewRecord:kCoreDataUserInfo fields:userInfo];
+                         [self updateuserInfo];
+                         if ( success )
+                             success(userInfo);
+                                 
+                         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationUpdateProfile object:userInfo];
                      }
                  }
              }
@@ -761,7 +765,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                          if ( failure )
                              failure(error);
                      }
-                     if ( [response objectForKey:kResponseKeyAttendanceId] ) {
+                     else if ( [response objectForKey:kResponseKeyAttendanceId] ) {
                          NSNumber *attendanceId = [NSNumber numberWithInt:[[response objectForKey:kResponseKeyAttendanceId] intValue]];
                          if ( success )
                              success(attendanceId);
@@ -871,7 +875,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                      else {
                          WodInfo *wodInfo = [[WodInfo alloc] init];
                          wodInfo.name = [response objectForKey:kResponseKeyWodName];
-                         wodInfo.canEdit = ![[response objectForKey:kResponseKeyWodCanEdit] boolValue];
+                         wodInfo.canEdit = [[response objectForKey:kResponseKeyWodCanEdit] boolValue];
                          wodInfo.classId = [response objectForKey:kResponseKeyWodId];
                          wodInfo.results = [response objectForKey:kResponseKeyWodResults];
                          wodInfo.startDate = [self getDateFromRFC3339DateTimeString:[response objectForKey:kResponseKeyWodStart]];
@@ -932,15 +936,6 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                              failure(error);
                      }
                      else {
-//                         WodInfo *wodInfo = [[WodInfo alloc] init];
-//                         wodInfo.name = [response objectForKey:kResponseKeyWodName];
-//                         wodInfo.canEdit = ![[response objectForKey:kResponseKeyWodCanEdit] boolValue];
-//                         wodInfo.classId = [response objectForKey:kResponseKeyWodId];
-//                         wodInfo.results = [response objectForKey:kResponseKeyWodResults];
-//                         wodInfo.startDate = [self getDateFromRFC3339DateTimeString:[response objectForKey:kResponseKeyWodStart]];
-//                         wodInfo.title = [response objectForKey:kResponseKeyWodTitle];
-//                         wodInfo.wod = [response objectForKey:kResponseKeyWodWod];
-//                         wodInfo.wodId = [response objectForKey:kResponseKeyWodWodId];
                          if ( success )
                              success(response);
                      }
@@ -984,18 +979,18 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                          failure(error.localizedDescription);
                  }
                  else {
-                     if ( ![response isKindOfClass:[NSArray class]] && [response objectForKey:@"error"] ){
+                     if ( [response isKindOfClass:[NSDictionary class]] && [response objectForKey:@"error"] ){
                          NSString *error = [response objectForKey:@"error"];
                          if ( failure )
                              failure(error);
                      }
-                     else {
+                     else if ( [response isKindOfClass:[NSArray class]] ){
                          NSMutableArray *result = [[NSMutableArray alloc] init];
                          NSLog(@"%@", response);
                          for ( NSDictionary *dict in response ) {
                              WodInfo *wodInfo = [[WodInfo alloc] init];
                              wodInfo.name = [dict objectForKey:kResponseKeyWodName];
-                             wodInfo.canEdit = ![[dict objectForKey:kResponseKeyWodCanEdit] boolValue];
+                             wodInfo.canEdit = [[dict objectForKey:kResponseKeyWodCanEdit] boolValue];
                              wodInfo.classId = [dict objectForKey:kResponseKeyWodId];
                              wodInfo.results = [dict objectForKey:kResponseKeyWodResults];
                              NSDateFormatter *df = [[NSDateFormatter alloc] init];
@@ -1010,6 +1005,10 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                          if ( success ) {
                              success(result);
                          }
+                     }
+                     else {
+                         if ( failure )
+                             failure(kMessageUnkownError);
                      }
                  }
              }

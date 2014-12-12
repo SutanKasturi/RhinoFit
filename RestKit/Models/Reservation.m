@@ -15,4 +15,8 @@
 //@dynamic title;
 //@dynamic when;
 
+- (NSComparisonResult)compare:(Reservation*)otherObject {
+    return [self.when compare:otherObject.when];
+}
+
 @end

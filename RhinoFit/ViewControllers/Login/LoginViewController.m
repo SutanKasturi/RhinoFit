@@ -77,5 +77,8 @@
     AppDelegate *app = [[UIApplication sharedApplication] delegate];
     app.window.rootViewController = viewController;
 }
+- (IBAction)onOpenBrowser:(id)sender {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:((UIButton*)sender).titleLabel.text]];
+}
 
 @end
