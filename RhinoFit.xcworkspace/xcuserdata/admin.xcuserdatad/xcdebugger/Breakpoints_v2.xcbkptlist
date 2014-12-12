@@ -25,13 +25,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "RhinoFit/ViewControllers/Profile/MyProfileEditContentViewController.m"
-            timestampString = "439816335.788385"
+            filePath = "RestKit/Managers/NetworkManager.m"
+            timestampString = "440067306.843611"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "167"
-            endingLineNumber = "167"
-            landmarkName = "-setImage:"
+            startingLineNumber = "786"
+            endingLineNumber = "786"
+            landmarkName = "-deleteAttendance:success:failure:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -42,12 +42,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RestKit/Managers/NetworkManager.m"
-            timestampString = "439936050.681286"
+            timestampString = "440067503.190457"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "872"
-            endingLineNumber = "872"
-            landmarkName = "-getWodInfo:startDate:success:failure:"
+            startingLineNumber = "970"
+            endingLineNumber = "970"
+            landmarkName = "-getMyWods:endDate:success:failure:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "RestKit/Managers/NetworkManager.m"
+            timestampString = "440067504.409406"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "979"
+            endingLineNumber = "979"
+            landmarkName = "-getMyWods:endDate:success:failure:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
