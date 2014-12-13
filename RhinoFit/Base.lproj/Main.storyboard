@@ -1,11 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="nQV-Ez-iQi">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="ygU-7s-HzQ">
+            <objects>
+                <navigationController navigationBarHidden="YES" id="nQV-Ez-iQi" sceneMemberID="viewController">
+                    <nil key="simulatedTopBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Zi9-Ij-yS4">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="vXZ-lx-hvc" kind="relationship" relationship="rootViewController" id="qFn-hV-60Z"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CJX-rf-U5S" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2142" y="798"/>
+        </scene>
         <!--Login View Controller-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
@@ -291,12 +308,12 @@
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="i8b-Bg-aas" secondAttribute="trailing" id="Bgk-5a-F9D"/>
                             <constraint firstItem="DI2-8z-qlP" firstAttribute="top" secondItem="dMP-Hd-aOu" secondAttribute="bottom" id="EkQ-xb-hbZ"/>
+                            <constraint firstItem="dMP-Hd-aOu" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" constant="20" id="IYo-oS-MUz"/>
                             <constraint firstItem="dMP-Hd-aOu" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="KcV-ad-awA"/>
                             <constraint firstAttribute="trailing" secondItem="dMP-Hd-aOu" secondAttribute="trailing" id="QuV-1z-gmR"/>
                             <constraint firstItem="DI2-8z-qlP" firstAttribute="top" secondItem="i8b-Bg-aas" secondAttribute="bottom" id="WaT-rQ-mqp"/>
                             <constraint firstItem="i8b-Bg-aas" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="g08-Db-ItD"/>
                             <constraint firstItem="i8b-Bg-aas" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="oDc-2w-KJr"/>
-                            <constraint firstItem="dMP-Hd-aOu" firstAttribute="top" secondItem="cLo-G7-XkW" secondAttribute="bottom" id="xqZ-dT-mrV"/>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
@@ -304,14 +321,14 @@
                                 <exclude reference="dMP-Hd-aOu"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="EkQ-xb-hbZ"/>
-                                <exclude reference="WaT-rQ-mqp"/>
                                 <exclude reference="Bgk-5a-F9D"/>
                                 <exclude reference="g08-Db-ItD"/>
                                 <exclude reference="oDc-2w-KJr"/>
+                                <exclude reference="IYo-oS-MUz"/>
                                 <exclude reference="KcV-ad-awA"/>
                                 <exclude reference="QuV-1z-gmR"/>
-                                <exclude reference="xqZ-dT-mrV"/>
+                                <exclude reference="EkQ-xb-hbZ"/>
+                                <exclude reference="WaT-rQ-mqp"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -320,17 +337,18 @@
                                 <include reference="dMP-Hd-aOu"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="EkQ-xb-hbZ"/>
-                                <include reference="WaT-rQ-mqp"/>
                                 <include reference="Bgk-5a-F9D"/>
                                 <include reference="g08-Db-ItD"/>
                                 <include reference="oDc-2w-KJr"/>
+                                <include reference="IYo-oS-MUz"/>
                                 <include reference="KcV-ad-awA"/>
                                 <include reference="QuV-1z-gmR"/>
-                                <include reference="xqZ-dT-mrV"/>
+                                <include reference="EkQ-xb-hbZ"/>
+                                <include reference="WaT-rQ-mqp"/>
                             </mask>
                         </variation>
                     </view>
+                    <navigationItem key="navigationItem" id="zcB-e7-06f"/>
                     <connections>
                         <outlet property="mEmailTextField" destination="Q6n-5E-nQp" id="6hH-YU-sCz"/>
                         <outlet property="mLoginButton" destination="b8A-pt-dwM" id="mMr-HS-IK2"/>

@@ -16,7 +16,9 @@
 //@dynamic when;
 
 - (NSComparisonResult)compare:(Attendance*)otherObject {
-    return [self.when compare:otherObject.when];
+    NSDate *date1 = self.when;
+    NSDate *date2 = otherObject.when;
+    return [date1 compare:date2];
 }
 
 @end

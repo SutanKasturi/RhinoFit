@@ -163,9 +163,10 @@
         self.slidingViewController.topViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MyProfileNavigationController"];
     } else if ([menuItem isEqualToString:kMenuLogout]) {
         [[NetworkManager sharedManager] deleteUser];
-        UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
-        AppDelegate *app = [[UIApplication sharedApplication] delegate];
-        app.window.rootViewController = viewController;
+//        UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+//        AppDelegate *app = [[UIApplication sharedApplication] delegate];
+//        app.window.rootViewController = viewController;
+        [self.navigationController popToRootViewControllerAnimated:YES];
         return;
     }
     

@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RestKit/Managers/NetworkManager.m"
-            timestampString = "440069779.791389"
+            timestampString = "440181524.735887"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "790"
-            endingLineNumber = "790"
+            startingLineNumber = "792"
+            endingLineNumber = "792"
             landmarkName = "-deleteAttendance:success:failure:"
             landmarkType = "5">
          </BreakpointContent>

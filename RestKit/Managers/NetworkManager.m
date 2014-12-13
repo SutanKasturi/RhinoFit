@@ -428,7 +428,8 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
     }
     
     // Convert the RFC 3339 date time string to an NSDate.
-    return [sRFC3339DateFormatter dateFromString:rfc3339DateTimeString];
+    NSDate *date = [sRFC3339DateFormatter dateFromString:rfc3339DateTimeString];
+    return date;
 }
 
 
@@ -491,6 +492,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                              class.isActionReservation = NO;
                              [result addObject:class];
                          }
+                         
                          if ( success ) {
                              success(result);
                          }

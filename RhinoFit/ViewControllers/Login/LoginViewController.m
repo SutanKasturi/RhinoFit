@@ -74,8 +74,9 @@
 - (void) successfullyLoggedIn
 {
     UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
-    AppDelegate *app = [[UIApplication sharedApplication] delegate];
-    app.window.rootViewController = viewController;
+//    AppDelegate *app = [[UIApplication sharedApplication] delegate];
+//    app.window.rootViewController = viewController;
+    [self.navigationController pushViewController:viewController animated:YES];
 }
 - (IBAction)onOpenBrowser:(id)sender {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://my.rhinofit.ca/findrhinofitgym"]];
