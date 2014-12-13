@@ -167,7 +167,7 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="crG-ht-By8"/>
                                         </constraints>
-                                        <state key="normal" title="https://my.rhinofit.ca/findrhinofitgym">
+                                        <state key="normal" title="Find a RhinoFit gym near you">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <variation key="default">
@@ -223,6 +223,9 @@
                                         <exclude reference="Vyv-7D-9LU"/>
                                     </mask>
                                     <mask key="constraints">
+                                        <exclude reference="jH6-aJ-YHJ"/>
+                                        <exclude reference="n2G-Tj-Vbc"/>
+                                        <exclude reference="oK9-kt-boo"/>
                                         <exclude reference="PnZ-2l-XGr"/>
                                         <exclude reference="f4H-Bc-OU9"/>
                                         <exclude reference="vsA-C3-2qi"/>
@@ -243,9 +246,6 @@
                                         <exclude reference="yjp-IX-3ww"/>
                                         <exclude reference="22s-sB-CZv"/>
                                         <exclude reference="xOy-b3-dJX"/>
-                                        <exclude reference="jH6-aJ-YHJ"/>
-                                        <exclude reference="n2G-Tj-Vbc"/>
-                                        <exclude reference="oK9-kt-boo"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
@@ -260,6 +260,9 @@
                                         <include reference="Vyv-7D-9LU"/>
                                     </mask>
                                     <mask key="constraints">
+                                        <include reference="jH6-aJ-YHJ"/>
+                                        <include reference="n2G-Tj-Vbc"/>
+                                        <include reference="oK9-kt-boo"/>
                                         <include reference="PnZ-2l-XGr"/>
                                         <include reference="f4H-Bc-OU9"/>
                                         <include reference="vsA-C3-2qi"/>
@@ -280,9 +283,6 @@
                                         <include reference="yjp-IX-3ww"/>
                                         <include reference="22s-sB-CZv"/>
                                         <include reference="xOy-b3-dJX"/>
-                                        <include reference="jH6-aJ-YHJ"/>
-                                        <include reference="n2G-Tj-Vbc"/>
-                                        <include reference="oK9-kt-boo"/>
                                     </mask>
                                 </variation>
                             </view>
@@ -304,14 +304,14 @@
                                 <exclude reference="dMP-Hd-aOu"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="EkQ-xb-hbZ"/>
+                                <exclude reference="WaT-rQ-mqp"/>
                                 <exclude reference="Bgk-5a-F9D"/>
                                 <exclude reference="g08-Db-ItD"/>
                                 <exclude reference="oDc-2w-KJr"/>
                                 <exclude reference="KcV-ad-awA"/>
                                 <exclude reference="QuV-1z-gmR"/>
                                 <exclude reference="xqZ-dT-mrV"/>
-                                <exclude reference="EkQ-xb-hbZ"/>
-                                <exclude reference="WaT-rQ-mqp"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -320,14 +320,14 @@
                                 <include reference="dMP-Hd-aOu"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="EkQ-xb-hbZ"/>
+                                <include reference="WaT-rQ-mqp"/>
                                 <include reference="Bgk-5a-F9D"/>
                                 <include reference="g08-Db-ItD"/>
                                 <include reference="oDc-2w-KJr"/>
                                 <include reference="KcV-ad-awA"/>
                                 <include reference="QuV-1z-gmR"/>
                                 <include reference="xqZ-dT-mrV"/>
-                                <include reference="EkQ-xb-hbZ"/>
-                                <include reference="WaT-rQ-mqp"/>
                             </mask>
                         </variation>
                     </view>

@@ -906,7 +906,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
           success:(void (^)(id results))success
           failure:(void (^)(NSString *error))failure {
     TrackWodRequest *dataObject = [[TrackWodRequest alloc] init];
-    [dataObject setAction:kRequestGetWodInfo];
+    [dataObject setAction:kRequestTrackWod];
     [dataObject setToken:[self getToken]];
     [dataObject setId:classId];
     [dataObject setStart:startDate];
@@ -989,16 +989,16 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                          NSLog(@"%@", response);
                          for ( NSDictionary *dict in response ) {
                              WodInfo *wodInfo = [[WodInfo alloc] init];
-                             wodInfo.name = [dict objectForKey:kResponseKeyWodName];
+                             wodInfo.name = [dict objectForKey:kResponseKeyWodName] && ![[dict objectForKey:kResponseKeyWodName] isKindOfClass:[NSNull class]] ? [dict objectForKey:kResponseKeyWodName]:@"";
                              wodInfo.canEdit = [[dict objectForKey:kResponseKeyWodCanEdit] boolValue];
                              wodInfo.classId = [dict objectForKey:kResponseKeyWodId];
-                             wodInfo.results = [dict objectForKey:kResponseKeyWodResults];
+                             wodInfo.results = [dict objectForKey:kResponseKeyWodResults] && ![[dict objectForKey:kResponseKeyWodResults] isKindOfClass:[NSNull class]] ? [dict objectForKey:kResponseKeyWodResults]:@"";
                              NSDateFormatter *df = [[NSDateFormatter alloc] init];
                              [df setDateFormat:@"yyyy-MM-dd hh:mm"];
                              wodInfo.startDate = ![[dict objectForKey:kResponseKeyWodStart] isKindOfClass:[NSNull class]]
                                                         ?[df dateFromString:[dict objectForKey:kResponseKeyWodStart]]:nil;
-                             wodInfo.title = [dict objectForKey:kResponseKeyWodTitle];
-                             wodInfo.wod = [dict objectForKey:kResponseKeyWodWod];
+                             wodInfo.title = [dict objectForKey:kResponseKeyWodTitle] && ![[dict objectForKey:kResponseKeyWodTitle] isKindOfClass:[NSNull class]] ? [dict objectForKey:kResponseKeyWodTitle]:@"";
+                             wodInfo.wod = [dict objectForKey:kResponseKeyWodWod] && ![[dict objectForKey:kResponseKeyWodWod] isKindOfClass:[NSNull class]] ? [dict objectForKey:kResponseKeyWodWod]:@"";
                              wodInfo.wodId = [dict objectForKey:kResponseKeyWodWodId];
                              [result addObject:wodInfo];
                          }

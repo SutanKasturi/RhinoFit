@@ -34,7 +34,7 @@
     
     [self setFont: [UIFont systemFontOfSize:17]];
     [self setTintColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
-    [self setBackgroundColor:[UIColor whiteColor]];
+    [self setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:0.1f]];
     
     _cornerRadius = 4.0f;
     _borderColor = [UIColor colorWithWhite:0.7f alpha:1.0f];
