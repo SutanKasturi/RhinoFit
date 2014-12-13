@@ -46,6 +46,7 @@
 }
 
 - (IBAction)onLogIn:(id)sender {
+    [self.view endEditing:YES];
     BOOL isValid = YES;
     if ( ![mEmailTextField validate] )
         isValid = NO;

@@ -139,8 +139,14 @@
                 NSDateFormatter *df = [[NSDateFormatter alloc] init];
                 if ( count > 1 )
                     [df setDateFormat:@"EEE, LLLL d, yyyy"];
-                else
-                    [df setDateFormat:@"LLLL d, yyyy"];
+                else {
+                    if ( self.frame.size.width < 170 ) {
+                        [df setDateFormat:@"LLL d, yyyy"];
+                    }
+                    else {
+                        [df setDateFormat:@"LLLL d, yyyy"];
+                    }
+                }
                 datePicker.date = [df dateFromString:self.text];
             }
             self.inputView = datePicker;
@@ -164,8 +170,14 @@
                 NSDateFormatter *df = [[NSDateFormatter alloc] init];
                 if ( count > 1 )
                     [df setDateFormat:@"EEE, LLLL d, yyyy"];
-                else
-                    [df setDateFormat:@"LLLL d, yyyy"];
+                else {
+                    if ( self.frame.size.width < 170 ) {
+                        [df setDateFormat:@"LLL d, yyyy"];
+                    }
+                    else {
+                        [df setDateFormat:@"LLLL d, yyyy"];
+                    }
+                }
                 datePicker.date = [df dateFromString:self.text];
             }
             self.inputView = datePicker;
@@ -283,7 +295,12 @@
     [df setDateFormat:@"EEEE, LLLL d, yyyy"];
     NSString *dateString = [df stringFromDate:date];
     if ( [self isLengthOverWidth:dateString] ) {
-        [df setDateFormat:@"LLLL d, yyyy"];
+        if ( self.frame.size.width < 170 ) {
+            [df setDateFormat:@"LLL d, yyyy"];
+        }
+        else {
+            [df setDateFormat:@"LLLL d, yyyy"];
+        }
         dateString = [df stringFromDate:date];
     }
     self.text = dateString;
