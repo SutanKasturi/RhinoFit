@@ -13,6 +13,7 @@
 #import "WaitingViewController.h"
 #import "MyWodsTableViewCell.h"
 #import "TrackWodViewController.h"
+#import "ScrollViewController.h"
 
 @interface MyWodsViewController ()<SRMonthPickerDelegate, UIScrollViewDelegate, MyWodsTableViewCellDelegate, TrackWodViewControllerDelegate>
 
@@ -221,10 +222,14 @@ static NSDate *startDate;
 
 #pragma mark - MyWodsTableViewCellDelegate
 - (void)onEditMyWod:(MyWodsTableViewCell *)cell {
+    ScrollViewController *scrollViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"ScrollViewController"];
     TrackWodViewController *trackWodViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"TrackWodViewController"];
     trackWodViewController.mWodInfo = cell.mWodInfo;
-    self.mSelectedIndexPath = [self.tableView indexPathForCell:cell];
-    [self.navigationController pushViewController:trackWodViewController animated:YES];
+    trackWodViewController.delegate = scrollViewController;
+    trackWodViewController.wodDelegate = self;
+    [scrollViewController setContentViewController:trackWodViewController];
+    [self.navigationController pushViewController:scrollViewController animated:YES];
+    [scrollViewController setTitle:@"Track WOD"];
 }
 
 #pragma mark - TrackWodViewControllerDelegate

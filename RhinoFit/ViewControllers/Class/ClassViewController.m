@@ -17,7 +17,7 @@
 #import "ScrollViewController.h"
 #import "TrackWodViewController.h"
 
-@interface ClassViewController ()<DemoTextFieldDelegate, ClassTableViewCellDelegate>
+@interface ClassViewController ()<DemoTextFieldDelegate, ClassTableViewCellDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) METransitions *transitions;
 @property (nonatomic, strong) UIPanGestureRecognizer *dynamicTransitionPanGesture;
@@ -159,6 +159,14 @@
     return cell;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ( [UIScreen mainScreen].bounds.size.width < 350) {
+        return 130;
+    }
+    else
+        return 100;
+}
+
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -173,7 +181,9 @@
     ScrollViewController *scrollViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"ScrollViewController"];
     TrackWodViewController *trackWodViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"TrackWodViewController"];
     trackWodViewController.mClass = rhinofitClass;
+    trackWodViewController.delegate = scrollViewController;
     [scrollViewController setContentViewController:trackWodViewController];
-    [self.navigationController pushViewController:trackWodViewController animated:YES];
+    [self.navigationController pushViewController:scrollViewController animated:YES];
+    [scrollViewController setTitle:@"Track WOD"];
 }
 @end

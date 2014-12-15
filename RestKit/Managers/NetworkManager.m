@@ -63,12 +63,15 @@ static UserInfo* currentUser;
 {
     if ( currentUser )
         return currentUser;
-//    CoreDataHandler *cdHandler = [[CoreDataHandler alloc] init];
-//    NSArray *result = [cdHandler getAllDataForEntity:kCoreDataUserInfo];
-//    for ( UserInfo *user in result ) {
-//        currentUser = user;
-//        return currentUser;
-//    }
+    else {
+        [self getUserInfo:nil failure:nil];
+    }
+    CoreDataHandler *cdHandler = [[CoreDataHandler alloc] init];
+    NSArray *result = [cdHandler getAllDataForEntity:kCoreDataUserInfo];
+    for ( UserInfo *user in result ) {
+        currentUser = user;
+        return currentUser;
+    }
     
     return nil;
 }

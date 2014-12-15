@@ -10,13 +10,13 @@
 
 @interface MyMembership : NSObject
 
-@property (nonatomic, assign) NSNumber *memebershipId;
+@property (nonatomic, strong) NSNumber *memebershipId;
 @property (nonatomic, strong) NSString *membershipName;
 @property (nonatomic, strong) NSDate *startDate;
 @property (nonatomic, strong) NSDate *endDate;
 @property (nonatomic, strong) NSString *renewal;
-@property (nonatomic, assign) NSNumber *attended;
-@property (nonatomic, assign) NSNumber *attendedLimit;
+@property (nonatomic, strong) NSNumber *attended;
+@property (nonatomic, strong) NSNumber *attendedLimit;
 @property (nonatomic, strong) NSString *limit;
 
 @end

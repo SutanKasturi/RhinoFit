@@ -10,7 +10,7 @@
 
 @interface MyBenchmark : NSObject
 
-@property (nonatomic, assign) NSNumber * benchmarkId;
+@property (nonatomic, strong) NSNumber * benchmarkId;
 @property (nonatomic, strong) NSString * title;
 @property (nonatomic, strong) NSString * type;
 @property (nonatomic, strong) NSDate * currentDate;

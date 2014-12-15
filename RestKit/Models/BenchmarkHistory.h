@@ -10,7 +10,7 @@
 
 @interface BenchmarkHistory : NSObject
 
-@property (nonatomic, assign) NSNumber *benchmarkDataId;
+@property (nonatomic, strong) NSNumber *benchmarkDataId;
 @property (nonatomic, strong) NSDate *date;
 @property (nonatomic, strong) NSString *value;
 

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ScrollContentViewController.h"
 
-@interface ScrollViewController : UIViewController
+@interface ScrollViewController : UIViewController<ScrollContentDelegate>
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) ScrollContentViewController *viewController;

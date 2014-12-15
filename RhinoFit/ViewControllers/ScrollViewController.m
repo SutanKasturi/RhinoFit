@@ -9,7 +9,7 @@
 #import "ScrollViewController.h"
 #import "ScrollContentDelegate.h"
 
-@interface ScrollViewController ()<ScrollContentDelegate>
+@interface ScrollViewController ()
 
 @end
 
@@ -17,6 +17,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationItem.backBarButtonItem.title = @"";
     
     if ( self.viewController ) {
         CGRect rect = [UIScreen mainScreen].bounds;

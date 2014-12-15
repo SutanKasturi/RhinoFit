@@ -10,7 +10,7 @@
 
 @interface AvailableBenchmark : NSObject
 
-@property (nonatomic, assign) NSNumber *benchmarkId;
+@property (nonatomic, strong) NSNumber *benchmarkId;
 @property (nonatomic, strong) NSString *bdescription;
 @property (nonatomic, strong) NSString *btype;
 @property (nonatomic, strong) NSString *bformat;

@@ -10,7 +10,7 @@
 
 @interface Reservation : NSObject
 
-@property (nonatomic, assign) NSNumber * reservationId;
+@property (nonatomic, strong) NSNumber * reservationId;
 @property (nonatomic, strong) NSString * title;
 @property (nonatomic, strong) NSDate * when;
 @property (nonatomic, assign) BOOL isActionReservation;
