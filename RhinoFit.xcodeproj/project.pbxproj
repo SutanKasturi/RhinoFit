@@ -20,6 +20,7 @@
 		840C0CEB1A023D7B00E10ABF /* MyMembershipsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 840C0CEA1A023D7B00E10ABF /* MyMembershipsTableViewCell.m */; };
 		840C0CEE1A02410F00E10ABF /* AvailableBenchmarksRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 840C0CED1A02410F00E10ABF /* AvailableBenchmarksRequest.m */; };
 		840C0CF11A024EBD00E10ABF /* AvailableBenchmark.m in Sources */ = {isa = PBXBuildFile; fileRef = 840C0CF01A024EBD00E10ABF /* AvailableBenchmark.m */; };
+		8456F1C91A4913E200F202DA /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8456F1C81A4913E200F202DA /* Default-568h@2x.png */; };
 		845E08CA1A3CA92A00BFE627 /* down_dark0.png in Resources */ = {isa = PBXBuildFile; fileRef = 845E08C31A3CA92A00BFE627 /* down_dark0.png */; };
 		845E08CB1A3CA92A00BFE627 /* icon_calendar.png in Resources */ = {isa = PBXBuildFile; fileRef = 845E08C41A3CA92A00BFE627 /* icon_calendar.png */; };
 		845E08CC1A3CA92A00BFE627 /* icon_menu.png in Resources */ = {isa = PBXBuildFile; fileRef = 845E08C51A3CA92A00BFE627 /* icon_menu.png */; };
@@ -171,6 +172,7 @@
 		840C0CED1A02410F00E10ABF /* AvailableBenchmarksRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AvailableBenchmarksRequest.m; path = RestKit/RequestModels/AvailableBenchmarksRequest.m; sourceTree = SOURCE_ROOT; };
 		840C0CEF1A024EBD00E10ABF /* AvailableBenchmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvailableBenchmark.h; sourceTree = "<group>"; };
 		840C0CF01A024EBD00E10ABF /* AvailableBenchmark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AvailableBenchmark.m; sourceTree = "<group>"; };
+		8456F1C81A4913E200F202DA /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		8457BF0B1A1E81B40033C725 /* RhinoFit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RhinoFit-Prefix.pch"; sourceTree = "<group>"; };
 		845E08C21A3CA92A00BFE627 /* avatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = avatar.png; sourceTree = "<group>"; };
 		845E08C31A3CA92A00BFE627 /* down_dark0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = down_dark0.png; sourceTree = "<group>"; };
@@ -688,6 +690,7 @@
 		849B766C19F099B400680B2D = {
 			isa = PBXGroup;
 			children = (
+				8456F1C81A4913E200F202DA /* Default-568h@2x.png */,
 				845E08D01A3CABD900BFE627 /* avatar.png */,
 				849B767719F099B400680B2D /* RhinoFit */,
 				849B769119F099B400680B2D /* RhinoFitTests */,
@@ -982,6 +985,7 @@
 				84F2B89219F0E4210007B929 /* whiteButton@2x.png in Resources */,
 				84F2B88819F0E4210007B929 /* greyButtonHighlight@2x.png in Resources */,
 				849B768919F099B400680B2D /* LaunchScreen.xib in Resources */,
+				8456F1C91A4913E200F202DA /* Default-568h@2x.png in Resources */,
 				845E08D11A3CABD900BFE627 /* avatar.png in Resources */,
 				849B768619F099B400680B2D /* Images.xcassets in Resources */,
 				84F2B88D19F0E4210007B929 /* tanButton.png in Resources */,
@@ -1241,10 +1245,11 @@
 			baseConfigurationReference = 473B015B68D8152DBB4074F3 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PREFIX_HEADER = "RhinoFit/RhinoFit-Prefix.pch";
 				INFOPLIST_FILE = RhinoFit/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1256,10 +1261,11 @@
 			baseConfigurationReference = 302F204E690C4B1284481685 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PREFIX_HEADER = "RhinoFit/RhinoFit-Prefix.pch";
 				INFOPLIST_FILE = RhinoFit/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;

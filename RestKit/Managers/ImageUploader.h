@@ -3,7 +3,7 @@
 //  2B1S
 //
 //  Created by Admin on 9/28/14.
-//  Copyright (c) 2014 Cui. All rights reserved.
+//  Copyright (c) 2014 Sutan. All rights reserved.
 //
 
 @interface ImageUploader : NSObject {

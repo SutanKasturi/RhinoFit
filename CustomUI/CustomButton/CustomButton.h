@@ -2,8 +2,8 @@
 //  CustomButton.h
 //  2B1S
 //
-//  Created by Cui on 9/11/14.
-//  Copyright (c) 2014 Cui. All rights reserved.
+//  Created by Sutan on 9/11/14.
+//  Copyright (c) 2014 Sutan. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
