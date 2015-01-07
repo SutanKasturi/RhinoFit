@@ -24,7 +24,7 @@ RhinoFit
 - Edit My Profile
 - Track WOD
 - My WODs
-- 
+
 #Fifth Milstone:
 - Update benchmark - when I click on update, there's no way to insert a colon for the time
 - iPhone 5C - "TRACK WOD" is over run with text, see screen shot. Let's put it on a new line under "You have attended this class" so it doesn't interfere. 
