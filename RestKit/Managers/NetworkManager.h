@@ -90,6 +90,7 @@
                         failure:(void (^)(NSString *error))failure;
 
 - (void) getMyBenchmarkData:(NSString*)benchmarkId
+                       type:(NSString*)type
                     success:(void (^)(NSMutableArray*result))success
                     failure:(void (^)(NSString *error))failure;
 

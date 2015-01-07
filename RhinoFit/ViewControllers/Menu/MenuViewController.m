@@ -65,6 +65,8 @@
 - (void) displayUserInfo
 {
     UserInfo *userInfo = [[NetworkManager sharedManager] getUser];
+    if ( userInfo == nil )
+        return;
     self.mUserNameLabel.text = userInfo.userEmail;
     [self.mAvatarImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:userInfo.userPicture]]
                                  placeholderImage:[UIImage imageNamed:@"avatar"]

@@ -27,7 +27,9 @@
     
     self.navigationItem.backBarButtonItem.title = @"";
     self.title = @"Post a Wall Message";
-    
+}
+
+- (void)viewWillAppear:(BOOL)animated {
     if ( postWallMessageContentViewController == nil ) {
         self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64)];
         
@@ -39,8 +41,6 @@
         
         [self.view addSubview:self.scrollView];
     }
-    
-    [self.view layoutIfNeeded];
 }
 
 

@@ -50,7 +50,10 @@
                                              failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
                                              }];
         self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", currentUser.userFirstName, currentUser.userLastName];
-        NSString *address = [NSString stringWithFormat:@"%@\n%@\n%@, %@\n%@\n%@", currentUser.userAddress1, currentUser.userAddress2, currentUser.userCity, currentUser.userState, currentUser.userZip, currentUser.userCountry];
+        NSString *address = [NSString stringWithFormat:@"%@\n%@\n%@", currentUser.userAddress1, currentUser.userAddress2, currentUser.userCity];
+        if ( ![currentUser.userCity isEqualToString:@""] && ![currentUser.userState isEqualToString:@""] )
+            address = [NSString stringWithFormat:@"%@, %@", address, currentUser.userState];
+        address = [NSString stringWithFormat:@"%@\n%@\n%@", address, currentUser.userZip, currentUser.userCountry];
         self.addressLabel.text = address;
         self.phoneLabel.text = [NSString stringWithFormat:@"%@\n%@", currentUser.userPhone1, currentUser.userPhone2];
         self.emailLabel.text = currentUser.userEmail;

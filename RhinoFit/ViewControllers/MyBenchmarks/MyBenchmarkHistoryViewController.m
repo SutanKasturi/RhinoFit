@@ -32,6 +32,7 @@
 - (void)getMyBenchmarkHistory {
     mBenchmarkHistory = [[NSMutableArray alloc] init];
     [[NetworkManager sharedManager] getMyBenchmarkData:[mBenchmark.benchmarkId stringValue]
+                                                  type:mBenchmark.type
                                                success:^(NSMutableArray *result) {
                                                    if ( result == nil || [result count] == 0 ) {
                                                        [waitingViewController showResult:kMessageNoMyBenchmarkHistories];

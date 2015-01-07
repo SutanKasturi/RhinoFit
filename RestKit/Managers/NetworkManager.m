@@ -156,6 +156,17 @@ static UserInfo* currentUser;
              }];
 }
 
+- (BOOL) isNull:(NSDictionary*)dict keyValue:(NSString*)keyValue
+{
+    NSString *value = [dict objectForKey:keyValue];
+    if ( value == nil
+        || [value isKindOfClass:[NSNull class]]
+        || [value isEqualToString:@"null"]
+        || [value isEqualToString:@"(null)"]
+        || [value isEqualToString:@"<null>"])
+        return YES;
+    return NO;
+}
 #pragma mark - Classes
 - (NSArray*) getClasses:(NSDate*)date
 {
@@ -192,18 +203,18 @@ static UserInfo* currentUser;
                      else {
                          CoreDataHandler *cdHandler = [[CoreDataHandler alloc] init];
                          NSDictionary *userInfo = @{
-                                                    @"userFirstName":[response objectForKey:kResponseKeyUserFirstName]?[response objectForKey:kResponseKeyUserFirstName]:@"",
-                                                    @"userLastName":[response objectForKey:kResponseKeyUserLastName]?[response objectForKey:kResponseKeyUserLastName]:@"",
-                                                    @"userAddress1":[response objectForKey:kResponseKeyUserAddress1]?[response objectForKey:kResponseKeyUserAddress1]:@"",
-                                                    @"userAddress2":[response objectForKey:kResponseKeyUserAddress2]?[response objectForKey:kResponseKeyUserAddress2]:@"",
-                                                    @"userCity":[response objectForKey:kResponseKeyUserCity]?[response objectForKey:kResponseKeyUserCity]:@"",
-                                                    @"userCountry":[response objectForKey:kResponseKeyUserCountry]?[response objectForKey:kResponseKeyUserCountry]:@"",
-                                                    @"userPhone1":[response objectForKey:kResponseKeyUserPhone1]?[response objectForKey:kResponseKeyUserPhone1]:@"",
-                                                    @"userPhone2":[response objectForKey:kResponseKeyUserPhone2]?[response objectForKey:kResponseKeyUserPhone2]:@"",
-                                                    @"userState":[response objectForKey:kResponseKeyUserState]?[response objectForKey:kResponseKeyUserState]:@"",
-                                                    @"userZip":[response objectForKey:kResponseKeyUserZip]?[response objectForKey:kResponseKeyUserZip]:@"",
-                                                    @"userEmail":[response objectForKey:kResponseKeyUserName]?[response objectForKey:kResponseKeyUserName]:@"",
-                                                    @"userPicture":[response objectForKey:kResponseKeyUserPicture]?[response objectForKey:kResponseKeyUserPicture]:@""
+                                                    @"userFirstName":![self isNull:response keyValue:kResponseKeyUserFirstName]?[response objectForKey:kResponseKeyUserFirstName]:@"",
+                                                    @"userLastName":![self isNull:response keyValue:kResponseKeyUserLastName]?[response objectForKey:kResponseKeyUserLastName]:@"",
+                                                    @"userAddress1":![self isNull:response keyValue:kResponseKeyUserAddress1]?[response objectForKey:kResponseKeyUserAddress1]:@"",
+                                                    @"userAddress2":![self isNull:response keyValue:kResponseKeyUserAddress2]?[response objectForKey:kResponseKeyUserAddress2]:@"",
+                                                    @"userCity":![self isNull:response keyValue:kResponseKeyUserCity]?[response objectForKey:kResponseKeyUserCity]:@"",
+                                                    @"userCountry":![self isNull:response keyValue:kResponseKeyUserCountry]?[response objectForKey:kResponseKeyUserCountry]:@"",
+                                                    @"userPhone1":![self isNull:response keyValue:kResponseKeyUserPhone1]?[response objectForKey:kResponseKeyUserPhone1]:@"",
+                                                    @"userPhone2":![self isNull:response keyValue:kResponseKeyUserPhone2]?[response objectForKey:kResponseKeyUserPhone2]:@"",
+                                                    @"userState":![self isNull:response keyValue:kResponseKeyUserState]?[response objectForKey:kResponseKeyUserState]:@"",
+                                                    @"userZip":![self isNull:response keyValue:kResponseKeyUserZip]?[response objectForKey:kResponseKeyUserZip]:@"",
+                                                    @"userEmail":![self isNull:response keyValue:kResponseKeyUserName]?[response objectForKey:kResponseKeyUserName]:@"",
+                                                    @"userPicture":![self isNull:response keyValue:kResponseKeyUserPicture]?[response objectForKey:kResponseKeyUserPicture]:@""
                                                     };
                          [cdHandler deleteAllDataForEntity:kCoreDataUserInfo sortField:@"userEmail"];
                          [cdHandler insertNewRecord:kCoreDataUserInfo fields:userInfo];
@@ -1077,6 +1088,15 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                                  benchmark.currentScore = [dict objectForKey:kParamBBestResults];
                                  benchmark.lastDate = [df dateFromString:[dict objectForKey:kParamBLastDate]];
                                  benchmark.lastScore = [dict objectForKey:kParamBLastResults];
+                                 NSRange range = [benchmark.type rangeOfString:@":"];
+                                 if ( range.length > 0 ) {
+                                     range = [benchmark.currentScore rangeOfString:@":"];
+                                     if ( range.length <= 0 )
+                                         benchmark.currentScore = [NSString stringWithFormat:@"%@:00", benchmark.currentScore];
+                                     range = [benchmark.lastScore rangeOfString:@":"];
+                                     if ( range.length <= 0 )
+                                         benchmark.lastScore = [NSString stringWithFormat:@"%@:00", benchmark.lastScore];
+                                 }
                                  [result addObject:benchmark];
                              }
                          }
@@ -1211,6 +1231,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
 }
 
 - (void) getMyBenchmarkData:(NSString*)benchmarkId
+                       type:(NSString*)type
                     success:(void (^)(NSMutableArray*result))success
                     failure:(void (^)(NSString *error))failure
 {
@@ -1250,6 +1271,13 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                                  [history setBenchmarkDataId:[NSNumber numberWithInt:[[dict objectForKey:kParamId] intValue]]];
                                  [history setDate:[df dateFromString:[dict objectForKey:kParamDate]]];
                                  [history setValue:[dict objectForKey:kParamValue]];
+                                 NSRange range = [type rangeOfString:@":"];
+                                 if ( range.length > 0 ) {
+                                     range = [history.value rangeOfString:@":"];
+                                     if ( range.length <= 0 )
+                                         history.value = [NSString stringWithFormat:@"%@:00", history.value];
+                                 }
+
                                  [result addObject:history];
                              }
                              result = [[NSMutableArray alloc] initWithArray:[result sortedArrayUsingSelector:@selector(compare:)]];

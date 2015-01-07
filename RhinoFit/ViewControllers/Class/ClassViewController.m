@@ -160,11 +160,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ( [UIScreen mainScreen].bounds.size.width < 350) {
-        return 130;
-    }
-    else
-        return 100;
+    return [ClassTableViewCell getCellHeight:classes[indexPath.row]];
 }
 
 #pragma mark - UITableViewDelegate
@@ -186,4 +182,11 @@
     [self.navigationController pushViewController:scrollViewController animated:YES];
     [scrollViewController setTitle:@"Track WOD"];
 }
+
+- (void)reloadCell:(ClassTableViewCell *)cell {
+    [self.tableView beginUpdates];
+    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[self.tableView indexPathForCell:cell]] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableView endUpdates];
+}
+
 @end

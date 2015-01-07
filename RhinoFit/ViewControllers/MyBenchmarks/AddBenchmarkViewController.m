@@ -220,10 +220,16 @@
     NSString *dataId = nil;
     if ( self.mBenchmarkHistory )
         dataId = [self.mBenchmarkHistory.benchmarkDataId stringValue];
-    
+
+    NSString *measureText = measurementTextfield.text;
+    NSRange range = [self.measurementLabel.text rangeOfString:@":"];
+    if ( range.length <= 0 ) {
+        measureText = [NSString stringWithFormat:@"%d",[measurementTextfield.text intValue]];
+    }
+
     [[NetworkManager sharedManager] addNewBenchmark:[NSString stringWithFormat:@"%@", selectedBenchmark.benchmarkId]
                                                date:dateTextField.text
-                                              value:[selectedBenchmark.btype isEqualToString:@"minutes:seconds"] == YES ? measurementTextfield.text : [NSString stringWithFormat:@"%d",[measurementTextfield.text intValue]]
+                                              value:measureText
                                              dataId:dataId
                                             success:^(NSNumber *benchmarkDataId) {
                                                 [MBProgressHUD hideAllHUDsForView:self.view.superview animated:YES];
@@ -300,7 +306,8 @@
                      }];
     selectedBenchmark = benchmark;
     benchmarkTextField.text = selectedBenchmark.bdescription;
-    if ( [selectedBenchmark.btype isEqualToString:@"minutes:seconds"] ) {
+    if ( [selectedBenchmark.btype isEqualToString:@"minutes:seconds"] ||
+        [selectedBenchmark.btype isEqualToString:@"min:sec"] ) {
         [measurementTextfield setType:TEXT_FIELD_MINUTEANDSECOND];
         measurementTextfield.pickerView = nil;
         measurementTextfield.text = @"00:00";
