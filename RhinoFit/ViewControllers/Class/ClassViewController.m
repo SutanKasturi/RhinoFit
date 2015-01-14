@@ -128,8 +128,10 @@
                             }
                         }
                         failure:^(NSString *error) {
-                            if ( classes )
+                            if ( classes ) {
                                 [classes removeAllObjects];
+                                [self.tableView reloadData];
+                            }
                             [waitingView setHidden:YES];
                             [waitingViewController showResult:error];
                         }];
@@ -154,6 +156,7 @@
     ClassTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     [cell setClass:classes[indexPath.row]];
+    cell.currentDate = dateTextField.datePicker.date;
     cell.delegate = self;
     
     return cell;

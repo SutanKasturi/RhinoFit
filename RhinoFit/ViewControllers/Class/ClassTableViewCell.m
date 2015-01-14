@@ -106,7 +106,7 @@
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"yyyy-MM-dd"];
     [networkManage makeReservation:theClass.classId
-                   reservationDate:[df stringFromDate:[NSDate new]]
+                   reservationDate:[df stringFromDate:self.currentDate]
                            success:^(NSDictionary *result) {
                                if ( result != nil ) {
                                    theClass.reservationId = [NSNumber numberWithInt:[[result objectForKey:kResponseKeyReservationId] intValue]];
@@ -147,7 +147,7 @@
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"yyyy-MM-dd"];
     [[NetworkManager sharedManager] makeAttendance:theClass.classId
-                   attendanceDate:[df stringFromDate:[NSDate new]]
+                   attendanceDate:[df stringFromDate:self.currentDate]
                           success:^(NSNumber *attendanceId) {
                               if ( attendanceId ) {
                                   theClass.aId = attendanceId;

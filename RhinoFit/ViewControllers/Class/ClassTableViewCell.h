@@ -25,6 +25,8 @@
 
 @property (weak, nonatomic) id<ClassTableViewCellDelegate> delegate;
 
+@property (strong, nonatomic) NSDate *currentDate;
+
 @property (weak, nonatomic) IBOutlet UIButton *reservationButton;
 @property (weak, nonatomic) IBOutlet UIButton *attendanceButton;
 @property (weak, nonatomic) IBOutlet UIButton *trackWodButton;
