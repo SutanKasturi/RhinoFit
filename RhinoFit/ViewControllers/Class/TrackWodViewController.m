@@ -46,7 +46,7 @@
 - (void)viewDidAppear:(BOOL)animated {
     if ( waitingViewController == nil ) {
         waitingViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"WaitingViewController"];
-        waitingViewController.view.frame = self.view.bounds;
+        waitingViewController.view.frame = self.parentViewController.view.bounds;
         [self addChildViewController:waitingViewController];
         [self.view addSubview:waitingViewController.view];
         
