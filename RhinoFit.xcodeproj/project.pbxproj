@@ -552,7 +552,7 @@
 			name = Reservation;
 			sourceTree = "<group>";
 		};
-		847BB50C19F16A3000528DE4 /* Attendace */ = {
+		847BB50C19F16A3000528DE4 /* Attendance */ = {
 			isa = PBXGroup;
 			children = (
 				847BB50D19F16A4600528DE4 /* AttendanceViewController.h */,
@@ -560,7 +560,7 @@
 				847BB56E19F2E37800528DE4 /* AttendanceTableViewCell.h */,
 				847BB56F19F2E37800528DE4 /* AttendanceTableViewCell.m */,
 			);
-			name = Attendace;
+			name = Attendance;
 			sourceTree = "<group>";
 		};
 		847BB51C19F1795900528DE4 /* Managers */ = {
@@ -657,7 +657,7 @@
 				84BD477A1A3156920082E67B /* Wall */,
 				840C0CCD1A01BCAC00E10ABF /* MyBenchmarks */,
 				840C0CCC1A01BC9800E10ABF /* MyMemberships */,
-				847BB50C19F16A3000528DE4 /* Attendace */,
+				847BB50C19F16A3000528DE4 /* Attendance */,
 				847BB50819F16A1900528DE4 /* Reservation */,
 				847BB50419F169EF00528DE4 /* Class */,
 				847BB4DF19F1253200528DE4 /* Menu */,

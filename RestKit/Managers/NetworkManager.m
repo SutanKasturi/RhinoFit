@@ -161,9 +161,10 @@ static UserInfo* currentUser;
     NSString *value = [dict objectForKey:keyValue];
     if ( value == nil
         || [value isKindOfClass:[NSNull class]]
-        || [value isEqualToString:@"null"]
-        || [value isEqualToString:@"(null)"]
-        || [value isEqualToString:@"<null>"])
+//        || [value isEqualToString:@"null"]
+//        || [value isEqualToString:@"(null)"]
+//        || [value isEqualToString:@"<null>"]
+        )
         return YES;
     return NO;
 }
@@ -490,18 +491,18 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                          NSMutableArray *result = [[NSMutableArray alloc] init];
                          for ( NSDictionary *theClass in response ) {
                              RhinoFitClass *class = [[RhinoFitClass alloc] init];
-                             class.startDate = [self getDateFromRFC3339DateTimeString:[theClass objectForKey:kResponseKeyStartDate]];
-                             class.endDate = [self getDateFromRFC3339DateTimeString:[theClass objectForKey:kResponseKeyEndDate]];
-                             class.allDay = [NSNumber numberWithBool:[[theClass objectForKey:kResponseKeyAllDay] boolValue]];
-                             class.title = [theClass objectForKey:kResponseKeyTitle];
-                             class.color = [theClass objectForKey:kResponseKeyColor];
-                             class.origColor = [theClass objectForKey:kResponseKeyOrigColor];
-                             class.reservationId = [NSNumber numberWithInt:[[theClass objectForKey:kResponseKeyReservation] intValue]];
-                             class.instructorId = [NSNumber numberWithInt:[[theClass objectForKey:kResponseKeyInstructorId] intValue]];
-                             class.instructorName = [theClass objectForKey:kResponseKeyInstructorName];
-                             class.classId = [theClass objectForKey:kResponseKeyClassId];
-                             class.aId = [NSNumber numberWithInt:[[theClass objectForKey:kResponseKeyAttendanceId] intValue]];
-                             class.day = [NSNumber numberWithInt:[[theClass objectForKey:kResponseKeyDay] intValue]];
+                             class.startDate = [self isNull:theClass keyValue:kResponseKeyStartDate] ? [NSDate new] : [self getDateFromRFC3339DateTimeString:[theClass objectForKey:kResponseKeyStartDate]];
+                             class.endDate = [self isNull:theClass keyValue:kResponseKeyEndDate] ? [NSDate new] : [self getDateFromRFC3339DateTimeString:[theClass objectForKey:kResponseKeyEndDate]];
+                             class.allDay = [self isNull:theClass keyValue:kResponseKeyAllDay] ? [NSNumber numberWithBool:NO] : [NSNumber numberWithBool:[[theClass objectForKey:kResponseKeyAllDay] boolValue]];
+                             class.title = [self isNull:theClass keyValue:kResponseKeyTitle] ? @"" : [theClass objectForKey:kResponseKeyTitle];
+                             class.color = [self isNull:theClass keyValue:kResponseKeyColor] ? @"" : [theClass objectForKey:kResponseKeyColor];
+                             class.origColor = [self isNull:theClass keyValue:kResponseKeyOrigColor] ? @"" : [theClass objectForKey:kResponseKeyOrigColor];
+                             class.reservationId = [self isNull:theClass keyValue:kResponseKeyReservation] ? [NSNumber numberWithInt:-1] : [NSNumber numberWithInt:[[theClass objectForKey:kResponseKeyReservation] intValue]];
+                             class.instructorId = [self isNull:theClass keyValue:kResponseKeyInstructorId] ? [NSNumber numberWithInt:-1] : [NSNumber numberWithInt:[[theClass objectForKey:kResponseKeyInstructorId] intValue]];
+                             class.instructorName = [self isNull:theClass keyValue:kResponseKeyInstructorName] ? @"" : [theClass objectForKey:kResponseKeyInstructorName];
+                             class.classId = [self isNull:theClass keyValue:kResponseKeyClassId] ? @"" : [theClass objectForKey:kResponseKeyClassId];
+                             class.aId = [self isNull:theClass keyValue:kResponseKeyAttendanceId] ? [NSNumber numberWithInt:-1] : [NSNumber numberWithInt:[[theClass objectForKey:kResponseKeyAttendanceId] intValue]];
+                             class.day = [self isNull:theClass keyValue:kResponseKeyDay] ? [NSNumber numberWithInt:-1] : [NSNumber numberWithInt:[[theClass objectForKey:kResponseKeyDay] intValue]];
                              class.isActionAttendance = NO;
                              class.isActionReservation = NO;
                              [result addObject:class];
@@ -610,13 +611,13 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                              NSMutableArray *result = [[NSMutableArray alloc] init];
                              for ( NSDictionary *dict in response ) {
                                  Reservation *reservation = [[Reservation alloc] init];
-                                 reservation.reservationId = [NSNumber numberWithInt:[[dict objectForKey:kResponseKeyReservationId] intValue]];
-                                 reservation.title = [dict objectForKey:kResponseKeyTitle];
+                                 reservation.reservationId = [self isNull:dict keyValue:kResponseKeyReservationId] ? [NSNumber numberWithInt:-1] :[NSNumber numberWithInt:[[dict objectForKey:kResponseKeyReservationId] intValue]];
+                                 reservation.title = [self isNull:dict keyValue:kResponseKeyTitle] ? @"" : [dict objectForKey:kResponseKeyTitle];
                                  
                                  NSDateFormatter *df = [[NSDateFormatter alloc] init];
                                  [df setDateFormat:@"EEE, d MMM yyyy HH:mm:ss Z"];
 
-                                 reservation.when = [df dateFromString:[dict objectForKey:kResponseKeyReservationWhen]];
+                                 reservation.when = [self isNull:dict keyValue:kResponseKeyReservationWhen] ? [NSDate new] : [df dateFromString:[dict objectForKey:kResponseKeyReservationWhen]];
                                  reservation.isActionReservation = NO;
                                  [result addObject:reservation];
                              }
@@ -725,11 +726,11 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                              NSMutableArray *result = [[NSMutableArray alloc] init];
                              for ( NSDictionary *dict in response ) {
                                  Attendance *attendance = [[Attendance alloc] init];
-                                 attendance.attendanceId = [NSNumber numberWithInt:[[dict objectForKey:kResponseKeyAttendanceId] intValue]];
-                                 attendance.title = [dict objectForKey:kResponseKeyTitle];
+                                 attendance.attendanceId = [self isNull:dict keyValue:kResponseKeyAttendanceId] ? [NSNumber numberWithInt:-1] : [NSNumber numberWithInt:[[dict objectForKey:kResponseKeyAttendanceId] intValue]];
+                                 attendance.title = [self isNull:dict keyValue:kResponseKeyTitle] ? @"" : [dict objectForKey:kResponseKeyTitle];
                                  NSDateFormatter *df = [[NSDateFormatter alloc] init];
                                  [df setDateFormat:@"EEE, d MMM yyyy HH:mm:ss Z"];
-                                 attendance.when = [df dateFromString:[dict objectForKey:kResponseKeyAttendanceWhen]];
+                                 attendance.when = [self isNull:dict keyValue:kResponseKeyAttendanceWhen] ? [NSDate new] : [df dateFromString:[dict objectForKey:kResponseKeyAttendanceWhen]];
                                  attendance.isActionAttendance = NO;
                                  [result addObject:attendance];
                              }
@@ -890,14 +891,14 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                      }
                      else {
                          WodInfo *wodInfo = [[WodInfo alloc] init];
-                         wodInfo.name = [response objectForKey:kResponseKeyWodName];
-                         wodInfo.canEdit = [[response objectForKey:kResponseKeyWodCanEdit] boolValue];
-                         wodInfo.classId = [response objectForKey:kResponseKeyWodId];
-                         wodInfo.results = [response objectForKey:kResponseKeyWodResults];
-                         wodInfo.startDate = [self getDateFromRFC3339DateTimeString:[response objectForKey:kResponseKeyWodStart]];
-                         wodInfo.title = [response objectForKey:kResponseKeyWodTitle];
-                         wodInfo.wod = [response objectForKey:kResponseKeyWodWod];
-                         wodInfo.wodId = [response objectForKey:kResponseKeyWodWodId];
+                         wodInfo.name = [self isNull:response keyValue:kResponseKeyWodName] ? @"" : [response objectForKey:kResponseKeyWodName];
+                         wodInfo.canEdit = [self isNull:response keyValue:kResponseKeyWodCanEdit] ? NO : [[response objectForKey:kResponseKeyWodCanEdit] boolValue];
+                         wodInfo.classId = [self isNull:response keyValue:kResponseKeyWodId] ? @"" : [response objectForKey:kResponseKeyWodId];
+                         wodInfo.results = [self isNull:response keyValue:kResponseKeyWodResults] ? @"" : [response objectForKey:kResponseKeyWodResults];
+                         wodInfo.startDate = [self isNull:response keyValue:kResponseKeyWodStart] ? [NSDate new] : [self getDateFromRFC3339DateTimeString:[response objectForKey:kResponseKeyWodStart]];
+                         wodInfo.title = [self isNull:response keyValue:kResponseKeyWodTitle] ? @"" : [response objectForKey:kResponseKeyWodTitle];
+                         wodInfo.wod = [self isNull:response keyValue:kResponseKeyWodWod] ? @"" : [response objectForKey:kResponseKeyWodWod];
+                         wodInfo.wodId = [self isNull:response keyValue:kResponseKeyWodId] ? @"" : [response objectForKey:kResponseKeyWodWodId];
                          if ( success )
                              success(wodInfo);
                      }
@@ -1008,17 +1009,14 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                          [df setDateFormat:@"yyyy-MM-dd HH:mm"];
                          for ( NSDictionary *dict in response ) {
                              WodInfo *wodInfo = [[WodInfo alloc] init];
-                             wodInfo.name = [dict objectForKey:kResponseKeyWodName] && ![[dict objectForKey:kResponseKeyWodName] isKindOfClass:[NSNull class]] ? [dict objectForKey:kResponseKeyWodName]:@"";
-                             wodInfo.canEdit = [[dict objectForKey:kResponseKeyWodCanEdit] boolValue];
-                             wodInfo.classId = [dict objectForKey:kResponseKeyWodId];
-                             wodInfo.results = [dict objectForKey:kResponseKeyWodResults] && ![[dict objectForKey:kResponseKeyWodResults] isKindOfClass:[NSNull class]] ? [dict objectForKey:kResponseKeyWodResults]:@"";
-                             
-                             if ( ![[dict objectForKey:kResponseKeyWodStart] isKindOfClass:[NSNull class]] ) {
-                                 wodInfo.startDate = [df dateFromString:[dict objectForKey:kResponseKeyWodStart]];
-                             }
-                             wodInfo.title = [dict objectForKey:kResponseKeyWodTitle] && ![[dict objectForKey:kResponseKeyWodTitle] isKindOfClass:[NSNull class]] ? [dict objectForKey:kResponseKeyWodTitle]:@"";
-                             wodInfo.wod = [dict objectForKey:kResponseKeyWodWod] && ![[dict objectForKey:kResponseKeyWodWod] isKindOfClass:[NSNull class]] ? [dict objectForKey:kResponseKeyWodWod]:@"";
-                             wodInfo.wodId = [dict objectForKey:kResponseKeyWodWodId];
+                             wodInfo.name = [self isNull:dict keyValue:kResponseKeyWodName] ? @"" : [dict objectForKey:kResponseKeyWodName];
+                             wodInfo.canEdit = [self isNull:dict keyValue:kResponseKeyWodCanEdit] ? NO : [[dict objectForKey:kResponseKeyWodCanEdit] boolValue];
+                             wodInfo.classId = [self isNull:dict keyValue:kResponseKeyWodId] ? @"" : [dict objectForKey:kResponseKeyWodId];
+                             wodInfo.results = [self isNull:dict keyValue:kResponseKeyWodResults] ? @"" : [dict objectForKey:kResponseKeyWodResults];
+                             wodInfo.startDate = [self isNull:dict keyValue:kResponseKeyWodStart] ? [NSDate new] : [df dateFromString:[dict objectForKey:kResponseKeyWodStart]];
+                             wodInfo.title = [self isNull:dict keyValue:kResponseKeyWodTitle] ? @"" : [dict objectForKey:kResponseKeyWodTitle];
+                             wodInfo.wod = [self isNull:dict keyValue:kResponseKeyWodWod] ? @"" : [dict objectForKey:kResponseKeyWodWod];
+                             wodInfo.wodId = [self isNull:dict keyValue:kResponseKeyWodId] ? @"" : [dict objectForKey:kResponseKeyWodWodId];
                              [result addObject:wodInfo];
                          }
                          if ( success ) {
@@ -1210,10 +1208,10 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                          for ( NSDictionary *dict in response ) {
                              NSLog(@"%@", dict);
                              AvailableBenchmark *availableBenchmark = [[AvailableBenchmark alloc] init];
-                             availableBenchmark.benchmarkId = [NSNumber numberWithInt:[[dict objectForKey:kParamBId] intValue]];
-                             availableBenchmark.bdescription = [dict objectForKey:kParamBDesc];
-                             availableBenchmark.btype = [dict objectForKey:kParamBType];
-                             availableBenchmark.bformat = [dict objectForKey:kParamBFormat];
+                             availableBenchmark.benchmarkId = [self isNull:dict keyValue:kParamBId] ? [NSNumber numberWithInt:-1] : [NSNumber numberWithInt:[[dict objectForKey:kParamBId] intValue]];
+                             availableBenchmark.bdescription = [self isNull:dict keyValue:kParamBId] ? @"" : [dict objectForKey:kParamBDesc];
+                             availableBenchmark.btype = [self isNull:dict keyValue:kParamBId] ? @"" : [dict objectForKey:kParamBType];
+                             availableBenchmark.bformat = [self isNull:dict keyValue:kParamBId] ? @"" : [dict objectForKey:kParamBFormat];
                              [result addObject:availableBenchmark];
                          }
                          if ( success )
@@ -1271,9 +1269,9 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                              [df setDateFormat:@"yyyy-MM-dd"];
                              for ( NSDictionary *dict in response ) {
                                  BenchmarkHistory *history = [[BenchmarkHistory alloc] init];
-                                 [history setBenchmarkDataId:[NSNumber numberWithInt:[[dict objectForKey:kParamId] intValue]]];
-                                 [history setDate:[df dateFromString:[dict objectForKey:kParamDate]]];
-                                 [history setValue:[dict objectForKey:kParamValue]];
+                                 [history setBenchmarkDataId:[self isNull:dict keyValue:kParamId] ? [NSNumber numberWithInt:-1] : [NSNumber numberWithInt:[[dict objectForKey:kParamId] intValue]]];
+                                 [history setDate:[self isNull:dict keyValue:kParamDate] ? [NSDate new] : [df dateFromString:[dict objectForKey:kParamDate]]];
+                                 [history setValue:[self isNull:dict keyValue:kParamValue] ? @"" : [dict objectForKey:kParamValue]];
                                  NSRange range = [type rangeOfString:@":"];
                                  if ( range.length > 0 ) {
                                      range = [history.value rangeOfString:@":"];
@@ -1387,16 +1385,16 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                              for ( NSDictionary *dict in response ) {
                                  NSLog(@"%@", dict);
                                  MyMembership *membership = [[MyMembership alloc] init];
-                                 membership.memebershipId = [NSNumber numberWithInt:[[dict objectForKey:kParamMId] intValue]];
-                                 membership.membershipName = [dict objectForKey:kParamMName];
+                                 membership.memebershipId = [self isNull:dict keyValue:kParamMId] ? [NSNumber numberWithInt:-1] : [NSNumber numberWithInt:[[dict objectForKey:kParamMId] intValue]];
+                                 membership.membershipName = [self isNull:dict keyValue:kParamMName] ? @"" : [dict objectForKey:kParamMName];
                                  NSDateFormatter *df = [[NSDateFormatter alloc] init];
                                  [df setDateFormat:@"yyyy-MM-dd"];
-                                 membership.startDate = [df dateFromString:[dict objectForKey:kParamMStartDate]];
-                                 membership.endDate = [df dateFromString:[dict objectForKey:kParamMEndDate]];
-                                 membership.renewal = [dict objectForKey:kParamMRenewal];
-                                 membership.attended = [NSNumber numberWithInt:[[dict objectForKey:kParamMAttended] intValue]];
-                                 membership.attendedLimit = [NSNumber numberWithInt:[[dict objectForKey:kParamMAttendedLimit] intValue]];
-                                 membership.limit = [dict objectForKey:kParamMLimit];
+                                 membership.startDate = [self isNull:dict keyValue:kParamMStartDate] ? [NSDate new] : [df dateFromString:[dict objectForKey:kParamMStartDate]];
+                                 membership.endDate = [self isNull:dict keyValue:kParamMEndDate] ? [NSDate new] : [df dateFromString:[dict objectForKey:kParamMEndDate]];
+                                 membership.renewal = [self isNull:dict keyValue:kParamMRenewal] ? @"" : [dict objectForKey:kParamMRenewal];
+                                 membership.attended = [self isNull:dict keyValue:kParamMAttended] ? [NSNumber numberWithInt:-1] : [NSNumber numberWithInt:[[dict objectForKey:kParamMAttended] intValue]];
+                                 membership.attendedLimit = [self isNull:dict keyValue:kParamMAttendedLimit] ? [NSNumber numberWithInt:-1] : [NSNumber numberWithInt:[[dict objectForKey:kParamMAttendedLimit] intValue]];
+                                 membership.limit = [self isNull:dict keyValue:kParamMLimit] ? @"" : [dict objectForKey:kParamMLimit];
                                  [result addObject:membership];
                              }
                              success(result);
@@ -1449,12 +1447,12 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                              NSMutableArray *result = [[NSMutableArray alloc] init];
                              for ( NSDictionary *dict in response ) {
                                  Wall *wall = [[Wall alloc] init];
-                                 wall.wallId = [NSNumber numberWithInt:[[dict objectForKey:kResponseKeyWallId] intValue]];
-                                 wall.msg = [dict objectForKey:kResponseKeyWallMessage]?[dict objectForKey:kResponseKeyWallMessage]:@"";
-                                 wall.name = [dict objectForKey:kResponseKeyWallUserName]?[dict objectForKey:kResponseKeyWallUserName]:@"";
-                                 wall.profilePic = [dict objectForKey:kResponseKeyWallUserPicture]?[dict objectForKey:kResponseKeyWallUserPicture]:@"";
-                                 wall.yours = [[dict objectForKey:kResponseKeyWallYours] boolValue];
-                                 wall.pic = ![[dict objectForKey:kResponseKeyWallPic] isKindOfClass:[NSNull class]]?[dict objectForKey:kResponseKeyWallPic]:@"";
+                                 wall.wallId = [self isNull:dict keyValue:kResponseKeyWallId] ? [NSNumber numberWithInt:-1] : [NSNumber numberWithInt:[[dict objectForKey:kResponseKeyWallId] intValue]];
+                                 wall.msg = [self isNull:dict keyValue:kResponseKeyWallMessage] ? @"" : [dict objectForKey:kResponseKeyWallMessage];
+                                 wall.name = [self isNull:dict keyValue:kResponseKeyWallUserName] ? @"" : [dict objectForKey:kResponseKeyWallUserName];
+                                 wall.profilePic = [self isNull:dict keyValue:kResponseKeyWallUserPicture] ? @"" : [dict objectForKey:kResponseKeyWallUserPicture];
+                                 wall.yours = [self isNull:dict keyValue:kResponseKeyWallYours] ? NO : [[dict objectForKey:kResponseKeyWallYours] boolValue];
+                                 wall.pic = [self isNull:dict keyValue:kResponseKeyWallPic] ? @"" : [dict objectForKey:kResponseKeyWallPic];
                                  [result addObject:wall];
                              }
                              success (result);
