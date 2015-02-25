@@ -27,7 +27,6 @@
 		845E08CD1A3CA92A00BFE627 /* icon_menu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 845E08C61A3CA92A00BFE627 /* icon_menu@2x.png */; };
 		845E08CE1A3CA92A00BFE627 /* kettlebell.png in Resources */ = {isa = PBXBuildFile; fileRef = 845E08C71A3CA92A00BFE627 /* kettlebell.png */; };
 		845E08CF1A3CA92A00BFE627 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 845E08C81A3CA92A00BFE627 /* logo.png */; };
-		845E08D11A3CABD900BFE627 /* avatar.png in Resources */ = {isa = PBXBuildFile; fileRef = 845E08D01A3CABD900BFE627 /* avatar.png */; };
 		845EDDCC1A1EB82000CA78A2 /* MyBenchmarkHistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 845EDDCB1A1EB82000CA78A2 /* MyBenchmarkHistoryViewController.m */; };
 		845EDDCF1A1EB83900CA78A2 /* MyBenchmarkHistoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 845EDDCE1A1EB83900CA78A2 /* MyBenchmarkHistoryTableViewCell.m */; };
 		845EDDD21A1EBBD800CA78A2 /* BenchmarkHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 845EDDD11A1EBBD800CA78A2 /* BenchmarkHistory.m */; };
@@ -181,7 +180,6 @@
 		845E08C61A3CA92A00BFE627 /* icon_menu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_menu@2x.png"; sourceTree = "<group>"; };
 		845E08C71A3CA92A00BFE627 /* kettlebell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kettlebell.png; sourceTree = "<group>"; };
 		845E08C81A3CA92A00BFE627 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
-		845E08D01A3CABD900BFE627 /* avatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = avatar.png; path = Resources/Images/avatar.png; sourceTree = "<group>"; };
 		845EDDCA1A1EB82000CA78A2 /* MyBenchmarkHistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyBenchmarkHistoryViewController.h; path = ViewControllers/MyBenchmarks/MyBenchmarkHistoryViewController.h; sourceTree = "<group>"; };
 		845EDDCB1A1EB82000CA78A2 /* MyBenchmarkHistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyBenchmarkHistoryViewController.m; path = ViewControllers/MyBenchmarks/MyBenchmarkHistoryViewController.m; sourceTree = "<group>"; };
 		845EDDCD1A1EB83900CA78A2 /* MyBenchmarkHistoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyBenchmarkHistoryTableViewCell.h; path = ViewControllers/MyBenchmarks/MyBenchmarkHistoryTableViewCell.h; sourceTree = "<group>"; };
@@ -691,7 +689,6 @@
 			isa = PBXGroup;
 			children = (
 				8456F1C81A4913E200F202DA /* Default-568h@2x.png */,
-				845E08D01A3CABD900BFE627 /* avatar.png */,
 				849B767719F099B400680B2D /* RhinoFit */,
 				849B769119F099B400680B2D /* RhinoFitTests */,
 				849B767619F099B400680B2D /* Products */,
@@ -986,7 +983,6 @@
 				84F2B88819F0E4210007B929 /* greyButtonHighlight@2x.png in Resources */,
 				849B768919F099B400680B2D /* LaunchScreen.xib in Resources */,
 				8456F1C91A4913E200F202DA /* Default-568h@2x.png in Resources */,
-				845E08D11A3CABD900BFE627 /* avatar.png in Resources */,
 				849B768619F099B400680B2D /* Images.xcassets in Resources */,
 				84F2B88D19F0E4210007B929 /* tanButton.png in Resources */,
 			);

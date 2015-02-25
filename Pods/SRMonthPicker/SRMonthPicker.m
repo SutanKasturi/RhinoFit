@@ -25,7 +25,7 @@
 #define MONTH_ROW_MULTIPLIER 340
 #define DEFAULT_MINIMUM_YEAR 1
 #define DEFAULT_MAXIMUM_YEAR 99999
-#define DATE_COMPONENT_FLAGS NSMonthCalendarUnit | NSYearCalendarUnit
+#define DATE_COMPONENT_FLAGS NSCalendarUnitMonth | NSCalendarUnitYear
 
 @interface SRMonthPicker()
 

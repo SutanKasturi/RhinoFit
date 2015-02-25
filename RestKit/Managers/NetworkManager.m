@@ -161,9 +161,7 @@ static UserInfo* currentUser;
     NSString *value = [dict objectForKey:keyValue];
     if ( value == nil
         || [value isKindOfClass:[NSNull class]]
-//        || [value isEqualToString:@"null"]
-//        || [value isEqualToString:@"(null)"]
-//        || [value isEqualToString:@"<null>"]
+        || ([value isKindOfClass:[NSString class]] && ([value isEqualToString:@"null"] || [value isEqualToString:@"(null)"] || [value isEqualToString:@"<null>"]))
         )
         return YES;
     return NO;

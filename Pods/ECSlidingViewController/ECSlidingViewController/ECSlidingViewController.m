@@ -86,6 +86,14 @@
     return self;
 }
 
+- (CGAffineTransform) targetTransform {
+    return self.targetTransform;
+}
+
+- (UIView *)viewForKey:(NSString *)key {
+    return nil;
+}
+
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
