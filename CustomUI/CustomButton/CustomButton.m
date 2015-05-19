@@ -12,9 +12,13 @@
 
 - (id)initWithFrame:(CGRect)frame
 {
-    self = [super initWithFrame:frame];
-    if (self) {
-//        [self draw];
+//    self = [super initWithFrame:frame];
+//    if (self) {
+////        [self draw];
+//    }
+//    return self;
+    if ( self = [super initWithFrame:frame] ) {
+        NSLog(@"CustomButton");
     }
     return self;
 }
