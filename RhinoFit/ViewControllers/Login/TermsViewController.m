@@ -35,20 +35,6 @@
                           } failed:^(RKObjectRequestOperation *operation, NSError *error) {
                               [MBProgressHUD hideHUDForView:self.view animated:YES];
                           }];
-//    [networkManage sendEmailLogin:mEmailTextField.text
-//                         password:mPasswordTextField.text
-//                          success:^(BOOL isLoggedIn, BOOL isValidUser) {
-//                              [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
-//                              if ( isLoggedIn == YES ) {
-//                                  if (isValidUser) {
-//                                      [self successfullyLoggedIn];
-//                                  } else {
-//                                      [self showTermsView];
-//                                  }
-//                              }
-//                          } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//                              [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
-//                          }];
     
 }
 
