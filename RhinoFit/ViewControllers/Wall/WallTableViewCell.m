@@ -28,6 +28,14 @@
 - (void)awakeFromNib {
     // Initialization code
 }
+- (IBAction)onFlagButtonClicked:(id)sender {
+//    NSLog(@"Flag Button clicked");
+    [self.buttonDelegate onFlagClicked:self.indexPath];
+}
+- (IBAction)onDeleteButtonClicked:(id)sender {
+//    NSLog(@"Delete Button clicked");
+    [self.buttonDelegate onDeleteClicked:self.indexPath];
+}
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

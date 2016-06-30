@@ -58,25 +58,25 @@
     
     CALayer *layer = [self layer];
     [layer setMasksToBounds:YES];
-    [layer setCornerRadius:_cornerRadius];
+    [layer setCornerRadius:4];
     if ( _backgroundColor == nil ) {
         [layer setBackgroundColor:[[UIColor whiteColor] CGColor]];
     } else {
         [layer setBackgroundColor:[_backgroundColor CGColor]];
     }
     
-    if ( _borderWidth < 0 ) {
-        [layer setBorderWidth:3.0f];
-    }
-    else {
-        [layer setBorderWidth:_borderWidth];
-    }
+//    if ( _borderWidth < 0 ) {
+//        [layer setBorderWidth:3.0f];
+//    }
+//    else {
+//        [layer setBorderWidth:_borderWidth];
+//    }
     
-    if ( _borderColor == nil ) {
-        [layer setBorderColor:[[UIColor whiteColor] CGColor]];
-    } else {
-        [layer setBorderColor:[_borderColor CGColor]];
-    }
+//    if ( _borderColor == nil ) {
+//        [layer setBorderColor:[[UIColor whiteColor] CGColor]];
+//    } else {
+//        [layer setBorderColor:[_borderColor CGColor]];
+//    }
 }
 
 @end

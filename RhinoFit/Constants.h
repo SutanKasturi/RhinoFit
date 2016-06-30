@@ -27,6 +27,8 @@ extern NSString *const kMenuMyWods;
 
 // Request
 extern NSString *const kRequestLogin;
+extern NSString *const kRequestEula;
+extern NSString *const kAcceptEula;
 extern NSString *const kRequestGetClassess;
 //extern NSString *const kRequestGetUserInfo;
 extern NSString *const kRequestMakeReservation;
@@ -50,6 +52,7 @@ extern NSString *const kRequestTrackWod;
 extern NSString *const kRequestGetMyWods;
 extern NSString *const kRequestGetCountries;
 extern NSString *const kRequestGetStates;
+extern NSString *const kRequestDeletePost;
 
 // Messages
 extern NSString *const kMessageInvalidLogin;
@@ -82,6 +85,7 @@ extern NSString *const kButtonCancelAttendance;
 // Globals
 extern NSString *const kRhinoFitUserToken;
 extern NSString *const kRhinoFitUserEmail;
+extern NSString *const kIsFirstUser;
 
 // Request Params
 extern NSString *const kParamAction;

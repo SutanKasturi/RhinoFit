@@ -13,10 +13,14 @@
 #import "RequestFail.h"
 
 #import "LoginRequest.h"
+#import "GetEulaRequest.h"
+#import "AcceptEulaRequest.h"
 #import "UserInfoRequest.h"
 #import "UpdateUserInfoRequest.h"
 #import "GetCountriesRequest.h"
 #import "GetStatesRequest.h"
+#import "DeletePostRequest.h"
+#import "ReportPost.h"
 
 #import "ClassesRequest.h"
 #import "RhinoFitClass.h"
@@ -111,9 +115,15 @@ static UserInfo* currentUser;
     return @"";
 }
 
+- (BOOL) checkValidUser {
+    NSUserDefaults *sharedInstance = [NSUserDefaults standardUserDefaults];
+    BOOL isValid = [sharedInstance boolForKey:kIsFirstUser];
+    return isValid;
+}
+
 - (void)sendEmailLogin:(NSString *)email
               password:(NSString *)password
-               success:(void (^)(BOOL isLoggedIn))success
+               success:(void (^)(BOOL isLoggedIn, BOOL isValidUser))success
                failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure
 {
     LoginRequest *dataObject = [LoginRequest new];
@@ -127,10 +137,11 @@ static UserInfo* currentUser;
              success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                  NSError *error;
                  NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
+                 NSLog(@"Login API %@", response);
                  if ( error ) {
                      [self errorMessage:error.localizedDescription];
                      if ( success )
-                         success(NO);
+                         success(NO, NO);
                  }
                  else {
                      if ( [response objectForKey:@"token"] ){
@@ -138,14 +149,22 @@ static UserInfo* currentUser;
                          NSUserDefaults *sharedInstance = [NSUserDefaults standardUserDefaults];
                          [sharedInstance setObject:token forKey:kParamToken];
                          [sharedInstance setObject:email forKey:kRhinoFitUserEmail];
-                         if ( success )
-                             success(YES);
+                         if ([[response objectForKey:@"valideula"] integerValue] == 0) {
+                             [sharedInstance setBool:NO forKey:kIsFirstUser];
+                             if (success) {
+                                 success(YES, NO);
+                             }
+                         } else {
+                             [sharedInstance setBool:YES forKey:kIsFirstUser];
+                             if ( success )
+                                 success(YES, YES);
+                         }
                      }
                      else {
                          NSString *error = [response objectForKey:@"error"];
                          [self errorMessage:error];
                          if ( success )
-                             success(NO);
+                             success(NO, NO);
                      }
                  }             }
              failure:^(RKObjectRequestOperation *operation, NSError *error) {
@@ -154,6 +173,130 @@ static UserInfo* currentUser;
                  if ( failure )
                      failure(operation, error);
              }];
+}
+
+- (void) getCurrentEula:(NSString *)token
+                success:(void (^)(NSString *eulaContent))success
+                 failed:(void (^)(RKObjectRequestOperation *, NSError *))failed {
+    GetEulaRequest *dataObject = [GetEulaRequest new];
+    [dataObject setAction:kRequestEula];
+    [dataObject setToken:token];
+    
+    [self postObject:dataObject
+                path:@"api.php"
+          parameters:nil
+             success:^(RKObjectRequestOperation *operation,RKMappingResult *mappingResult) {
+                 NSError *error;
+                 NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
+                 NSLog(@"Get Eula API %@", response);
+                 if (error) {
+                     [self errorMessage:error.localizedDescription];
+                     if (success) {
+                         success(@"");
+                     }
+                 } else {
+//                     if ([[response objectForKey:@"success"] isEqualToString:@"1"]) {
+//                         NSString *versionId = [response objectForKey:@"versionid"];
+//                         NSString *eulaContent = [response objectForKey:@""];
+//                     }
+                 }
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        
+    }];
+}
+
+- (void) deleteWallPost:(NSNumber *)wallId
+                success:(void (^)(BOOL ))success
+                failure:(void (^)(NSString *))failure {
+    
+    DeletePostRequest *dataObject = [DeletePostRequest new];
+    [dataObject setAction:kRequestDeletePost];
+    [dataObject setToken:[self getToken]];
+    [dataObject setWallId:wallId];
+    
+    [self postObject:dataObject
+                path:@"api.php"
+          parameters:nil
+             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                 NSError *error;
+                 NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
+                 NSLog(@"Delete Wall Post API %@", response);
+                 if (error) {
+                     [self errorMessage:error.localizedDescription];
+                     if (success) {
+//                         success();
+                     }
+                 } else {
+//                     if ([[response objectForKey:@"success"] isEqualToString:@"1"]) {
+//                         NSString *versionId = [response objectForKey:@"versionid"];
+//                         NSString *eulaContent = [response objectForKey:@""];
+//                     }
+                 }
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        
+    }];
+}
+
+- (void) reportWallPost:(NSNumber *)wallId
+                success:(void (^)(BOOL))success
+                failure:(void (^)(NSString *))failure {
+    ReportPost *dataObject = [ReportPost new];
+    [dataObject setAction:kRequestDeletePost];
+    [dataObject setToken:[self getToken]];
+    [dataObject setWallId:wallId];
+    
+    [self postObject:dataObject
+                path:@"api.php"
+          parameters:nil
+             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                 NSError *error;
+                 NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
+                 NSLog(@"Report Wall Post API %@", response);
+                 if (error) {
+                     [self errorMessage:error.localizedDescription];
+                     if (success) {
+//                         success();
+                     }
+                 } else {
+//                     if ([[response objectForKey:@"success"] isEqualToString:@"1"]) {
+//                         NSString *versionId = [response objectForKey:@"versionid"];
+//                         NSString *eulaContent = [response objectForKey:@""];
+//                     }
+                 }
+             } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                 
+             }];
+}
+
+- (void) acceptEula:(NSString *)versionId
+            success:(void (^)(BOOL isSuccess))success
+             failed:(void (^)(RKObjectRequestOperation *, NSError *))failure {
+    AcceptEulaRequest *dataObject = [AcceptEulaRequest new];
+    [dataObject setAction:kAcceptEula];
+    [dataObject setToken:[self getToken]];
+    [dataObject setVersionId:versionId];
+    
+    [self postObject:dataObject
+                path:@"api.php"
+          parameters:nil
+             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                 NSError *error;
+                 NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
+                 NSLog(@"Accept Eula %@", response);
+                 if (error) {
+                     [self errorMessage:error.localizedDescription];
+                     if (success) {
+                         success(@"");
+                     }
+                 } else {
+//                     if ([[response objectForKey:@"success"] isEqualToString:@"1"]) {
+//                         NSString *versionId = [response objectForKey:@"versionid"];
+//                         NSString *eulaContent = [response objectForKey:@""];
+//                     }
+                 }
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        
+    }];
 }
 
 - (BOOL) isNull:(NSDictionary*)dict keyValue:(NSString*)keyValue
@@ -174,6 +317,14 @@ static UserInfo* currentUser;
 }
 
 #pragma mark - User Info
+
+//- (void) getUserInfoEula:(void (^)(id))success
+//                 failure:(void (^)(NSString *))failure {
+//    UserInfoRequest *dataObject = [UserInfoRequest new];
+//    [dataObject setAction:kRequestGetUserInfoE];
+//    [dataObject setToken:[self getToken]];
+//    
+//}
 - (void) getUserInfo:(void (^)(id result))success
              failure:(void (^)(NSString *error))failure
 {
@@ -187,6 +338,7 @@ static UserInfo* currentUser;
              success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                  NSError *error;
                  NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
+                 NSLog(@"User Info : %@", response);
                  if ( error ) {
                      if ( failure )
                          failure(error.localizedDescription);

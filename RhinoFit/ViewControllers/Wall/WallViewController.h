@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "CustomButton.h"
+#import "RoundedButton.h"
 
 @interface WallViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet CustomButton *addWallPostButton;
+@property (weak, nonatomic) IBOutlet RoundedButton *addWallPostButton;
 
 @end

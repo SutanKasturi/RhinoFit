@@ -10,6 +10,7 @@
 
 // App Url
 NSString *const kAppBaseUrl = @"https://my.rhinofit.ca/";
+//NSString *const kAppBaseUrl = @"https://test20.rhinofit.ca";
 
 // Menu Items
 NSString *const kMenuClasses = @"My Classes";
@@ -24,6 +25,8 @@ NSString *const kMenuMyWods = @"My WODS";
 
 // Request
 NSString *const kRequestLogin = @"login";
+NSString *const kRequestEula = @"getcurrenteula";
+NSString *const kAcceptEula = @"accepteula";
 NSString *const kRequestGetClassess = @"getclasses";
 //NSString *const kRequestGetUserInfo = @"getuserinfo";
 NSString *const kRequestMakeReservation = @"makereservation";
@@ -47,6 +50,7 @@ NSString *const kRequestTrackWod = @"trackwod";
 NSString *const kRequestGetMyWods = @"getmywods";
 NSString *const kRequestGetCountries = @"getcountries";
 NSString *const kRequestGetStates = @"getstates";
+NSString *const kRequestDeletePost = @"deletepost";
 
 // Messages
 NSString* const kMessageInvalidLogin = @"Invalid Login";
@@ -79,6 +83,7 @@ NSString *const kButtonCancelAttendance = @"Cancel Attendance";
 // Globals
 NSString *const kRhinoFitUserToken = @"com.travis.rhinofit.token";
 NSString *const kRhinoFitUserEmail = @"com.travis.rhinofit.email";
+NSString *const kIsFirstUser = @"isFirstUser";
 
 // Request Params
 NSString *const kParamAction = @"action";

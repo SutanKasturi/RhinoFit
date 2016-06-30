@@ -30,7 +30,7 @@
     [self.scrollView addSubview:myProfileContentViewController.view];
     [self.view addSubview:self.scrollView];
     
-    [self.updateMyProfileButton setButtonType:CustomButtonBlue];
+//    [self.updateMyProfileButton setButtonType:CustomButtonBlue];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -21,19 +21,23 @@
 @implementation LoginViewController
 
 @synthesize mEmailTextField;
-@synthesize mPasswordTextField;
-@synthesize mLoginButton;
+@synthesize mPasswordTextField;@synthesize mLoginButton;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    [mLoginButton setButtonType:CustomButtonGrey];
     [mEmailTextField setType:TEXT_FIELD_EMAIL];
     
     NSString *token = [[NetworkManager sharedManager] getToken];
-    if ( token != nil && ![token isEqualToString:@""] )
-        [self successfullyLoggedIn];
+    if ( token != nil && ![token isEqualToString:@""] ) {
+        if ([[NetworkManager sharedManager] checkValidUser]) {
+            [self successfullyLoggedIn];
+        } else {
+            [self showTermsView];
+//            [self successfullyLoggedIn];
+        }
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -61,10 +65,15 @@
         NetworkManager *networkManage = [NetworkManager sharedManager];
         [networkManage sendEmailLogin:mEmailTextField.text
                              password:mPasswordTextField.text
-                              success:^(BOOL isLoggedIn) {
+                              success:^(BOOL isLoggedIn, BOOL isValidUser) {
                                   [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
                                   if ( isLoggedIn == YES ) {
-                                      [self successfullyLoggedIn];
+                                      if (isValidUser) {
+                                          [self successfullyLoggedIn];
+                                      } else {
+                                          [self showTermsView];
+//                                          [self successfullyLoggedIn];
+                                      }
                                   }
                               } failure:^(RKObjectRequestOperation *operation, NSError *error) {
                                   [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
@@ -79,6 +88,12 @@
 //    app.window.rootViewController = viewController;
     [self.navigationController pushViewController:viewController animated:YES];
 }
+
+- (void) showTermsView {
+    UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"TermsViewController"];
+    [self.navigationController presentViewController:viewController animated:YES completion:nil];
+}
+
 - (IBAction)onOpenBrowser:(id)sender {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://my.rhinofit.ca/findrhinofitgym"]];
 }

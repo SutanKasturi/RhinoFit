@@ -29,7 +29,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self.trackWodButton setButtonType:CustomButtonGrey];
+//    [self.trackWodButton setButtonType:CustomButtonGrey];
     self.nameLabel.text = @"";
     self.timeLabel.text = @"";
     self.dateLabel.text = @"";

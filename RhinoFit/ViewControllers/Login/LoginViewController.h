@@ -9,13 +9,13 @@
 #import <UIKit/UIKit.h>
 
 @class DemoTextField;
-@class CustomButton;
+@class RoundedButton;
 
 @interface LoginViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet DemoTextField *mEmailTextField;
 @property (weak, nonatomic) IBOutlet DemoTextField *mPasswordTextField;
-@property (weak, nonatomic) IBOutlet CustomButton *mLoginButton;
+@property (weak, nonatomic) IBOutlet RoundedButton *mLoginButton;
 @property (weak, nonatomic) IBOutlet UILabel *rhinofitLabel;
 
 @end

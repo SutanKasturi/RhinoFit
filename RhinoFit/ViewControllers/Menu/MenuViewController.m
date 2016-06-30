@@ -45,6 +45,9 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(displayUserInfo) name:kNotificationUpdateProfile object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMyWods) name:kNotificationMyWods object:nil];
+    
+    [self.tableView setDataSource:self];
+    [self.tableView setDelegate:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -67,16 +70,16 @@
     UserInfo *userInfo = [[NetworkManager sharedManager] getUser];
     if ( userInfo == nil )
         return;
-    self.mUserNameLabel.text = userInfo.userEmail;
-    [self.mAvatarImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:userInfo.userPicture]]
-                                 placeholderImage:[UIImage imageNamed:@"avatar"]
-                                          success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                              if ( image )
-                                                  self.mAvatarImageView.image = image;
-                                          }
-                                          failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                                              
-                                          }];
+//    self.mUserNameLabel.text = userInfo.userEmail;
+//    [self.mAvatarImageView setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:userInfo.userPicture]]
+//                                 placeholderImage:[UIImage imageNamed:@"avatar"]
+//                                          success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+//                                              if ( image )
+//                                                  self.mAvatarImageView.image = image;
+//                                          }
+//                                          failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+//                                              
+//                                          }];
 }
 
 - (void) onMyWods {
@@ -165,10 +168,10 @@
         self.slidingViewController.topViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MyProfileNavigationController"];
     } else if ([menuItem isEqualToString:kMenuLogout]) {
         [[NetworkManager sharedManager] deleteUser];
-//        UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
-//        AppDelegate *app = [[UIApplication sharedApplication] delegate];
-//        app.window.rootViewController = viewController;
-        [self.navigationController popToRootViewControllerAnimated:YES];
+        UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+        AppDelegate *app = [[UIApplication sharedApplication] delegate];
+        app.window.rootViewController = viewController;
+//        [self.navigationController popToRootViewControllerAnimated:YES];
         return;
     }
     

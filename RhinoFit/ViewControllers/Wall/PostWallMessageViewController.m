@@ -23,7 +23,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    [self.postThisMessageButton setButtonType:CustomButtonBlue];
+//    [self.postThisMessageButton setButtonType:CustomButtonBlue];
     
     self.navigationItem.backBarButtonItem.title = @"";
     self.title = @"Post a Wall Message";

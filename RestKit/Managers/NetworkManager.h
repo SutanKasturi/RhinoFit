@@ -16,6 +16,7 @@
 - (UserInfo*) getUser;
 - (void) deleteUser;
 - (NSString*) getToken;
+- (BOOL) checkValidUser;
 
 // Classes
 - (NSArray*) getClasses:(NSDate*)date;
@@ -24,8 +25,17 @@
 // Login
 - (void) sendEmailLogin:(NSString*) email
                password:(NSString*) password
-                success:(void (^)(BOOL isLoggedIn))success
+                success:(void (^)(BOOL isLoggedIn, BOOL isValidUser))success
                 failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
+
+// Eula
+- (void) getCurrentEula:(NSString*) token
+                success:(void (^)(NSString *eulaContent))success
+                 failed:(void (^)(RKObjectRequestOperation *operation, NSError *error))failed;
+
+- (void) acceptEula: (NSString *)versionId
+            success:(void (^)(BOOL isSuccess)) success
+             failed:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
 
 // Classes
 - (void) getClassess:(NSString*)startDate
@@ -113,7 +123,12 @@
              message:(NSString*)message
              success:(void (^)(NSNumber*wallId))success
              failure:(void (^)(NSString *error))failure;
-
+- (void) deleteWallPost:(NSNumber*)wallId
+                success:(void (^)( BOOL isSuccess ))success
+                failure:(void (^)(NSString *error))failure;
+- (void) reportWallPost:(NSNumber*) wallId
+                success:(void (^)( BOOL isSuccess ))success
+                failure:(void (^)(NSString *error))failure;
 // User Info
 - (void) getUserInfo:(void (^)(id result))success
              failure:(void (^)(NSString *error))failure;

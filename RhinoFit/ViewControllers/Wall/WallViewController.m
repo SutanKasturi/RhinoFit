@@ -14,7 +14,7 @@
 #import "TakePhoto.h"
 #import "PostWallMessageViewController.h"
 
-@interface WallViewController ()<UITableViewDataSource, UITableViewDelegate>
+@interface WallViewController ()<UITableViewDataSource, UITableViewDelegate, WallTableCellButtonDelegate>
 
 @property (nonatomic, strong) WaitingViewController *waitingViewController;
 @property (nonatomic, strong) NSMutableArray *mWallPostArray;
@@ -55,7 +55,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    [self.addWallPostButton setButtonType:CustomButtonBlue];
+//    [self.addWallPostButton setButtonType:CustomButtonBlue];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -116,7 +116,8 @@
     }
 
     WallTableViewCell *cell = (WallTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
-    
+    cell.indexPath = indexPath;
+    cell.buttonDelegate = self;
     [cell setupWallInfo:wall];
     
     return cell;
@@ -146,6 +147,66 @@
     }
     
     return defaultSize.height + requiredHeight.size.height;
+}
+
+- (void) onFlagClicked:(NSIndexPath *)indexPath {
+    NSLog(@"Flag Button clicked");
+    Wall *wall = mWallPostArray[indexPath.row - 1];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Confirm" message:@"Are you sure want to report this user for inappropriate content?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *flagAction = [UIAlertAction actionWithTitle:@"YES" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        NetworkManager *networkManage = [NetworkManager sharedManager];
+        [networkManage deleteWallPost:wall.wallId
+                              success:^(BOOL isSuccess) {
+                                  
+                              } failure:^(NSString *error) {
+                                  
+                              }];
+    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"NO" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }];
+    [alert addAction:flagAction];
+    [alert addAction:cancelAction];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void) onDeleteClicked:(NSIndexPath *)indexPath {
+    Wall *wall = mWallPostArray[indexPath.row - 1];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Confirm" message:@"Are you sure want to Delete this post?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"YES" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        NSLog(@"Delete Button clicked %ld", (long)indexPath.row);
+        NetworkManager *networkManage = [NetworkManager sharedManager];
+        [networkManage deleteWallPost:wall.wallId
+                              success:^(BOOL isSuccess) {
+            
+        } failure:^(NSString *error) {
+            
+        }];
+//        [networkManage sendEmailLogin:mEmailTextField.text
+//                             password:mPasswordTextField.text
+//                              success:^(BOOL isLoggedIn, BOOL isValidUser) {
+//                                  [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
+//                                  if ( isLoggedIn == YES ) {
+//                                      if (isValidUser) {
+//                                          [self successfullyLoggedIn];
+//                                      } else {
+//                                          //                                          [self showTermsView];
+//                                          [self successfullyLoggedIn];
+//                                      }
+//                                  }
+//                              } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+//                                  [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
+//                              }];
+    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"NO" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }];
+    [alert addAction:deleteAction];
+    [alert addAction:cancelAction];
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void) scrollToBottom {

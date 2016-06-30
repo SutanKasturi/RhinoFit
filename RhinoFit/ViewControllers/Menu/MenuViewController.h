@@ -10,8 +10,8 @@
 
 @interface MenuViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UIImageView *mAvatarImageView;
-@property (weak, nonatomic) IBOutlet UILabel *mUserNameLabel;
+//@property (weak, nonatomic) IBOutlet UIImageView *mAvatarImageView;
+//@property (weak, nonatomic) IBOutlet UILabel *mUserNameLabel;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
