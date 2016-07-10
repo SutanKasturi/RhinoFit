@@ -14,6 +14,8 @@
 
 #import "LoginRequest.h"
 #import "UserInfoRequest.h"
+#import "GetEulaRequest.h"
+#import "AcceptEulaRequest.h"
 #import "UpdateUserInfoRequest.h"
 #import "GetCountriesRequest.h"
 #import "GetStatesRequest.h"
@@ -38,6 +40,8 @@
 #import "DeleteBenchmarkData.h"
 #import "GetWallPostsRequest.h"
 #import "AddWallPostRequest.h"
+#import "DeletePostRequest.h"
+#import "ReportPost.h"
 
 static AKObjectManager *sharedManager = nil;
 
@@ -129,13 +133,25 @@ static AKObjectManager *sharedManager = nil;
     
     [self addRequestDescriptor:loginRequestDescriptors];
     
+    // Get CurrentEula Request
+    RKRequestDescriptor *eulaRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[GetEulaRequest getEulaRequestMapping]
+                                                                                            objectClass:[GetEulaRequest class]
+                                                                                            rootKeyPath:nil
+                                                                                                 method:RKRequestMethodPOST];
+    [self addRequestDescriptor:eulaRequestDescriptors];
+    
+    // Accept CurrentEula Request
+    RKRequestDescriptor *acceptEulaRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[AcceptEulaRequest getAcceptEulaRequestMapping]
+                                                                                        objectClass:[AcceptEulaRequest class]
+                                                                                        rootKeyPath:nil
+                                                                                             method:RKRequestMethodPOST];
+    [self addRequestDescriptor:acceptEulaRequestDescriptors];
+    
     // UserInfoRequest
     RKRequestDescriptor *userInfoRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[UserInfoRequest getUserInfoRequestMapping]
                                                                                                     objectClass:[UserInfoRequest class]
                                                                                                     rootKeyPath:nil
                                                                                                          method:RKRequestMethodPOST];
-    
-    
     [self addRequestDescriptor:userInfoRequestDescriptors];
     
     RKRequestDescriptor *updateUserInfoRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[UpdateUserInfoRequest updateUserInfoRequestMapping]
@@ -313,6 +329,22 @@ static AKObjectManager *sharedManager = nil;
     
     
     [self addRequestDescriptor:addWallPostRequestDescriptors];
+    
+    RKRequestDescriptor *deleteWallPostRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[DeletePostRequest deleteWallPostsRequestMapping]
+                                                                                               objectClass:[DeletePostRequest class]
+                                                                                               rootKeyPath:nil
+                                                                                                    method:RKRequestMethodPOST];
+    
+    
+    [self addRequestDescriptor:deleteWallPostRequestDescriptors];
+    
+    RKRequestDescriptor *reportWallPostRequestDescriptors = [RKRequestDescriptor requestDescriptorWithMapping:[ReportPost reportWallPostRequestMapping]
+                                                                                                  objectClass:[ReportPost class]
+                                                                                                  rootKeyPath:nil
+                                                                                                       method:RKRequestMethodPOST];
+    
+    
+    [self addRequestDescriptor:reportWallPostRequestDescriptors];
 }
 
 - (void) setupResponseDescriptors {

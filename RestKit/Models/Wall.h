@@ -17,5 +17,6 @@
 @property (nonatomic, strong) UIImage *picImage;
 @property (nonatomic, strong) NSString *pic;
 @property (nonatomic, assign) BOOL yours;
+@property (nonatomic, assign) BOOL flaggable;
 
 @end

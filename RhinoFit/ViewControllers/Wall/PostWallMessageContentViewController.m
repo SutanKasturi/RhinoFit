@@ -69,6 +69,8 @@
                                                      message:self.messageTextView.text
                                                      success:^(NSNumber*wallId) {
                                                          [MBProgressHUD hideHUDForView:self.parentViewController.view.superview animated:YES];
+                                                         [[NSNotificationCenter defaultCenter] postNotificationName:@"AddWalls" object:self];
+                                                         [MBProgressHUD hideHUDForView:self.parentViewController.view.superview animated:YES];
                                                          [self.navigationController popViewControllerAnimated:YES];
 //                                                         Wall *wall = [[Wall alloc] init];
 //                                                         wall.wallId = wallId;
@@ -82,6 +84,7 @@
 //                                                         wall.pic =
                                                      }
                                                      failure:^(NSString *error) {
+                                                         [[NSNotificationCenter defaultCenter] postNotificationName:@"AddWalls" object:self];
                                                          [MBProgressHUD hideHUDForView:self.parentViewController.view.superview animated:YES];
                                                      }];
     }

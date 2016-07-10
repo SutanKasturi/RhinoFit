@@ -226,7 +226,7 @@
     if ( range.length <= 0 ) {
         measureText = [NSString stringWithFormat:@"%d",[measurementTextfield.text intValue]];
     }
-
+    
     [[NetworkManager sharedManager] addNewBenchmark:[NSString stringWithFormat:@"%@", selectedBenchmark.benchmarkId]
                                                date:dateTextField.text
                                               value:measureText
@@ -240,6 +240,7 @@
                                                         self.mBenchmarkHistory.date = dateTextField.datePicker.date;
                                                         self.mBenchmarkHistory.value = measurementTextfield.text;
                                                     }
+                                                    
                                                     [self.delegate didAddedBenchmark:newBenchmark];
                                                     [self.navigationController popViewControllerAnimated:YES];
                                                 }

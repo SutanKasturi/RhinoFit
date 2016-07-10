@@ -774,7 +774,7 @@
 				TargetAttributes = {
 					849B767419F099B400680B2D = {
 						CreatedOnToolsVersion = 6.0.1;
-						DevelopmentTeam = 98UCNHCPGU;
+						DevelopmentTeam = WX5R49E5T2;
 					};
 				};
 			};
@@ -1045,15 +1045,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: DongMei Gao (UVY9CC44H2)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: DongMei Gao (WX5R49E5T2)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: DongMei Gao (WX5R49E5T2)";
 				GCC_PREFIX_HEADER = "RhinoFit/RhinoFit-Prefix.pch";
 				INFOPLIST_FILE = RhinoFit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rhinofit.RhinoFit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "f6a4423d-b581-4675-9d7f-7c1024ee2237";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -1064,15 +1064,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: DongMei Gao (UVY9CC44H2)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: DongMei Gao (WX5R49E5T2)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: DongMei Gao (WX5R49E5T2)";
 				GCC_PREFIX_HEADER = "RhinoFit/RhinoFit-Prefix.pch";
 				INFOPLIST_FILE = RhinoFit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rhinofit.RhinoFit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "f6a4423d-b581-4675-9d7f-7c1024ee2237";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

@@ -12,7 +12,7 @@
 + (RKObjectMapping*) getAcceptEulaRequestMapping
 {
     RKObjectMapping *mapping = [RKObjectMapping requestMapping];
-    [mapping addAttributeMappingsFromArray:@[@"action", @"token", @"versionId"]];
+    [mapping addAttributeMappingsFromArray:@[@"action", @"token", @"versionid"]];
     return mapping;
 }
 @end

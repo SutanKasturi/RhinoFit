@@ -166,7 +166,8 @@ static UserInfo* currentUser;
                          if ( success )
                              success(NO, NO);
                      }
-                 }             }
+                 }
+             }
              failure:^(RKObjectRequestOperation *operation, NSError *error) {
                  NSLog(@"Error : %@", error.description);
                  [self errorMessage:error.localizedDescription];
@@ -177,7 +178,8 @@ static UserInfo* currentUser;
 
 - (void) getCurrentEula:(NSString *)token
                 success:(void (^)(NSString *eulaContent))success
-                 failed:(void (^)(RKObjectRequestOperation *, NSError *))failed {
+                 failed:(void (^)(NSError *error))failed {
+    
     GetEulaRequest *dataObject = [GetEulaRequest new];
     [dataObject setAction:kRequestEula];
     [dataObject setToken:token];
@@ -195,13 +197,21 @@ static UserInfo* currentUser;
                          success(@"");
                      }
                  } else {
-//                     if ([[response objectForKey:@"success"] isEqualToString:@"1"]) {
-//                         NSString *versionId = [response objectForKey:@"versionid"];
-//                         NSString *eulaContent = [response objectForKey:@""];
-//                     }
+                     if ([[response objectForKey:@"success"] integerValue] == 1) {
+                         NSString *versionId = [response objectForKey:@"versionid"];
+                         NSString *eulaContent = [response objectForKey:@"html"];
+                         NSUserDefaults *sharedInstance = [NSUserDefaults standardUserDefaults];
+                         [sharedInstance setObject:versionId forKey:kParamEulaVersionId];
+                         if (success) {
+                             success(eulaContent);
+                         }
+                     }
                  }
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        
+        NSLog(@"Error : %@", error.description);
+        [self errorMessage:error.localizedDescription];
+        if ( failed )
+            failed(error);
     }];
 }
 
@@ -212,7 +222,7 @@ static UserInfo* currentUser;
     DeletePostRequest *dataObject = [DeletePostRequest new];
     [dataObject setAction:kRequestDeletePost];
     [dataObject setToken:[self getToken]];
-    [dataObject setWallId:wallId];
+    [dataObject setWallid:wallId];
     
     [self postObject:dataObject
                 path:@"api.php"
@@ -224,13 +234,12 @@ static UserInfo* currentUser;
                  if (error) {
                      [self errorMessage:error.localizedDescription];
                      if (success) {
-//                         success();
+                         success(NO);
                      }
                  } else {
-//                     if ([[response objectForKey:@"success"] isEqualToString:@"1"]) {
-//                         NSString *versionId = [response objectForKey:@"versionid"];
-//                         NSString *eulaContent = [response objectForKey:@""];
-//                     }
+                     if (success) {
+                         success(YES);
+                     }
                  }
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         
@@ -241,9 +250,9 @@ static UserInfo* currentUser;
                 success:(void (^)(BOOL))success
                 failure:(void (^)(NSString *))failure {
     ReportPost *dataObject = [ReportPost new];
-    [dataObject setAction:kRequestDeletePost];
+    [dataObject setAction:kRequestReportPost];
     [dataObject setToken:[self getToken]];
-    [dataObject setWallId:wallId];
+    [dataObject setWallid:wallId];
     
     [self postObject:dataObject
                 path:@"api.php"
@@ -255,13 +264,12 @@ static UserInfo* currentUser;
                  if (error) {
                      [self errorMessage:error.localizedDescription];
                      if (success) {
-//                         success();
+                         success(NO);
                      }
                  } else {
-//                     if ([[response objectForKey:@"success"] isEqualToString:@"1"]) {
-//                         NSString *versionId = [response objectForKey:@"versionid"];
-//                         NSString *eulaContent = [response objectForKey:@""];
-//                     }
+                     if (success) {
+                         success(YES);
+                     }
                  }
              } failure:^(RKObjectRequestOperation *operation, NSError *error) {
                  
@@ -270,11 +278,11 @@ static UserInfo* currentUser;
 
 - (void) acceptEula:(NSString *)versionId
             success:(void (^)(BOOL isSuccess))success
-             failed:(void (^)(RKObjectRequestOperation *, NSError *))failure {
+             failed:(void (^)(NSError *))failed {
     AcceptEulaRequest *dataObject = [AcceptEulaRequest new];
     [dataObject setAction:kAcceptEula];
     [dataObject setToken:[self getToken]];
-    [dataObject setVersionId:versionId];
+    [dataObject setVersionid:versionId];
     
     [self postObject:dataObject
                 path:@"api.php"
@@ -286,16 +294,20 @@ static UserInfo* currentUser;
                  if (error) {
                      [self errorMessage:error.localizedDescription];
                      if (success) {
-                         success(@"");
+                         success(NO);
                      }
                  } else {
-//                     if ([[response objectForKey:@"success"] isEqualToString:@"1"]) {
-//                         NSString *versionId = [response objectForKey:@"versionid"];
-//                         NSString *eulaContent = [response objectForKey:@""];
-//                     }
+                     NSUserDefaults *sharedInstance = [NSUserDefaults standardUserDefaults];
+                     [sharedInstance setBool:YES forKey:kIsFirstUser];
+                     if (success) {
+                         success(YES);
+                     }
                  }
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        
+        NSLog(@"Error : %@", error.description);
+        [self errorMessage:error.localizedDescription];
+        if ( failed )
+            failed(error);
     }];
 }
 
@@ -436,7 +448,7 @@ static UserInfo* currentUser;
                      else {
                          CoreDataHandler *cdHandler = [[CoreDataHandler alloc] init];
                          NSString *photo = [response objectForKey:@"photo"];
-                         if ( photo == nil || [photo isEqualToString:@""] || [photo isKindOfClass:[NSNull class]] ) {
+                         if ( [photo isEqual:[NSNull null]] || photo == nil || [photo isEqualToString:@""] || [photo isKindOfClass:[NSNull class]] ) {
                              photo = [self getUser].userPicture;
                          }
                          NSDictionary *userInfo = @{
@@ -1582,6 +1594,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                  }
                  NSError *error;
                  NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.HTTPRequestOperation.responseData options:0 error:&error];
+                 NSLog(@"Get Wall Post API %@", response);
                  if ( error || response == nil ) {
                      if ( failure )
                          failure (error.localizedDescription);
@@ -1602,6 +1615,7 @@ static NSDateFormatter *sUserVisibleDateFormatter = nil;
                                  wall.name = [self isNull:dict keyValue:kResponseKeyWallUserName] ? @"" : [dict objectForKey:kResponseKeyWallUserName];
                                  wall.profilePic = [self isNull:dict keyValue:kResponseKeyWallUserPicture] ? @"" : [dict objectForKey:kResponseKeyWallUserPicture];
                                  wall.yours = [self isNull:dict keyValue:kResponseKeyWallYours] ? NO : [[dict objectForKey:kResponseKeyWallYours] boolValue];
+                                 wall.flaggable = [self isNull:dict keyValue:kResponseKeyWallFlaggable] ? NO : [[dict objectForKey:kResponseKeyWallFlaggable] boolValue];
                                  wall.pic = [self isNull:dict keyValue:kResponseKeyWallPic] ? @"" : [dict objectForKey:kResponseKeyWallPic];
                                  [result addObject:wall];
                              }

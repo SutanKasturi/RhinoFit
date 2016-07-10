@@ -56,6 +56,12 @@
     // Do any additional setup after loading the view.
     
 //    [self.addWallPostButton setButtonType:CustomButtonBlue];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshWalls:) name:@"AddWalls" object:nil];
+}
+
+- (void)refreshWalls:(NSNotification *) notification    {
+    [self getWallPosts];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -118,6 +124,11 @@
     WallTableViewCell *cell = (WallTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     cell.indexPath = indexPath;
     cell.buttonDelegate = self;
+    if (!wall.flaggable) {
+        [cell.btnFlag setHidden:YES];
+    } else {
+        [cell.btnFlag setHidden:NO];
+    }
     [cell setupWallInfo:wall];
     
     return cell;
@@ -156,8 +167,11 @@
     UIAlertAction *flagAction = [UIAlertAction actionWithTitle:@"YES" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         
         NetworkManager *networkManage = [NetworkManager sharedManager];
-        [networkManage deleteWallPost:wall.wallId
+        [networkManage reportWallPost:wall.wallId
                               success:^(BOOL isSuccess) {
+                                  if (isSuccess) {
+                                      [self getWallPosts];
+                                  }
                                   
                               } failure:^(NSString *error) {
                                   
@@ -180,25 +194,13 @@
         NetworkManager *networkManage = [NetworkManager sharedManager];
         [networkManage deleteWallPost:wall.wallId
                               success:^(BOOL isSuccess) {
+                                  if (isSuccess) {
+                                      [self getWallPosts];
+                                  }
             
         } failure:^(NSString *error) {
             
         }];
-//        [networkManage sendEmailLogin:mEmailTextField.text
-//                             password:mPasswordTextField.text
-//                              success:^(BOOL isLoggedIn, BOOL isValidUser) {
-//                                  [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
-//                                  if ( isLoggedIn == YES ) {
-//                                      if (isValidUser) {
-//                                          [self successfullyLoggedIn];
-//                                      } else {
-//                                          //                                          [self showTermsView];
-//                                          [self successfullyLoggedIn];
-//                                      }
-//                                  }
-//                              } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-//                                  [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
-//                              }];
     }];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"NO" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [alert dismissViewControllerAnimated:YES completion:nil];

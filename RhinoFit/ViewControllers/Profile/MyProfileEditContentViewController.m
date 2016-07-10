@@ -97,12 +97,12 @@
 #pragma mark - Button Actions
 
 - (IBAction)onUpdatePicture:(id)sender {
-//    if ( takePhoto == nil ) {
-//        takePhoto = [[TakePhoto alloc] init:self];
-//        takePhoto.actiondelegate = self;
-//        [self addChildViewController:takePhoto];
-//    }
-//    [takePhoto takePhoto];
+    if ( takePhoto == nil ) {
+        takePhoto = [[TakePhoto alloc] init:self];
+        takePhoto.actiondelegate = self;
+        [self addChildViewController:takePhoto];
+    }
+    [takePhoto takePhoto];
 }
 
 - (IBAction)onSave:(id)sender {
@@ -141,7 +141,7 @@
     hud.labelText = NSLocalizedString(@"Updating...", nil);
     hud.dimBackground = YES;
     
-    [[NetworkManager sharedManager] updateUserInfo:nil//self.mImage
+    [[NetworkManager sharedManager] updateUserInfo:self.mImage
                                          firstName:self.firstNameTextField.text
                                           lastName:self.lastNameTextField.text
                                           address1:self.address1TextField.text

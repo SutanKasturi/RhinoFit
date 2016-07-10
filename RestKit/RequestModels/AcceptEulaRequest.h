@@ -7,12 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <RestKit/RestKit.h>
 
 @interface AcceptEulaRequest : NSObject
 
 @property (nonatomic, strong) NSString *action;
 @property (nonatomic, strong) NSString *token;
-@property (nonatomic, strong) NSString *versionId;
+@property (nonatomic, strong) NSString *versionid;
 
 + (RKObjectMapping*) getAcceptEulaRequestMapping;
 

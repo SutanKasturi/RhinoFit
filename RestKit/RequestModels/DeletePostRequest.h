@@ -7,12 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <RestKit/RestKit.h>
 
 @interface DeletePostRequest : NSObject
 
 @property (nonatomic, strong) NSString *action;
 @property (nonatomic, strong) NSString *token;
-@property (nonatomic, strong) NSNumber *wallId;
+@property (nonatomic, strong) NSNumber *wallid;
 
 + (RKObjectMapping*) deleteWallPostsRequestMapping;
 

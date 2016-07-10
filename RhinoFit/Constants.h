@@ -53,6 +53,7 @@ extern NSString *const kRequestGetMyWods;
 extern NSString *const kRequestGetCountries;
 extern NSString *const kRequestGetStates;
 extern NSString *const kRequestDeletePost;
+extern NSString *const kRequestReportPost;
 
 // Messages
 extern NSString *const kMessageInvalidLogin;
@@ -98,6 +99,7 @@ extern NSString *const kParamClassTimeId;
 extern NSString *const kParamDate;
 extern NSString *const kParamResId;
 extern NSString *const kParamAId;
+extern NSString *const kParamEulaVersionId;
 
 extern NSString *const kParamBId;
 extern NSString *const kParamBDesc;
@@ -188,6 +190,7 @@ extern NSString *const kResponseKeyWallUserName;
 extern NSString *const kResponseKeyWallPic;
 extern NSString *const kResponseKeyWallUserPicture;
 extern NSString *const kResponseKeyWallYours;
+extern NSString *const kResponseKeyWallFlaggable;
 
 // result
 extern NSString *const kResponseKeyResult;

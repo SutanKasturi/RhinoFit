@@ -32,10 +32,17 @@
     [networkManage getCurrentEula:[[NetworkManager sharedManager] getToken]
                           success:^(NSString *eulaContent) {
                               [MBProgressHUD hideHUDForView:self.view animated:YES];
-                          } failed:^(RKObjectRequestOperation *operation, NSError *error) {
+                              if (![eulaContent isEqualToString:@""]) {
+                                  NSAttributedString *attributedString = [[NSAttributedString alloc]
+                                                                          initWithData:[eulaContent dataUsingEncoding:NSUnicodeStringEncoding]
+                                                                          options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType}
+                                                                          documentAttributes:nil
+                                                                          error:nil];
+                                  self.termsContentTextView.attributedText = attributedString;
+                              }
+                          } failed:^(NSError *error) {
                               [MBProgressHUD hideHUDForView:self.view animated:YES];
                           }];
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -55,28 +62,23 @@
 }
 
 - (IBAction)tapSubmit:(id)sender {
-//    UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
-//    [self.navigationController pushViewController:viewController animated:YES];
     
-    
-    UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
-    AppDelegate *app = [[UIApplication sharedApplication] delegate];
-    app.window.rootViewController = viewController;
-    
-//    NetworkManager *networkManage = [NetworkManager sharedManager];
-//    [networkManage acceptEula:@"4"
-//                      success:^(BOOL isSuccess) {
-//        
-//    } failed:^(RKObjectRequestOperation *operation, NSError *error) {
-//        
-//    }];
-    
-//    [networkManage getCurrentEula:[[NetworkManager sharedManager] getToken]
-//                          success:^(NSString *eulaContent) {
-//                              [MBProgressHUD hideHUDForView:self.view animated:YES];
-//                          } failed:^(RKObjectRequestOperation *operation, NSError *error) {
-//                              [MBProgressHUD hideHUDForView:self.view animated:YES];
-//                          }];
+    NSUserDefaults *sharedInstance = [NSUserDefaults standardUserDefaults];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = NSLocalizedString(@"Accept Eula...", nil);
+    hud.dimBackground = YES;
+    NetworkManager *networkManage = [NetworkManager sharedManager];
+    [networkManage acceptEula:[sharedInstance objectForKey:kParamEulaVersionId]
+                      success:^(BOOL isSuccess) {
+                          [MBProgressHUD hideHUDForView:self.view animated:YES];
+                          if (isSuccess) {
+                              UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
+                              AppDelegate *app = [[UIApplication sharedApplication] delegate];
+                              app.window.rootViewController = viewController;
+                          }
+    } failed:^(NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    }];
 
 }
 

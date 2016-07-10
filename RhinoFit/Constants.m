@@ -10,7 +10,7 @@
 
 // App Url
 NSString *const kAppBaseUrl = @"https://my.rhinofit.ca/";
-//NSString *const kAppBaseUrl = @"https://test20.rhinofit.ca";
+//NSString *const kAppBaseUrl = @"http://test20.rhinofit.ca";
 
 // Menu Items
 NSString *const kMenuClasses = @"My Classes";
@@ -51,6 +51,7 @@ NSString *const kRequestGetMyWods = @"getmywods";
 NSString *const kRequestGetCountries = @"getcountries";
 NSString *const kRequestGetStates = @"getstates";
 NSString *const kRequestDeletePost = @"deletepost";
+NSString *const kRequestReportPost = @"flagpost";
 
 // Messages
 NSString* const kMessageInvalidLogin = @"Invalid Login";
@@ -96,6 +97,7 @@ NSString *const kParamClassTimeId = @"classtimeid";
 NSString *const kParamDate = @"date";
 NSString *const kParamResId = @"resid";
 NSString *const kParamAId = @"aid";
+NSString *const kParamEulaVersionId = @"versionid";
 
 NSString *const kParamBId = @"bid";
 NSString *const kParamBDesc = @"bdesc";
@@ -180,12 +182,13 @@ NSString *const kResponseKeyAttendanceTitle = @"title";
 NSString *const kResponseKeyAttendanceWhen = @"when";
 
 // wall
-NSString *const kResponseKeyWallId = @"id";
+NSString *const kResponseKeyWallId = @"wallid";
 NSString *const kResponseKeyWallMessage = @"msg";
 NSString *const kResponseKeyWallUserName = @"name";
 NSString *const kResponseKeyWallPic = @"pic";
 NSString *const kResponseKeyWallUserPicture = @"profilepic";
 NSString *const kResponseKeyWallYours = @"yours";
+NSString *const kResponseKeyWallFlaggable = @"flagable";
 
 // result
 NSString *const kResponseKeyResult = @"result";

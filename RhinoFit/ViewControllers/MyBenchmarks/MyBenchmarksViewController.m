@@ -127,17 +127,22 @@ static NSMutableArray * availableBenchmark;
     [self.addBenchmarkButton setButtonType:CustomButtonBlue];
     [self.addBenchmarkButton setHidden:YES];
     [self setTitleString];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    [self loadAllData];
+}
+
+- (void)loadAllData {
     if ( waitingViewController == nil ) {
         waitingViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"WaitingViewController"];
         waitingViewController.view.frame = self.view.frame;
         [self addChildViewController:waitingViewController];
         [self.view addSubview:waitingViewController.view];
         [waitingViewController showWaitingIndicator];
-//        [self getMyBenchmarks];
+        //        [self getMyBenchmarks];
     }
     if ( availableBenchmark == nil ) {
         [self getAvailableBenchmark];
@@ -145,6 +150,7 @@ static NSMutableArray * availableBenchmark;
     else {
         [self getMyBenchmarks];
     }
+
 }
 
 - (void) setTitleString
@@ -191,73 +197,11 @@ static NSMutableArray * availableBenchmark;
 
 - (void)didAddedBenchmark:(NSArray *)newBenchmark
 {
-    [self.tableView beginUpdates];
-    
-    AvailableBenchmark *available = newBenchmark[0];
-    NSDate *date = newBenchmark[1];
-    NSString *result = newBenchmark[2];
-    
-    MyBenchmark *selectedBenchmark = nil;
-    NSIndexPath *path = nil;
-    
-    for ( int i = 0; i < [[self mMyBenchmarks] count]; i++ ) {
-        MyBenchmark *theBenchmark = [self mMyBenchmarks][i];
-        if ( [theBenchmark.benchmarkId intValue] >= [available.benchmarkId intValue] ) {
-            if ( [theBenchmark.benchmarkId intValue] == [available.benchmarkId intValue] ) {
-                selectedBenchmark = theBenchmark;
-            }
-            path = [NSIndexPath indexPathForRow:i inSection:0];
-            break;
-        }
-    }
-    BOOL isNew = NO;
-    if ( selectedBenchmark == nil ) {
-        isNew = YES;
-        selectedBenchmark = [[MyBenchmark alloc] init];
-        selectedBenchmark.benchmarkId = available.benchmarkId;
-        selectedBenchmark.title = available.bdescription;
-        selectedBenchmark.type = available.btype;
-        if ( path == nil ) {
-            path = [NSIndexPath indexPathForRow:[[self mMyBenchmarks] count] inSection:0];
-        }
-    }
-    selectedBenchmark.lastDate = date;
-    selectedBenchmark.lastScore = result;
-    
-    if ( isNew == NO ) {
-        BOOL isUpdated = NO;
-        if ( [available.btype isEqualToString:@"minutes:seconds"] ) {
-            if ( [self getSeconds:result] > [self getSeconds:selectedBenchmark.currentScore])
-                isUpdated = YES;
-        }
-        else {
-            if ( [result intValue] > [selectedBenchmark.currentScore intValue] )
-                isUpdated = YES;
-        }
-        
-        if ( isUpdated ) {
-            selectedBenchmark.currentDate = date;
-            selectedBenchmark.currentScore = result;
-        }
-    }
-    else {
-        selectedBenchmark.currentDate = date;
-        selectedBenchmark.currentScore = result;
-        [[self mMyBenchmarks] insertObject:selectedBenchmark atIndex:path.row];
-    }
-    if ( isNew == NO ) {
-        [self.tableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
-    else {
-        [self.tableView insertRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationAutomatic];
-        if ( [[self mMyBenchmarks] count] == [availableBenchmark count] ) {
-            [self refresh];
-        }
-        else if ( [[self mMyBenchmarks] count] == 1 ) {
-            [waitingViewController.view setHidden:YES];
-        }
-    }
-    [self.tableView endUpdates];
+    availableBenchmark = nil;
+    waitingViewController = nil;
+    [self.mMyBenchmarks removeAllObjects];
+    [self.tableView reloadData];
+    [self loadAllData];
 }
 
 - (int) getSeconds:(NSString*)minuteAndSecond

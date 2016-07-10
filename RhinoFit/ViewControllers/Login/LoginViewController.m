@@ -33,6 +33,7 @@
     if ( token != nil && ![token isEqualToString:@""] ) {
         if ([[NetworkManager sharedManager] checkValidUser]) {
             [self successfullyLoggedIn];
+//            [self showTermsView];
         } else {
             [self showTermsView];
 //            [self successfullyLoggedIn];
@@ -84,9 +85,9 @@
 - (void) successfullyLoggedIn
 {
     UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
-//    AppDelegate *app = [[UIApplication sharedApplication] delegate];
-//    app.window.rootViewController = viewController;
-    [self.navigationController pushViewController:viewController animated:YES];
+    AppDelegate *app = [[UIApplication sharedApplication] delegate];
+    app.window.rootViewController = viewController;
+//    [self.navigationController pushViewController:viewController animated:YES];
 }
 
 - (void) showTermsView {
@@ -96,6 +97,49 @@
 
 - (IBAction)onOpenBrowser:(id)sender {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://my.rhinofit.ca/findrhinofitgym"]];
+}
+
+#pragma mark forgot password methods -
+
+- (IBAction)onResetPassword:(id)sender {
+    [self.view endEditing:YES];
+    BOOL isValid = YES;
+    if ( ![mEmailTextField validate] )
+        isValid = NO;
+    
+    if (isValid) {
+        [self requestResetPassword];
+    }
+}
+
+- (void)requestResetPassword    {
+    
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view.superview animated:YES];
+    hud.labelText = NSLocalizedString(@"Logging in...", nil);
+    hud.dimBackground = YES;
+    
+    NSString *post = [NSString stringWithFormat:@"email=%@&formid=resetaccountpass", mEmailTextField.text];
+    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    
+    NSURL *url = [NSURL URLWithString:@"https://my.rhinofit.ca/wizard"];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url
+                                                           cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
+    
+        
+    [request setHTTPMethod:@"POST"];
+    [request setValue:[NSString stringWithFormat:@"%lu", (unsigned long)[postData length]] forHTTPHeaderField:@"Content-Length"];
+    [request setHTTPBody: postData];
+    
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    [[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        
+        [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
+        
+        NSString *requestReply = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+        NSLog(@"requestReply: %@", requestReply);
+        
+    }] resume];
 }
 
 @end

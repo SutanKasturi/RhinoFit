@@ -31,11 +31,11 @@
 // Eula
 - (void) getCurrentEula:(NSString*) token
                 success:(void (^)(NSString *eulaContent))success
-                 failed:(void (^)(RKObjectRequestOperation *operation, NSError *error))failed;
+                 failed:(void (^)(NSError *error))failed;
 
 - (void) acceptEula: (NSString *)versionId
             success:(void (^)(BOOL isSuccess)) success
-             failed:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
+             failed:(void (^)(NSError *error))failure;
 
 // Classes
 - (void) getClassess:(NSString*)startDate
