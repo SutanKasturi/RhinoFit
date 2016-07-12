@@ -27,6 +27,13 @@
     
     self.navigationItem.backBarButtonItem.title = @"";
     self.title = @"Post a Wall Message";
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(back:) name:@"AddWalls" object:nil];
+}
+
+#pragma mark - notification methods -
+- (void)back:(NSNotification*) notification  {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

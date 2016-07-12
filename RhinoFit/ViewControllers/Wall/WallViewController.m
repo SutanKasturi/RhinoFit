@@ -61,10 +61,17 @@
 }
 
 - (void)refreshWalls:(NSNotification *) notification    {
-    [self getWallPosts];
+    waitingViewController = nil;
+    [mWallPostArray removeAllObjects];
+    [self.tableView reloadData];
+    [self loadAllData];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    [self loadAllData];
+}
+
+- (void)loadAllData {
     if ( waitingViewController == nil ) {
         waitingViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"WaitingViewController"];
         waitingViewController.view.frame = self.tableView.frame;

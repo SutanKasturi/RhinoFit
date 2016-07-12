@@ -33,6 +33,11 @@
 #import <CoreServices/CoreServices.h>
 #endif
 
+#define kFacebookId @"100010131700972"
+#define kFacebookLink @"https://www.facebook.com/RhinoFitInc"
+
+#define AppURL @"www.rhinofit.ca"
+
 #if __IPHONE_7_0 && __IPHONE_OS_VERSION_MAX_ALLOWED >=  __IPHONE_7_0
 #define IS_RUNNING_IOS7 ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
 #else

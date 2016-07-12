@@ -12,6 +12,7 @@
 #import "Constants.h"
 #import "AppDelegate.h"
 #import "NetworkManager.h"
+#import <Social/Social.h>
 #import <MBProgressHUD/MBProgressHUD.h>
 
 @interface LoginViewController ()
@@ -99,47 +100,28 @@
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://my.rhinofit.ca/findrhinofitgym"]];
 }
 
-#pragma mark forgot password methods -
+#pragma mark - forgot password methods -
 
 - (IBAction)onResetPassword:(id)sender {
-    [self.view endEditing:YES];
-    BOOL isValid = YES;
-    if ( ![mEmailTextField validate] )
-        isValid = NO;
-    
-    if (isValid) {
-        [self requestResetPassword];
-    }
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://my.rhinofit.ca/forgetpassword.php"]];
 }
 
-- (void)requestResetPassword    {
+#pragma mark - facebook manage method -
+
+- (IBAction)onLikeViaFacebook:(id)sender {
+    UIApplication *a = [UIApplication sharedApplication];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"fb://profile/%@", kFacebookId]];
+    if( ![a canOpenURL:url] )
+        url = [NSURL URLWithString:kFacebookLink];
+    [a openURL:url];
+}
+
+- (IBAction)onShareViaFacebook:(id)sender {
+    SLComposeViewController *controller = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    pasteboard.string = AppURL;
     
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view.superview animated:YES];
-    hud.labelText = NSLocalizedString(@"Logging in...", nil);
-    hud.dimBackground = YES;
-    
-    NSString *post = [NSString stringWithFormat:@"email=%@&formid=resetaccountpass", mEmailTextField.text];
-    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    
-    NSURL *url = [NSURL URLWithString:@"https://my.rhinofit.ca/wizard"];
-    
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url
-                                                           cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
-    
-        
-    [request setHTTPMethod:@"POST"];
-    [request setValue:[NSString stringWithFormat:@"%lu", (unsigned long)[postData length]] forHTTPHeaderField:@"Content-Length"];
-    [request setHTTPBody: postData];
-    
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-    [[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        
-        [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
-        
-        NSString *requestReply = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-        NSLog(@"requestReply: %@", requestReply);
-        
-    }] resume];
+    [self presentViewController:controller animated:YES completion:Nil];
 }
 
 @end

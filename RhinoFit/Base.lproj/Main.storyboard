@@ -120,6 +120,9 @@
                                     <constraint firstAttribute="width" secondItem="8La-pg-0lh" secondAttribute="height" multiplier="227:98" id="p0b-Mq-7oG"/>
                                 </constraints>
                                 <state key="normal" image="fb_like"/>
+                                <connections>
+                                    <action selector="onLikeViaFacebook:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="RhY-KM-WPy"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cI0-H7-Opp">
                                 <rect key="frame" x="187" y="585" width="1" height="21"/>
@@ -139,6 +142,9 @@
                                     <constraint firstAttribute="height" constant="32" id="CxU-14-9vu"/>
                                 </constraints>
                                 <state key="normal" image="fb_share"/>
+                                <connections>
+                                    <action selector="onShareViaFacebook:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Wih-Kw-aQn"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w9D-MV-npy" customClass="RoundedButton">
                                 <rect key="frame" x="24" y="472" width="327" height="40"/>
